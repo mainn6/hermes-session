@@ -4,13 +4,11 @@ def s(kick,title,body,cls=''):
     return f'<section class="slide {cls}"><div class="kick">{kick}</div><h1>{title}</h1>{body}</section>'
 def qr(k,label,size=260): return f'<figure class="q" style="width:{size}px"><img src="{U[k]}"><figcaption>{label}</figcaption></figure>'
 S=[]
-S.append('<section class="slide cover"><div class="kick">실습</div><h1>Hermes Agent<br>설치와 연결</h1><p class="sub">참가자 페이지 순서대로 진행합니다. 링크는 디스코드 고정글에 있습니다.</p><p class="tag">설치 → 모델 키 → 연결 → 텔레그램 → 확인 → 거래소 읽기 · 모의 주문 · 취소</p></section>')
-# ---- Part 3. 실습 ----
-S.append(s('실습 1/5','오늘 하는 것','<ol class="big"><li>Hermes 설치</li><li>Dgrid 모델 키 (무료 라우터 <code>dgridai/free</code>)</li><li>Hermes에 모델 연결 → 대화 확인</li><li>텔레그램 봇 연결 → 폰에서 “안녕”</li><li>거래소 읽기 → 규칙 카드 → 모의 주문 1건 → 취소 → 노트 기록</li></ol><p class="note">순서와 명령은 디스코드의 참가자 페이지에 있습니다. 위에서부터 하나씩.</p>'))
-S.append(s('실습 2/5','필요한 것','<table class="kv"><tr><td>노트북</td><td>Mac(Apple Silicon) 또는 Windows 11. 인텔 맥은 미지원</td></tr><tr><td>텔레그램</td><td>폰과 노트북 둘 다 로그인</td></tr><tr><td>모델 키</td><td>Dgrid. 지갑으로 로그인. 지갑 없으면 세션용 키 배포</td></tr><tr><td>적어 둘 값</td><td>Dgrid 키 · 봇 토큰 · 내 텔레그램 ID. 메모장에만</td></tr></table>'))
-S.append(s('실습 3/5','규칙 카드','<div class="grid7"><div>종목 1개</div><div>진입 조건 1개</div><div>손절 %</div><div>익절 %</div><div>1회 주문 한도 (숫자)</div><div>거래 금지 시간·조건</div><div>하루 최대 손실</div></div><p class="note">종이에 쓴 카드가 에이전트의 역할 카드가 됩니다. “한도를 넘는 주문은 거절하고 사람에게 묻는다”는 문장은 고정.</p>'))
-S.append(s('실습 4/5','안전 규칙','<ul class="big"><li>API 키는 읽기 + 거래만. <b>출금 권한 OFF</b>. IP 화이트리스트</li><li>모의 계정 또는 잔고 0 계정만</li><li>모의 주문은 현재가 대비 30% 아래 지정가 0.0001 BTC. 체결되지 않습니다</li><li>10초 뒤 취소. 조건이 안 맞으면 주문하지 않는 것이 정답</li><li>키·토큰은 화면에 비치지 않게</li></ul>'))
-S.append(s('실습 5/5','마무리','<ul class="big"><li>옆 사람 봇에 “잔고 알려줘” → 답이 오면 완료</li><li>오늘 기록을 Obsidian 노트 한 장으로</li><li>집에 가서 실돈 계정에 연결하지 않습니다. 오늘 만든 키는 지워도 됩니다</li></ul><p class="note">질문과 후속 자료는 디스코드에서.</p>'))
+S.append('<section class="slide cover"><div class="kick">실습</div><h1>Hermes Agent<br>설치와 연결</h1><p class="sub">SESSIONS → #헤르메스 채널의 순서대로 진행합니다.</p><p class="tag">설치 → 모델 키 → 연결 → 텔레그램 → 확인</p></section>')
+S.append(s('실습 1/4','오늘 하는 것','<ol class="big"><li>Hermes 설치</li><li>Dgrid 모델 키 (무료 라우터 <code>dgridai/free</code>)</li><li>Hermes에 모델 연결 → 대화 확인</li><li>텔레그램 봇 연결 → 폰에서 “안녕”</li><li>완료 체크 스크립트</li></ol><p class="note">순서와 명령은 #헤르메스 채널에. 위에서부터 하나씩.</p>'))
+S.append(s('실습 2/4','필요한 것','<table class="kv"><tr><td>노트북</td><td>Mac(Apple Silicon) 또는 Windows 11. 인텔 맥은 미지원</td></tr><tr><td>텔레그램</td><td>폰과 노트북 둘 다 로그인</td></tr><tr><td>모델 키</td><td>Dgrid. 지갑으로 로그인. 지갑 없으면 세션용 키 배포</td></tr><tr><td>적어 둘 값</td><td>Dgrid 키 · 봇 토큰 · 내 텔레그램 ID. 메모장에만</td></tr></table>'))
+S.append(s('실습 3/4','막히면','<table class="kv"><tr><td>hermes 명령 없음</td><td>터미널 새로 열기</td></tr><tr><td>답이 비어 있음</td><td><code>hermes model</code> 다시. base URL·모델명 확인</td></tr><tr><td>봇이 unauthorized</td><td>내 ID가 Allowed users에 없음</td></tr><tr><td>봇이 무반응</td><td><code>hermes gateway</code> 창 확인</td></tr><tr><td>Dgrid 429</td><td>무료 라우터 한도. 1분 뒤 재시도</td></tr></table>'))
+S.append(s('실습 4/4','마무리','<ul class="big"><li>옆 사람 봇에 “안녕” → 답이 오면 완료</li><li>집에 가서: 옵시디언 연결 · 반복 작업 · 구글 연동 (채널 글 참고)</li><li>오늘 만든 키는 지워도 됩니다</li></ul><p class="note">질문과 후속 자료는 #헤르메스에서.</p>'))
 CSS='''
 :root{--bg:#070a0b;--ink:#eef4f6;--muted:#97a9b0;--acc:#97d3eb;--acc2:#ffd879;--line:#233036;--panel:#0f1517}
 *{box-sizing:border-box;margin:0;padding:0}html,body{height:100%;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans KR",Pretendard,-apple-system,"Segoe UI",sans-serif}
