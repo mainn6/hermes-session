@@ -13,9 +13,9 @@
 
 [설명 끝난 뒤 — 화면 QR과 함께]
 디스코드 입장: https://discord.gg/QxeUpCUX
-입장하면 #hermes-agent 채널에 참가자 페이지 링크와 설치 가이드 PDF가 있습니다.
+입장하면 #헤르메스 채널에 참가자 페이지 링크와 설치 가이드 PDF가 있습니다.
 
-[디스코드 #hermes-agent 에 고정할 글]
+[디스코드 #헤르메스 에 고정할 글]
 참가자 페이지 (설치·연결 순서, 복사 버튼): https://mainn6.github.io/hermes-session/
 설치 가이드 A4 PDF: https://mainn6.github.io/hermes-session/install-guide-a4.pdf
 실습 진행 덱(강사 화면과 동일): https://mainn6.github.io/hermes-session/practice.html
