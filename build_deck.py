@@ -14,6 +14,7 @@ S.append(s('06 사례 · 이미지와 영상','포스터와 영상도 텔레그�
 S.append(s('07 구글 연동','Gmail · 캘린더 · 시트','<ul class="big"><li>메일만 필요하면 Gmail 앱 비밀번호로 2분(himalaya 스킬)</li><li>캘린더·시트·문서까지면 Google Cloud OAuth 한 번(google-workspace 스킬, 5분)</li><li>읽기·요약·초안은 에이전트가, <b>발송과 수정은 확인 후</b></li></ul><pre>“오늘 안 읽은 메일 요약해줘”\n“이 메일에 답장 초안 써줘. 보내기 전에 보여줘”\n“이번 주 일정 겹치는 거 있어?”</pre>'))
 S.append(s('08 기억','Obsidian 볼트 = 에이전트의 기억','<ul class="big"><li>에이전트 자체 메모리는 2,200자. 긴 기록은 볼트(markdown 폴더)에 씁니다</li><li>정체성 파일에 한 줄: “프로젝트 질문은 답하기 전에 볼트를 먼저 검색한다”</li><li>밖에서 “그 링크 어디 저장했지?” 하면 파일명을 찍어 답합니다. 저도 같은 파일을 봅니다</li></ul><p class="note">진실은 채팅이 아니라 볼트에 있습니다. 저장 안 된 결정은 없는 결정.</p>'))
 S.append(s('09 원칙','회사에서 써도 되는 조건 셋','<ol class="big"><li>위험한 일은 실행 전에 <b>묻는다</b>. 메일 발송 · 결제 · 삭제</li><li>진실은 <b>볼트</b>에. 채팅은 흘러간다</li><li>키는 <b>파일에만</b>. 채팅 · 스크린샷 · 문서에 안 남긴다</li></ol>'))
+S.append(f'<section class="slide center"><div class="kick">준비</div><h1>Dgrid 가입은 이 QR로</h1>{qr("dgrid","dgrid.ai/arena?code=5GG6FQ",340)}<p class="note">가입 후 dgrid.ai/api-keys 에서 모델 키를 만듭니다. 오늘은 무료 라우터라 크레딧이 필요 없습니다.</p></section>')
 S.append(f'<section class="slide center"><div class="kick">실습</div><h1>설치와 실습 자료는 디스코드에</h1>{qr("discord","discord.gg/QxeUpCUX",340)}<p class="note">입장하면 SESSIONS → #헤르메스 채널에 설치 순서와 자료가 있습니다. 여기서부터 같이 설치합니다.</p></section>')
 CSS='''
 :root{--bg:#070a0b;--ink:#eef4f6;--muted:#97a9b0;--acc:#97d3eb;--acc2:#ffd879;--line:#233036;--panel:#0f1517}
