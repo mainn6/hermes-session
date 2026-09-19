@@ -20,6 +20,7 @@
 설치 가이드 A4 PDF: https://mainn6.github.io/hermes-session/install-guide-a4.pdf
 실습 진행 덱(강사 화면과 동일): https://mainn6.github.io/hermes-session/practice.html
 완료 체크 스크립트: curl -fsSL https://mainn6.github.io/hermes-session/check.sh -o check.sh && bash check.sh
+Dgrid 크레딧 접수 폼 (디스코드 핸들 + 지갑 주소): https://docs.google.com/forms/d/e/1FAIpQLSfLmwIRULESwOrsmAvVsrcKSy8TjH6ixYWc5YSs3PwsZyFmDA/viewform
 키·토큰·비밀번호는 여기 올리지 마세요. 막히는 화면은 스크린샷으로.
 
 [실습 시작]
