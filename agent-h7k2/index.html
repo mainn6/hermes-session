@@ -315,7 +315,7 @@ function chartData(preserve = false) {
   (D.signals.dots || []).filter(s => s.symbol === sym).forEach(s => m.push({time: bar(s.time), position: 'aboveBar', shape: 'circle', color: css('--faint'), text: '', size: .4}));
   S.closed.filter(t => t.symbol === sym).forEach(t => {
     ordered(t);
-    m.push({time: bar(t.closed_at), position: t.side === 'long' ? 'aboveBar' : 'belowBar', shape: t.side === 'long' ? 'arrowDown' : 'arrowUp', color: css(t.pnl >= 0 ? '--up' : '--down'), text: hours <= 3 ? '청산 ' + hm(t.closed_at) : ''});
+    m.push({time: bar(t.closed_at), position: t.side === 'long' ? 'aboveBar' : 'belowBar', shape: t.side === 'long' ? 'arrowDown' : 'arrowUp', color: css(t.pnl >= 0 ? '--up' : '--down'), text: hours <= 3 ? t.reason + ' ' + hm(t.closed_at) : ''});
   });
   markers.setMarkers(m.filter(m => m.time >= rows[0][0] + KST && m.time <= rows[rows.length - 1][0] + KST).sort((a, b) => a.time - b.time));
   applyRange();
