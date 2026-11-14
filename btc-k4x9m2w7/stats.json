@@ -1,0 +1,174 @@
+{
+  "frequency": [
+    {
+      "period": "2021-12 ~ 2024-06",
+      "BTC": {
+        "daily_signals": 26.891834570519617,
+        "long_share": 0.5169762214598368,
+        "gap_minutes": 33.0
+      },
+      "SOL": {
+        "daily_signals": 24.943796394485684,
+        "long_share": 0.4984695178981379,
+        "gap_minutes": 35.0
+      }
+    },
+    {
+      "period": "2024-07 ~ 2025-12",
+      "BTC": {
+        "daily_signals": 25.974499089253186,
+        "long_share": 0.4957924263674614,
+        "gap_minutes": 35.0
+      },
+      "SOL": {
+        "daily_signals": 24.94353369763206,
+        "long_share": 0.48787790273112314,
+        "gap_minutes": 36.0
+      }
+    },
+    {
+      "period": "2026-01 ~ 2026-08",
+      "BTC": {
+        "daily_signals": 25.650205761316872,
+        "long_share": 0.5052141825766083,
+        "gap_minutes": 35.0
+      },
+      "SOL": {
+        "daily_signals": 22.74074074074074,
+        "long_share": 0.49601882012305465,
+        "gap_minutes": 38.0
+      }
+    }
+  ],
+  "results": [
+    {
+      "period": "2021-12 ~ 2024-06",
+      "attempts": 5832,
+      "filled": 4948,
+      "profit": -0.06738765909915509,
+      "random": -0.06479822550317073,
+      "difference": -0.002589433595984361
+    },
+    {
+      "period": "2024-07 ~ 2025-12",
+      "attempts": 3193,
+      "filled": 2695,
+      "profit": -0.07885922190247943,
+      "random": -0.06670874737944273,
+      "difference": -0.012150474523036706
+    },
+    {
+      "period": "2026-01 ~ 2026-08",
+      "attempts": 1397,
+      "filled": 1152,
+      "profit": -0.0732474347689063,
+      "random": -0.07546992079131776,
+      "difference": 0.0022224860224114573
+    }
+  ],
+  "filter": {
+    "time": "2026-11-15T08:28:40.520558+09:00 UTC+9",
+    "period": "selection",
+    "period_start_utc9": "2022-05-30 17:20:00 UTC+9",
+    "period_end_exclusive_utc9": "2026-01-01 09:00:00 UTC+9",
+    "units": "Mean net result is percent of planned notional per accepted attempt; edge is percentage points; trades/day counts filled trades.",
+    "table": [
+      {
+        "variant": "Filter 01",
+        "trades_per_day": 1.5194570039919948,
+        "mean_net_percent": -0.0668735837380917,
+        "edge_percentage_points": -0.0071513379222423,
+        "selected": false,
+        "evidence": "measured"
+      },
+      {
+        "variant": "Filter 02",
+        "trades_per_day": 0.8226262455129766,
+        "mean_net_percent": -0.0750619394624664,
+        "edge_percentage_points": -0.0143017420313348,
+        "selected": false,
+        "evidence": "measured"
+      },
+      {
+        "variant": "Filter 03",
+        "trades_per_day": 1.499634684823007,
+        "mean_net_percent": -0.0582209111069393,
+        "edge_percentage_points": 0.0010215971074681,
+        "selected": false,
+        "evidence": "measured"
+      },
+      {
+        "variant": "Filter 04",
+        "trades_per_day": 0.7974671481061849,
+        "mean_net_percent": -0.0468049441157122,
+        "edge_percentage_points": 0.0133321012780024,
+        "selected": false,
+        "evidence": "measured"
+      },
+      {
+        "variant": "Filter 05",
+        "trades_per_day": 1.7695231842776815,
+        "mean_net_percent": -0.0576699638707966,
+        "edge_percentage_points": 0.0031469164378201,
+        "selected": false,
+        "evidence": "measured"
+      },
+      {
+        "variant": "Filter 06",
+        "trades_per_day": 0.9690064486070372,
+        "mean_net_percent": -0.0514027401842225,
+        "edge_percentage_points": 0.0082921146360556,
+        "selected": false,
+        "evidence": "measured"
+      },
+      {
+        "variant": "Filter 07",
+        "trades_per_day": 1.7901079003377842,
+        "mean_net_percent": -0.064353774607575,
+        "edge_percentage_points": -0.0026515873321507,
+        "selected": false,
+        "evidence": "measured"
+      },
+      {
+        "variant": "Filter 08",
+        "trades_per_day": 1.0155126589650465,
+        "mean_net_percent": -0.0470911443168804,
+        "edge_percentage_points": 0.0131977923268018,
+        "selected": false,
+        "evidence": "measured"
+      },
+      {
+        "variant": "Filter 09",
+        "trades_per_day": 1.7024322578595708,
+        "mean_net_percent": -0.0555582946916212,
+        "edge_percentage_points": 0.0055241944599355,
+        "selected": false,
+        "evidence": "measured"
+      },
+      {
+        "variant": "Filter 10",
+        "trades_per_day": 0.932411397833522,
+        "mean_net_percent": -0.0514524573883169,
+        "edge_percentage_points": 0.0103980021691994,
+        "selected": false,
+        "evidence": "measured"
+      },
+      {
+        "variant": "Filter 11",
+        "trades_per_day": 1.6597380319571362,
+        "mean_net_percent": -0.0655757508544977,
+        "edge_percentage_points": -0.0053141943645328,
+        "selected": false,
+        "evidence": "measured"
+      },
+      {
+        "variant": "Filter 12",
+        "trades_per_day": 0.9042027128622708,
+        "mean_net_percent": -0.0645403006082308,
+        "edge_percentage_points": -0.0035416509349951,
+        "selected": false,
+        "evidence": "measured"
+      }
+    ]
+  }
+}
