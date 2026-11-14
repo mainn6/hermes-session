@@ -257,6 +257,7 @@ function position() {
 function buildChart() {
   chart = LightweightCharts.createChart(el('lw'), {
     autoSize: true,
+    handleScroll: false, handleScale: false,
     layout: {background: {color: 'transparent'}, textColor: css('--muted'), fontFamily: getComputedStyle(document.body).fontFamily, fontSize: 12},
     grid: {vertLines: {visible: false}, horzLines: {color: css('--line')}},
     rightPriceScale: {borderVisible: false, scaleMargins: {top: 0.1, bottom: 0.24}},
@@ -279,7 +280,13 @@ function buildChart() {
   chart.priceScale('vol').applyOptions({scaleMargins: {top: 0.84, bottom: 0}});
   markers = LightweightCharts.createSeriesMarkers(candles, []);
   chart.timeScale().subscribeVisibleLogicalRangeChange(overlay);
-  new ResizeObserver(() => requestAnimationFrame(overlay)).observe(el('lw'));
+  new ResizeObserver(() => requestAnimationFrame(() => { applyRange(); overlay(); })).observe(el('lw'));
+}
+
+function applyRange() {
+  if (!C) return;
+  const rows = C[sym], bars = hours * 60, future = Math.round(bars * (pos() ? .32 : .04));
+  chart.timeScale().setVisibleLogicalRange({from: rows.length - bars, to: rows.length - 1 + future});
 }
 
 function chartData(preserve = false) {
@@ -295,8 +302,8 @@ function chartData(preserve = false) {
   const m = [], bar = t => Math.floor(t / 60) * 60 + KST;
   const ordered = t => {
     const up = t.side === 'long';
-    if (t.signal_time) m.push({time: bar(t.signal_time), position: 'aboveBar', shape: 'circle', color: css('--faint'), text: '신호', size: .6});
-    m.push({time: bar(t.opened_at), position: up ? 'belowBar' : 'aboveBar', shape: up ? 'arrowUp' : 'arrowDown', color: css(up ? '--up' : '--down'), text: '진입 ' + hm(t.opened_at)});
+    if (t.signal_time) m.push({time: bar(t.signal_time), position: 'aboveBar', shape: 'circle', color: css('--faint'), text: hours <= 3 ? '신호' : '', size: .6});
+    m.push({time: bar(t.opened_at), position: up ? 'belowBar' : 'aboveBar', shape: up ? 'arrowUp' : 'arrowDown', color: css(up ? '--up' : '--down'), text: hours <= 3 ? '진입 ' + hm(t.opened_at) : ''});
   };
   if (p) {
     line(p.target, css('--up'), L.Dashed); line(p.entry, css('--text'), L.Solid);
@@ -308,14 +315,10 @@ function chartData(preserve = false) {
   (D.signals.dots || []).filter(s => s.symbol === sym).forEach(s => m.push({time: bar(s.time), position: 'aboveBar', shape: 'circle', color: css('--faint'), text: '', size: .4}));
   S.closed.filter(t => t.symbol === sym).forEach(t => {
     ordered(t);
-    m.push({time: bar(t.closed_at), position: t.side === 'long' ? 'aboveBar' : 'belowBar', shape: t.side === 'long' ? 'arrowDown' : 'arrowUp', color: css(t.pnl >= 0 ? '--up' : '--down'), text: t.reason + ' ' + hm(t.closed_at)});
+    m.push({time: bar(t.closed_at), position: t.side === 'long' ? 'aboveBar' : 'belowBar', shape: t.side === 'long' ? 'arrowDown' : 'arrowUp', color: css(t.pnl >= 0 ? '--up' : '--down'), text: hours <= 3 ? '청산 ' + hm(t.closed_at) : ''});
   });
   markers.setMarkers(m.filter(m => m.time >= rows[0][0] + KST && m.time <= rows[rows.length - 1][0] + KST).sort((a, b) => a.time - b.time));
-  if (previous) chart.timeScale().setVisibleLogicalRange({from: previous.from + shift, to: previous.to + shift});
-  else {
-    const bars = hours * 60, future = Math.round(bars * (p ? .32 : .04));
-    chart.timeScale().setVisibleLogicalRange({from: rows.length - bars, to: rows.length - 1 + future});
-  }
+  applyRange();
   el('ttl').innerHTML = `${sym}/USDT<span>1분 · 거래량</span>`;
   el('ranges').innerHTML = [1, 3, 6, 24].map(h => `<button class="${h === hours ? 'on' : ''}" data-h="${h}" aria-pressed="${h === hours}">${h}시간</button>`).join('');
   el('ranges').querySelectorAll('button').forEach(b => b.onclick = () => { hours = +b.dataset.h; chartData(); });
@@ -354,7 +357,12 @@ function overlay() {
     zone('tp', x0, x1, y(t.entry), y(t.target)); zone('sl', x0, x1, y(t.entry), y(t.stop));
     const res = `${esc(t.reason)} ${hm(t.closed_at)} · ${sgn(t.pnl)} USDT · ${sgn(t.pnl_pct)}%`, c = t.pnl >= 0 ? 'gain' : 'loss';
     if (W < 520) out.push(`<div class="tag ${c}" data-closed style="left:10px;top:${10 + mobileRow++ * 28}px">${res}</div>`);
-    else out.push(`<div class="tag ${c}" data-closed style="left:${x0 - 10}px;top:${y(t.exit) - 12}px;transform:translateX(-100%)">${res}</div>`);
+    else {
+      const top = Math.max(4, Math.min(...[y(t.entry), y(t.target), y(t.stop), y(t.exit)].filter(v => v != null)) - 30);
+      const text = x1 - x0 < 40 ? `${sgn(t.pnl)}` : res;                         // narrow zone (long ranges): the amount only
+      if (x0 > W - 260) out.push(`<div class="tag ${c}" data-closed style="left:${Math.min(W - 8, Math.max(x1, x0 + 4))}px;top:${top}px;transform:translateX(-100%)">${text}</div>`);
+      else out.push(`<div class="tag ${c}" data-closed style="left:${Math.max(4, x0)}px;top:${top}px">${text}</div>`);
+    }
   });
   ov.innerHTML = out.join('');
 }
