@@ -144,21 +144,21 @@
 <body>
 <div class="app-shell">
   <aside class="sidebar" aria-label="워크스페이스 메뉴">
-    <a class="workspace-brand" href="#overview"><span class="brand-mark" aria-hidden="true">K</span><span>KRAPI<span class="brand-caption">TRADING AGENT</span></span></a>
+    <a class="workspace-brand" href="#overview" aria-label="KRAPI 트레이딩 현황"><span class="brand-art"><img class="brand-symbol brand-light" src="krapi-symbol-black.svg" alt=""><img class="brand-symbol brand-dark" src="krapi-symbol-white.svg" alt=""><img class="brand-wordmark brand-light" src="krapi-wordmark-black.svg" alt="KRAPI"><img class="brand-wordmark brand-dark" src="krapi-wordmark-white.svg" alt="KRAPI"></span><span class="brand-caption">TRADING AGENT</span></a>
     <div class="nav-label">WORKSPACE</div>
     <nav class="side-nav"><a class="active" href="#overview"><span aria-hidden="true">▦</span>트레이딩 현황</a><a href="#chart-panel"><span aria-hidden="true">⌁</span>실시간 차트</a><a href="#signals-panel"><span aria-hidden="true">◉</span>신호 기록</a><a href="#trades-panel"><span aria-hidden="true">▤</span>거래 내역</a></nav>
     <div class="side-divider"></div><div class="nav-label">MARKETS</div>
-    <div class="asset-nav"><button data-asset="BTC"><span class="asset-icon btc">₿</span>Bitcoin<span class="asset-caption">BTC</span></button><button data-asset="ETH"><span class="asset-icon eth">Ξ</span>Ethereum<span class="asset-caption">ETH</span></button><button data-asset="SOL"><span class="asset-icon sol">S</span>Solana<span class="asset-caption">SOL</span></button></div>
+    <div class="asset-nav"><button data-asset="BTC"><img class="asset-icon" src="coin-btc.svg" alt="">Bitcoin<span class="asset-caption">BTC</span></button><button data-asset="ETH"><img class="asset-icon" src="coin-eth.png" alt="">Ethereum<span class="asset-caption">ETH</span></button><button data-asset="SOL"><img class="asset-icon" src="coin-sol.svg" alt="">Solana<span class="asset-caption">SOL</span></button></div>
     <div class="sidebar-bottom"><span class="mode-dot"></span><div><strong>모의 운영</strong><span>실제 주문 없이 신호 관찰</span></div></div>
   </aside>
   <div class="workspace">
-    <div class="workspace-top"><div class="breadcrumbs">워크스페이스 <span>›</span> 트레이딩 <span>›</span> <strong>운영 현황</strong></div><a class="top-link" href="#signals-panel">신호 기록 보기 <span aria-hidden="true">↗</span></a></div>
+    <div class="workspace-top"><a class="mobile-brand brand-art" href="#overview" aria-label="KRAPI 트레이딩 현황"><img class="brand-symbol brand-light" src="krapi-symbol-black.svg" alt=""><img class="brand-symbol brand-dark" src="krapi-symbol-white.svg" alt=""><img class="brand-wordmark brand-light" src="krapi-wordmark-black.svg" alt="KRAPI"><img class="brand-wordmark brand-dark" src="krapi-wordmark-white.svg" alt="KRAPI"></a><div class="breadcrumbs">워크스페이스 <span>›</span> 트레이딩 <span>›</span> <strong>운영 현황</strong></div><a class="top-link" href="#signals-panel">신호 기록 보기 <span aria-hidden="true">↗</span></a></div>
     <main class="page" id="overview">
   <header class="top">
     <div class="brand"><strong>트레이딩 현황</strong><span class="live"><i></i><span id="live" role="status">자료 불러오는 중</span></span><button id="theme-toggle" aria-label="화면 테마 변경"></button></div>
     <div id="accounts" aria-label="모의 집계 시작"></div>
   </header>
-  <p class="intro-copy">SOL, BTC, ETH의 신호와 모의 거래를 한곳에서 확인하세요.</p>
+  <p class="intro-copy">BTC, ETH, SOL의 신호와 모의 거래를 한곳에서 확인하세요.</p>
   <div id="stale" role="status" hidden></div>
   <nav class="symbols" id="symbols" aria-label="종목"></nav>
   <section class="pos" id="pos" aria-label="지금 포지션"><div class="muted">자료 불러오는 중</div></section>
@@ -246,7 +246,7 @@ function header() {
     const p = S.positions.find(p => p.symbol === s);
     const activeShort = currentShort(s);
     const st = p ? `<span class="st ${esc(p.side)}">${esc(p.side.toUpperCase())} 보유</span>` : activeShort && activeShort.status !== '완료' ? '<span class="st short">숏 신호 관찰</span>' : '<span class="st none">새 신호 대기</span>';
-    return `<button class="sym ${s === sym ? 'on' : ''}" data-s="${s}" aria-pressed="${s === sym}"><span class="s">${s}</span><span class="p">${num(last(s), dp(s))}</span>${st}</button>`;
+    return `<button class="sym ${s === sym ? 'on' : ''}" data-s="${s}" aria-pressed="${s === sym}"><span class="s"><img class="coin-icon" src="coin-${s.toLowerCase()}.${s === 'ETH' ? 'png' : 'svg'}" alt="">${s}</span><span class="p">${num(last(s), dp(s))}</span>${st}</button>`;
   }).join('');
   el('symbols').querySelectorAll('button').forEach(b => b.onclick = () => { sym = b.dataset.s; firstBar=null; render(); });
   document.querySelectorAll('[data-asset]').forEach(b=>{b.classList.toggle('active',b.dataset.asset===sym);b.onclick=()=>{sym=b.dataset.asset;firstBar=null;render();};});
