@@ -133,34 +133,52 @@
   }
   /* Only the requested theme control and health/stale states extend the approved CSS. */
   #theme-toggle { font-size: 12px; color: var(--muted); white-space: nowrap; }
-  #accounts { flex-shrink: 0; }
+  #accounts { flex-shrink: 0; font-size: 12px; color: var(--muted); }
+  .chart-tools { display: flex; gap: 10px; flex-wrap: wrap; }
+  #ohlc { padding: 5px 16px; min-height: 30px; font-size: 12px; color: var(--muted); }
   .live.failed i { background: var(--down); }
   #stale { margin-top: 12px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--down-text); }
 </style>
+<link rel="stylesheet" href="workspace.css">
 </head>
 <body>
-<div class="page">
+<div class="app-shell">
+  <aside class="sidebar" aria-label="워크스페이스 메뉴">
+    <a class="workspace-brand" href="#overview"><span class="brand-mark" aria-hidden="true">▥</span><span>KRAPI<span class="brand-caption">TRADING AGENT</span></span></a>
+    <div class="nav-label">WORKSPACE</div>
+    <nav class="side-nav"><a class="active" href="#overview"><span aria-hidden="true">▦</span>트레이딩 현황</a><a href="#chart-panel"><span aria-hidden="true">⌁</span>실시간 차트</a><a href="#signals-panel"><span aria-hidden="true">◉</span>신호 기록</a><a href="#trades-panel"><span aria-hidden="true">▤</span>거래 내역</a></nav>
+    <div class="side-divider"></div><div class="nav-label">MARKETS</div>
+    <div class="asset-nav"><button data-asset="SOL"><span class="asset-icon sol">S</span>Solana<span class="asset-caption">SOL</span></button><button data-asset="BTC"><span class="asset-icon btc">₿</span>Bitcoin<span class="asset-caption">BTC</span></button><button data-asset="ETH"><span class="asset-icon eth">Ξ</span>Ethereum<span class="asset-caption">ETH</span></button></div>
+    <div class="sidebar-bottom"><span class="mode-dot"></span><div><strong>모의 운영</strong><span>실제 주문 없이 신호 관찰</span></div></div>
+  </aside>
+  <div class="workspace">
+    <div class="workspace-top"><div class="breadcrumbs">워크스페이스 <span>›</span> 트레이딩 <span>›</span> <strong>운영 현황</strong></div><a class="top-link" href="#signals-panel">신호 기록 보기 <span aria-hidden="true">↗</span></a></div>
+    <main class="page" id="overview">
   <header class="top">
-    <div class="brand"><strong>KRAPI TRADING AGENT</strong><span class="live"><i></i><span id="live" role="status">자료 불러오는 중</span></span><button id="theme-toggle" aria-label="화면 테마 변경"></button></div>
-    <div class="seg" id="accounts" aria-label="계좌"><button data-account="paper">모의</button><button data-account="practice">LBank 연습</button></div>
+    <div class="brand"><strong>트레이딩 현황</strong><span class="live"><i></i><span id="live" role="status">자료 불러오는 중</span></span><button id="theme-toggle" aria-label="화면 테마 변경"></button></div>
+    <div id="accounts" aria-label="모의 집계 시작"></div>
   </header>
+  <p class="intro-copy">SOL, BTC, ETH의 신호와 모의 거래를 한곳에서 확인하세요.</p>
   <div id="stale" role="status" hidden></div>
   <nav class="symbols" id="symbols" aria-label="종목"></nav>
   <section class="pos" id="pos" aria-label="지금 포지션"><div class="muted">자료 불러오는 중</div></section>
-  <section class="chart-box" aria-label="차트">
+  <section class="chart-box" id="chart-panel" aria-label="차트">
     <div class="chart-bar">
       <div class="ttl" id="ttl"></div>
-      <div class="seg" id="ranges" aria-label="범위"></div>
+      <div class="chart-tools"><div class="seg" id="intervals" aria-label="봉 간격"></div><div class="seg" id="ranges" aria-label="범위"></div></div>
     </div>
+    <div class="chart-caption"><div id="ohlc" aria-live="off"></div><button id="reset-view" aria-label="차트 배율 맞춤">차트 맞춤 ↔</button></div>
     <div class="chart"><div id="lw"></div><div class="ov" id="ov"></div></div>
   </section>
   <section class="grid3">
-    <div class="block"><h2>신호 수신 <span id="sigsum"></span></h2><div id="signals"></div></div>
-    <div class="block"><h2>계좌</h2><div id="account"></div></div>
-    <div class="block"><h2>최근 거래 <span id="tradesum"></span></h2><div id="trades"></div></div>
+    <div class="block" id="signals-panel"><h2><span class="card-heading">신호 수신</span> <span id="sigsum"></span></h2><div id="signals"></div></div>
+    <div class="block"><h2>SOL 모의 계좌</h2><div id="account"></div></div>
+    <div class="block" id="trades-panel"><h2><span class="card-heading">최근 거래</span> <span id="tradesum"></span></h2><div id="trades"></div></div>
   </section>
-</div>
+<footer class="workspace-footer">모의 신호와 거래만 표시합니다. 원본 기록은 보존됩니다.</footer>
+</main></div></div>
 <script src="lwc.js"></script>
+<script src="chart-data.js"></script>
 <script>
 const Q = new URLSearchParams(location.search), KST = 9 * 3600;
 const SYMBOLS = ['SOL', 'BTC', 'ETH'];
@@ -175,14 +193,17 @@ const cls = v => v >= 0 ? 'up' : 'down';
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const systemTheme = matchMedia('(prefers-color-scheme: dark)');
 let preference = Q.get('theme');
-try { preference ||= localStorage.getItem('theme'); } catch {}
+try { preference ||= localStorage.getItem('workspace-theme'); } catch {}
+preference ||= 'light';
 if (!['light', 'dark'].includes(preference)) preference = null;
 let sym = SYMBOLS.includes(Q.get('sym')) ? Q.get('sym') : SYMBOLS[0];
 let hours = [1, 3, 6, 24].includes(+Q.get('h')) ? +Q.get('h') : 3;
-let account = Q.get('account') === 'practice' ? 'practice' : 'paper';
+let interval = Q.get('tf') === '5' ? 5 : 1;
 let D, C, S, failed = false, refreshing = false, chart, candles, volume, markers, lines = [], firstBar;
 const pos = () => S.positions.find(p => p.symbol === sym);
-const last = s => D.marks[s] || C[s][C[s].length - 1][4];
+const last = s => C[s][C[s].length - 1][4];
+const bars = () => aggregateCandles(C[sym], interval);
+const currentShort = s => D.shorts.find(r => r.symbol === s);
 
 function theme() {
   const dark = (preference || (systemTheme.matches ? 'dark' : 'light')) === 'dark';
@@ -197,7 +218,7 @@ function theme() {
 }
 el('theme-toggle').onclick = () => {
   preference = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-  try { localStorage.setItem('theme', preference); } catch {}
+  try { localStorage.setItem('workspace-theme', preference); } catch {}
   theme();
 };
 systemTheme.addEventListener('change', () => { if (!preference) theme(); });
@@ -216,24 +237,27 @@ function status() {
 
 function header() {
   status();
-  el('accounts').querySelectorAll('button').forEach(b => {
-    b.classList.toggle('on', b.dataset.account === account);
-    b.setAttribute('aria-pressed', String(b.dataset.account === account));
-    b.onclick = () => { account = b.dataset.account; render(true); };
-  });
+  el('accounts').textContent = `모의 · 새 집계 ${dhm(D.session.started_at)}부터`;
   el('symbols').innerHTML = SYMBOLS.map(s => {
     const p = S.positions.find(p => p.symbol === s);
-    const st = p ? `<span class="st ${esc(p.side)}">${esc(p.side.toUpperCase())} 보유</span>` : '<span class="st none">포지션 없음</span>';
+    const activeShort = currentShort(s);
+    const st = p ? `<span class="st ${esc(p.side)}">${esc(p.side.toUpperCase())} 보유</span>` : activeShort && activeShort.status !== '완료' ? '<span class="st short">숏 신호 관찰</span>' : '<span class="st none">새 신호 대기</span>';
     return `<button class="sym ${s === sym ? 'on' : ''}" data-s="${s}" aria-pressed="${s === sym}"><span class="s">${s}</span><span class="p">${num(last(s), dp(s))}</span>${st}</button>`;
   }).join('');
-  el('symbols').querySelectorAll('button').forEach(b => b.onclick = () => { sym = b.dataset.s; render(); });
+  el('symbols').querySelectorAll('button').forEach(b => b.onclick = () => { sym = b.dataset.s; firstBar=null; render(); });
+  document.querySelectorAll('[data-asset]').forEach(b=>{b.classList.toggle('active',b.dataset.asset===sym);b.onclick=()=>{sym=b.dataset.asset;firstBar=null;render();};});
 }
 
 function position() {
   const p = pos(), d = dp(sym);
+  if (sym !== 'SOL') {
+    const signal = currentShort(sym);
+    el('pos').innerHTML = signal ? `<div><div class="pos-id"><span class="side short">SHORT</span><span class="pair">${sym}/USDT</span><span class="when">모의 20배 신호 · ${esc(signal.status)}</span></div><div class="pnl-sub">${hm(signal.time)} 신호 · 진입 예정 ${hm(signal.entry_time)} · 시간청산 예정 ${hm(signal.exit_time)} · ${signal.notified ? '알림 전송 확인' : '전송 확인 대기'}</div>${signal.return_pct == null ? '' : `<div class="pnl ${cls(signal.return_pct)}">${sgn(signal.return_pct)}<small>%</small></div><div class="pnl-sub">봉 기준 모의 증거금 수익률 · 16bp 비용 가정</div>`}<div class="pnl-sub">신호 관찰 기록 · 실제 주문·체결 없음</div></div>` : `<div><div class="none">새 ${sym} 숏 신호 대기</div><div class="pnl-sub">새 집계 이후 신호부터 표시 · 모의 20배 · 실제 주문 없음</div></div>`;
+    return;
+  }
   if (!p) {
     const c = S.closed.find(t => t.symbol === sym);
-    const empty = account === 'practice' ? `연습 주문 ${(S.orders || []).filter(o => o.symbol === sym).length}건 기록 · 체결 없음` : '다음 신호 대기 중';
+    const empty = (S.orders || []).filter(o => o.symbol === sym).length ? `분할 주문 ${(S.orders || []).filter(o => o.symbol === sym).length}건 대기` : '새 집계 이후 신호 대기 중';
     el('pos').innerHTML = `<div><div class="none">지금 ${sym} 포지션 없음</div><div class="pnl-sub">${empty}</div>` + (c ?
       `<div class="last"><span class="side ${esc(c.side)}">${esc(c.side.toUpperCase())}</span><span>직전 거래 ${hm(c.opened_at)} → ${hm(c.closed_at)} · ${esc(c.reason)}</span><b class="${cls(c.pnl)}">${sgn(c.pnl)} USDT</b><span class="${cls(c.pnl)}">${sgn(c.pnl_pct)}%</span></div>` : '') + '</div>';
     return;
@@ -258,7 +282,8 @@ function position() {
 function buildChart() {
   chart = LightweightCharts.createChart(el('lw'), {
     autoSize: true,
-    handleScroll: false, handleScale: false,
+    handleScroll: {mouseWheel: true, pressedMouseMove: true, horzTouchDrag: true, vertTouchDrag: false},
+    handleScale: {mouseWheel: true, pinch: true, axisPressedMouseMove: true, axisDoubleClickReset: true},
     layout: {background: {color: 'transparent'}, textColor: css('--muted'), fontFamily: getComputedStyle(document.body).fontFamily, fontSize: 12},
     grid: {vertLines: {visible: false}, horzLines: {color: css('--line')}},
     rightPriceScale: {borderVisible: false, scaleMargins: {top: 0.1, bottom: 0.24}},
@@ -267,7 +292,7 @@ function buildChart() {
   });
   candles = chart.addSeries(LightweightCharts.CandlestickSeries, {
     upColor: css('--up'), downColor: css('--down'), borderVisible: false, wickUpColor: css('--up'), wickDownColor: css('--down'),
-    priceLineVisible: false, lastValueVisible: false,
+    priceLineVisible: true, lastValueVisible: true,
     autoscaleInfoProvider: original => {
       const r = original(), p = pos();
       if (!r || !p) return r;
@@ -281,18 +306,23 @@ function buildChart() {
   chart.priceScale('vol').applyOptions({scaleMargins: {top: 0.84, bottom: 0}});
   markers = LightweightCharts.createSeriesMarkers(candles, []);
   chart.timeScale().subscribeVisibleLogicalRangeChange(overlay);
-  new ResizeObserver(() => requestAnimationFrame(() => { applyRange(); overlay(); })).observe(el('lw'));
+  new ResizeObserver(() => requestAnimationFrame(overlay)).observe(el('lw'));
+  chart.subscribeCrosshairMove(event => {
+    const value = event.seriesData.get(candles), row = bars().at(-1);
+    const b = value || {open:row[1],high:row[2],low:row[3],close:row[4]};
+    el('ohlc').textContent = `O ${num(b.open,dp(sym))}   H ${num(b.high,dp(sym))}   L ${num(b.low,dp(sym))}   C ${num(b.close,dp(sym))} · UTC+9`;
+  });
 }
 
 function applyRange() {
   if (!C) return;
-  const rows = C[sym], bars = hours * 60, future = Math.round(bars * (pos() ? .32 : .04));
-  chart.timeScale().setVisibleLogicalRange({from: rows.length - bars, to: rows.length - 1 + future});
+  const rows = bars(), count = hours * 60 / interval, future = Math.round(count * (pos() ? .32 : .04));
+  chart.timeScale().setVisibleLogicalRange({from: rows.length - count, to: rows.length - 1 + future});
 }
 
 function chartData(preserve = false) {
-  const d = dp(sym), rows = C[sym], p = pos(), previous = preserve && chart.timeScale().getVisibleLogicalRange();
-  const shift = firstBar == null ? 0 : (firstBar - rows[0][0]) / 60;
+  const d = dp(sym), rows = bars(), p = pos(), previous = preserve && chart.timeScale().getVisibleLogicalRange();
+  const shift = firstBar == null ? 0 : (firstBar - rows[0][0]) / (interval * 60);
   firstBar = rows[0][0];
   candles.applyOptions({priceFormat: {type: 'price', precision: d, minMove: d === 1 ? .1 : .01}});
   candles.setData(rows.map(r => ({time: r[0] + KST, open: r[1], high: r[2], low: r[3], close: r[4]})));
@@ -300,7 +330,7 @@ function chartData(preserve = false) {
   lines.forEach(l => candles.removePriceLine(l)); lines = [];
   const L = LightweightCharts.LineStyle;
   const line = (price, color, style, axis = true) => { if (price > 0) lines.push(candles.createPriceLine({price, color, lineWidth: 1, lineStyle: style, axisLabelVisible: axis, title: ''})); };
-  const m = [], bar = t => Math.floor(t / 60) * 60 + KST;
+  const m = [], bar = t => Math.floor(t / (interval * 60)) * interval * 60 + KST;
   const ordered = t => {
     const up = t.side === 'long';
     if (t.signal_time) m.push({time: bar(t.signal_time), position: 'aboveBar', shape: 'circle', color: css('--faint'), text: hours <= 3 ? '신호' : '', size: .6});
@@ -319,17 +349,23 @@ function chartData(preserve = false) {
     m.push({time: bar(t.closed_at), position: t.side === 'long' ? 'aboveBar' : 'belowBar', shape: t.side === 'long' ? 'arrowDown' : 'arrowUp', color: css(t.pnl >= 0 ? '--up' : '--down'), text: hours <= 3 ? t.reason + ' ' + hm(t.closed_at) : ''});
   });
   markers.setMarkers(m.filter(m => m.time >= rows[0][0] + KST && m.time <= rows[rows.length - 1][0] + KST).sort((a, b) => a.time - b.time));
-  applyRange();
-  el('ttl').innerHTML = `${sym}/USDT<span>1분 · 거래량</span>`;
+  if (previous) chart.timeScale().setVisibleLogicalRange({from:previous.from+shift,to:previous.to+shift});
+  else applyRange();
+  el('ttl').innerHTML = `${sym}/USDT<span>${interval}분봉 · TradingView</span>`;
+  const latestBar = rows.at(-1);
+  el('ohlc').textContent = `O ${num(latestBar[1],d)}   H ${num(latestBar[2],d)}   L ${num(latestBar[3],d)}   C ${num(latestBar[4],d)} · 거래량 ${num(latestBar[5],0)}`;
+  el('intervals').innerHTML = [1,5].map(n=>`<button class="${n===interval?'on':''}" data-min="${n}" aria-pressed="${n===interval}">${n}분봉</button>`).join('');
+  el('intervals').querySelectorAll('button').forEach(b=>b.onclick=()=>{interval=+b.dataset.min;firstBar=null;chartData();});
   el('ranges').innerHTML = [1, 3, 6, 24].map(h => `<button class="${h === hours ? 'on' : ''}" data-h="${h}" aria-pressed="${h === hours}">${h}시간</button>`).join('');
   el('ranges').querySelectorAll('button').forEach(b => b.onclick = () => { hours = +b.dataset.h; chartData(); });
+  el('reset-view').onclick=()=>{applyRange();overlay();};
   requestAnimationFrame(overlay);
 }
 
 function overlay() {
   if (!S || !C || firstBar == null) return;
   const ov = el('ov'), ts = chart.timeScale(), p = pos(), W = ts.width(), out = [];
-  const x = t => ts.logicalToCoordinate((Math.floor(t / 60) * 60 - firstBar) / 60), y = v => v > 0 ? candles.priceToCoordinate(v) : null;
+  const x = t => ts.logicalToCoordinate((Math.floor(t / (interval * 60)) * interval * 60 - firstBar) / (interval * 60)), y = v => v > 0 ? candles.priceToCoordinate(v) : null;
   const zone = (c, x0, x1, a, b) => {
     if (x0 == null || x1 == null || a == null || b == null) return;
     const l = Math.max(0, x0), r = Math.min(W, x1);
@@ -384,17 +420,18 @@ function lower() {
   el('signals').innerHTML = rows.map(r => {
     const chk = r.state || (r.checked_at ? (S.now - r.checked_at < 60 ? '방금 확인' : `${ago(S.now - r.checked_at)} 전 확인`) : '확인 전');
     const last = r.last ? `<b>${hm(r.last.time)} ${esc(r.last.side.toUpperCase())}</b> → ${esc(r.last.result)}${r.last.result_time ? ' ' + hm(r.last.result_time) : ''}` : '아직 신호 없음';
-    return `<div class="row sig"><span class="nm">${esc(r.name)}</span><span class="stt ${r.on ? '' : 'off'}"><i></i>${r.state ? '' : r.on ? '수신 중 · ' : '멈춤 · '}${esc(chk)}</span><span class="cnt">${r.today == null ? '' : '오늘 ' + r.today + '건'}</span>${r.today == null ? '' : `<span class="lastsig">마지막 ${last}</span>`}</div>`;
+    return `<div class="row sig"><span class="nm">${esc(r.name)}</span><span class="stt ${r.on ? '' : 'off'}"><i></i>${r.state ? '' : r.on ? '수신 중 · ' : '멈춤 · '}${esc(chk)}</span><span class="cnt">${r.count == null ? '' : '수신 ' + r.count + '건'}</span>${r.count == null ? '' : `<span class="lastsig">마지막 ${last}</span>`}</div>`;
   }).join('') + (D.signals.flow.length ? '<div class="flow-ttl">마지막 신호가 지나간 길</div><div class="flow">' + D.signals.flow.map(r => `<div class="st"><b>${esc(r.step)}</b>${hm(r.time)}</div>`).join('') + '</div>' : '') + history();
-  el('account').innerHTML = [['평가액', num(S.equity) + ' USDT', ''], ['오늘 손익', sgn(S.day_pnl) + ' USDT', cls(S.day_pnl)], ['누적 실현 손익', sgn(S.realized) + ' USDT', cls(S.realized)], ['거래', `${S.trades}건 · ${S.wins}승`, '']]
+  el('account').innerHTML = [['평가액', num(S.equity) + ' USDT', ''], ['새 집계 손익', sgn(S.day_pnl) + ' USDT', cls(S.day_pnl)], ['누적 실현 손익', sgn(S.realized) + ' USDT', cls(S.realized)], ['거래', `${S.trades}건 · ${S.wins}승`, '']]
     .map(([k, v, c]) => `<div class="row acct"><span class="muted">${k}</span><span class="v ${c}">${v}</span></div>`).join('');
-  el('tradesum').textContent = `${S.trades}건`;
+  el('tradesum').textContent = `${S.trades}건 · 모의 신호 ${D.shorts.length}건`;
   el('trades').innerHTML = S.closed.map(t => `<div class="row trade"><span class="side ${esc(t.side)}">${esc(t.side.toUpperCase())}</span><span class="nm">${esc(t.symbol)}</span><span class="amt ${cls(t.pnl)}">${sgn(t.pnl)} USDT · ${sgn(t.pnl_pct)}%</span>
-    <span class="meta">${hm(t.opened_at)} → ${hm(t.closed_at)} · ${esc(t.reason)} · ${num(t.notional)} USDT</span></div>`).join('');
+    <span class="meta">${hm(t.opened_at)} → ${hm(t.closed_at)} · ${esc(t.reason)} · ${num(t.notional)} USDT</span></div>`).join('') + D.shorts.map(r=>`<div class="row trade"><span class="side short">SHORT</span><span class="nm">${esc(r.symbol)}</span><span class="amt">${esc(r.status)}${r.return_pct==null?'':' · '+sgn(r.return_pct)+'% (모의 20배)'}</span><span class="meta">예정 ${hm(r.entry_time)} → ${hm(r.exit_time)} · 신호 관찰 기록</span></div>`).join('');
+  if (!S.closed.length && !D.shorts.length) el('trades').innerHTML='<div class="empty-state"><span aria-hidden="true">▤</span><strong>새 거래를 기다리고 있어요</strong><p>새 집계 이후 거래가 생기면<br>이곳에 표시됩니다.</p></div>';
 }
 
 function render(preserve = false) {
-  S = {...D.accounts[account], now: D.updated};
+  S = {...D.accounts.paper, now: D.updated};
   header(); position();
   if (!chart) buildChart();
   chartData(preserve); lower();
@@ -404,7 +441,7 @@ function validate(data, rows) {
   if (!Number.isFinite(data.updated) || !data.health || !Array.isArray(data.health.down) || !data.marks || !data.accounts || !Array.isArray(data.signals?.rows) || !Array.isArray(data.signals.flow)) throw Error('invalid data');
   const numbers = (item, keys) => keys.every(k => Number.isFinite(item[k]));
   if (!numbers(data.health, ['ok','total']) || !data.health.down.every(s => typeof s === 'string')) throw Error('invalid health');
-  for (const name of ['paper', 'practice']) {
+  for (const name of ['paper']) {
     const a = data.accounts[name];
     if (!a || !Array.isArray(a.positions) || !Array.isArray(a.closed) || !numbers(a, ['equity','day_pnl','realized','trades','wins'])) throw Error('invalid account');
     if (![...a.positions, ...a.closed].every(p => ['long', 'short'].includes(p.side) && SYMBOLS.includes(p.symbol) && Array.isArray(p.fills) && numbers(p, ['size','entry','notional','pnl','pnl_pct','opened_at','target','stop','signal_time']))) throw Error('invalid position');
@@ -412,6 +449,7 @@ function validate(data, rows) {
     if (!a.closed.every(t => numbers(t, ['exit','closed_at']) && typeof t.reason === 'string')) throw Error('invalid trade');
     if (a.orders && (!Array.isArray(a.orders) || !a.orders.every(o => numbers(o, ['time','price','size']) && SYMBOLS.includes(o.symbol)))) throw Error('invalid orders');
   }
+  if (!data.session || !Number.isFinite(data.session.started_at) || !Array.isArray(data.shorts) || !data.shorts.every(r=>SYMBOLS.includes(r.symbol)&&r.side==='short'&&[r.time,r.entry_time,r.exit_time,r.leverage].every(Number.isFinite)&&(r.return_pct===null||Number.isFinite(r.return_pct)))) throw Error('invalid session or short signal');
   if (!data.signals.rows.every(r => typeof r.name === 'string' && typeof r.on === 'boolean' && (!r.last || (numbers(r.last, ['time','result_time']) && ['long','short'].includes(r.last.side) && typeof r.last.result === 'string')))) throw Error('invalid signals');
   if (!data.signals.flow.every(r => typeof r.step === 'string' && Number.isFinite(r.time))) throw Error('invalid flow');
   if (data.signals.dots && (!Array.isArray(data.signals.dots) || !data.signals.dots.every(r => SYMBOLS.includes(r.symbol) && Number.isFinite(r.time)))) throw Error('invalid dots');
@@ -438,6 +476,7 @@ async function refresh() {
     if (!D) el('pos').innerHTML = '<div class="muted">자료를 기다리는 중</div>';
   } finally { refreshing = false; status(); }
 }
+document.querySelectorAll('.side-nav a').forEach(a=>a.addEventListener('click',()=>{document.querySelectorAll('.side-nav a').forEach(n=>n.classList.remove('active'));a.classList.add('active');}));
 refresh();
 setInterval(refresh, 60000);
 setInterval(status, 10000);
