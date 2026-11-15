@@ -516,7 +516,7 @@ async function refresh() {
 }
 document.querySelectorAll('.side-nav a').forEach(a=>a.addEventListener('click',()=>{document.querySelectorAll('.side-nav a').forEach(n=>n.classList.remove('active'));a.classList.add('active');}));
 refresh();
-setInterval(refresh, 60000);
+setInterval(refresh, 10000);
 setInterval(status, 10000);
 </script>
 </body>
