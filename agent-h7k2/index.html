@@ -161,6 +161,7 @@
   <p class="intro-copy">BTC, ETH, SOL의 신호와 모의 거래를 한곳에서 확인하세요.</p>
   <div id="stale" role="status" hidden></div>
   <nav class="symbols" id="symbols" aria-label="종목"></nav>
+  <section class="pos" id="total-pnl" aria-label="전체 실시간 손익"><div class="muted">전체 손익 불러오는 중</div></section>
   <section class="pos" id="pos" aria-label="지금 포지션"><div class="muted">자료 불러오는 중</div></section>
   <section class="chart-box" id="chart-panel" aria-label="차트">
     <div class="chart-bar">
@@ -181,6 +182,7 @@
 <script src="lwc.js"></script>
 <script src="chart-data.js"></script>
 <script src="indicators.js"></script>
+<script src="live-pnl.js"></script>
 <script>
 const Q = new URLSearchParams(location.search), KST = 9 * 3600;
 const SYMBOLS = ['BTC', 'ETH', 'SOL'];
@@ -190,6 +192,7 @@ const dp = s => s === 'BTC' ? 1 : 2;
 const num = (v, d = 2) => v.toLocaleString('en-US', {minimumFractionDigits: d, maximumFractionDigits: d});
 const sgn = (v, d = 2) => (v >= 0 ? '+' : '−') + num(Math.abs(v), d);
 const hm = t => t ? new Date((t + KST) * 1000).toISOString().slice(11, 16) : '—';
+const hms = t => t ? new Date((t + KST) * 1000).toISOString().slice(11, 19) : '—';
 const ago = s => s < 3600 ? Math.max(1, Math.round(Math.max(0, s) / 60)) + '분' : Math.floor(s / 3600) + '시간 ' + Math.round(s % 3600 / 60) + '분';
 const cls = v => v >= 0 ? 'up' : 'down';
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -204,10 +207,32 @@ let interval = [1,5,10].includes(+Q.get('tf')) ? +Q.get('tf') : 1;
 let indicatorSeries = [], selectedIndicators = new Set(['EMA','RSI']);
 try { const saved=JSON.parse(localStorage.getItem('chart-indicators'));if(Array.isArray(saved)) selectedIndicators=new Set(saved.filter(v=>['EMA','SMA','BB','VWAP','RSI','MACD'].includes(v))); } catch {}
 let D, C, S, failed = false, refreshing = false, chart, candles, volume, markers, lines = [], firstBar;
+const liveQuotes={};let liveConnected=false,liveShorts=[];
 const pos = () => S.positions.find(p => p.symbol === sym);
-const last = s => C[s][C[s].length - 1][4];
+const last = s => LivePnl.quoteFor(s,liveQuotes,Date.now())?.price??C[s][C[s].length - 1][4];
 const bars = () => aggregateCandles(C[sym], interval);
-const currentShort = s => D.shorts.find(r => r.symbol === s);
+const currentShort = s => liveShorts.find(r => r.symbol === s);
+
+function prepareLive() {
+  const now=Date.now();S={...LivePnl.paper(D,liveQuotes,now),now:now/1000};
+  liveShorts=LivePnl.shorts(D,liveQuotes,now);
+}
+
+function totalPnl() {
+  const q=LivePnl.quoteFor(sym,liveQuotes,Date.now());
+  const live=liveConnected&&q?.live&&Date.now()/1000-D.updated<=900;
+  const stamp=`Bitget 표시가격 · ${live?'실시간 시세':'시세 연결 확인 중 / 마지막 가격'} ${q?hms(q.ts/1000):'—'} · 포지션 기록 ${hms(D.updated)} 기준`;
+  let title,value,pct,realized,unrealized,detail,unit;
+  if(sym==='SOL') {
+    title='SOL 계좌 전체 PnL';value=S.total_pnl;pct=S.total_pct;realized=S.realized;unrealized=S.unrealized;unit='USDT';
+    detail=`실현 + 보유분 미실현 · 새 집계 기준 · 기록된 수수료 반영`;
+  } else {
+    const t=LivePnl.shortTotal(sym,liveShorts,Date.now());
+    title=`${sym} 모의 신호 전체 평균 PnL`;value=t.total;pct=null;realized=t.realized;unrealized=t.unrealized;unit='%';
+    detail=`동일 증거금 가정 · 시작된 ${t.count}개 신호 평균 · 보유 ${t.active}개 · 20배 / 16bp 비용 가정${t.waiting_exit?' · 청산 기록 갱신 대기':''}`;
+  }
+  el('total-pnl').innerHTML=`<div><div class="pos-id"><strong>${title}</strong></div><div class="pnl-row"><div class="pnl ${value==null?'muted':cls(value)}">${value==null?'—':sgn(value)}<small>${unit}</small></div>${pct==null?'':`<div class="pct ${cls(pct)}">${sgn(pct)}%</div>`}</div><div class="pnl-sub">${detail}</div><div class="pnl-sub" id="pnl-price-status">${stamp}</div></div><dl class="facts"><div><dt>${sym==='SOL'?'실현 손익':'실현 기여'}</dt><dd>${sgn(realized)}<span>${unit}</span></dd></div><div><dt>${sym==='SOL'?'미실현 손익':'미실현 기여'}</dt><dd>${sgn(unrealized)}<span>${unit}</span></dd></div>${sym==='SOL'?`<div><dt>현재 평가액</dt><dd>${num(S.equity)}<span>USDT</span></dd></div>`:''}</dl>`;
+}
 
 function theme() {
   const dark = (preference || (systemTheme.matches ? 'dark' : 'light')) === 'dark';
@@ -276,7 +301,7 @@ function position() {
       <div class="pos-id"><span class="side ${esc(p.side)}">${esc(p.side.toUpperCase())}</span><span class="pair">${sym}/USDT</span>
         <span class="when">${hm(p.opened_at)} 진입 · ${ago(S.now - p.opened_at)} 전</span><span class="limit">${limit % 3600 ? num(limit / 60, 0) + '분' : num(limit / 3600, 0) + '시간'} 한도 · ${left > 0 ? ago(left) + ' 남음' : '청산 대기'}</span></div>
       <div class="pnl-row"><div class="pnl ${cls(p.pnl)}">${sgn(p.pnl)}<small>USDT</small></div><div class="pct ${cls(p.pnl)}">${sgn(p.pnl_pct)}%</div></div>
-      <div class="pnl-sub">미실현 손익 · 계좌 대비 ${S.equity ? sgn(p.pnl / S.equity * 100) + '%' : '—'}</div>
+      <div class="pnl-sub">현재 포지션 미실현 손익 · 계좌 대비 ${S.equity ? sgn(p.pnl / S.equity * 100) + '%' : '—'} · ${p.quote_live&&liveConnected?'실시간 표시가격':'마지막 기준가격'}</div>
     </div>
     <dl class="facts">
       <div><dt>평균 진입가</dt><dd>${num(p.entry, d)}</dd></div>
@@ -478,8 +503,8 @@ function lower() {
 }
 
 function render(preserve = false) {
-  S = {...D.accounts.paper, now: D.updated};
-  header(); position();
+  prepareLive();
+  header(); totalPnl(); position();
   if (!chart) buildChart();
   chartData(preserve); lower();
 }
@@ -525,6 +550,8 @@ async function refresh() {
 }
 document.querySelectorAll('.side-nav a').forEach(a=>a.addEventListener('click',()=>{document.querySelectorAll('.side-nav a').forEach(n=>n.classList.remove('active'));a.classList.add('active');}));
 refresh();
+LivePnl.feed(q=>{liveQuotes[q.symbol]=q;},connected=>{liveConnected=connected;});
+setInterval(()=>{if(D){prepareLive();header();totalPnl();position();lower();if(chart)overlay();}},1000);
 setInterval(refresh, 10000);
 setInterval(status, 10000);
 </script>
