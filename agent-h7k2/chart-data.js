@@ -1,5 +1,5 @@
 function aggregateCandles(rows, minutes) {
-  if (![1, 5].includes(minutes)) throw Error('Unsupported candle interval');
+  if (![1, 5, 10].includes(minutes)) throw Error('Unsupported candle interval');
   const step = minutes * 60, result = [];
   rows.forEach((row, i) => {
     if (row.length !== 6 || !row.every(Number.isFinite) || row[0] % 60 ||

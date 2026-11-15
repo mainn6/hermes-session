@@ -144,11 +144,11 @@
 <body>
 <div class="app-shell">
   <aside class="sidebar" aria-label="워크스페이스 메뉴">
-    <a class="workspace-brand" href="#overview"><span class="brand-mark" aria-hidden="true">▥</span><span>KRAPI<span class="brand-caption">TRADING AGENT</span></span></a>
+    <a class="workspace-brand" href="#overview"><span class="brand-mark" aria-hidden="true">K</span><span>KRAPI<span class="brand-caption">TRADING AGENT</span></span></a>
     <div class="nav-label">WORKSPACE</div>
     <nav class="side-nav"><a class="active" href="#overview"><span aria-hidden="true">▦</span>트레이딩 현황</a><a href="#chart-panel"><span aria-hidden="true">⌁</span>실시간 차트</a><a href="#signals-panel"><span aria-hidden="true">◉</span>신호 기록</a><a href="#trades-panel"><span aria-hidden="true">▤</span>거래 내역</a></nav>
     <div class="side-divider"></div><div class="nav-label">MARKETS</div>
-    <div class="asset-nav"><button data-asset="SOL"><span class="asset-icon sol">S</span>Solana<span class="asset-caption">SOL</span></button><button data-asset="BTC"><span class="asset-icon btc">₿</span>Bitcoin<span class="asset-caption">BTC</span></button><button data-asset="ETH"><span class="asset-icon eth">Ξ</span>Ethereum<span class="asset-caption">ETH</span></button></div>
+    <div class="asset-nav"><button data-asset="BTC"><span class="asset-icon btc">₿</span>Bitcoin<span class="asset-caption">BTC</span></button><button data-asset="ETH"><span class="asset-icon eth">Ξ</span>Ethereum<span class="asset-caption">ETH</span></button><button data-asset="SOL"><span class="asset-icon sol">S</span>Solana<span class="asset-caption">SOL</span></button></div>
     <div class="sidebar-bottom"><span class="mode-dot"></span><div><strong>모의 운영</strong><span>실제 주문 없이 신호 관찰</span></div></div>
   </aside>
   <div class="workspace">
@@ -167,6 +167,7 @@
       <div class="ttl" id="ttl"></div>
       <div class="chart-tools"><div class="seg" id="intervals" aria-label="봉 간격"></div><div class="seg" id="ranges" aria-label="범위"></div></div>
     </div>
+    <div id="indicators" class="indicator-tools" aria-label="인디케이터 선택"></div>
     <div class="chart-caption"><div id="ohlc" aria-live="off"></div><button id="reset-view" aria-label="차트 배율 맞춤">차트 맞춤 ↔</button></div>
     <div class="chart"><div id="lw"></div><div class="ov" id="ov"></div></div>
   </section>
@@ -179,9 +180,10 @@
 </main></div></div>
 <script src="lwc.js"></script>
 <script src="chart-data.js"></script>
+<script src="indicators.js"></script>
 <script>
 const Q = new URLSearchParams(location.search), KST = 9 * 3600;
-const SYMBOLS = ['SOL', 'BTC', 'ETH'];
+const SYMBOLS = ['BTC', 'ETH', 'SOL'];
 const el = id => document.getElementById(id);
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const dp = s => s === 'BTC' ? 1 : 2;
@@ -198,7 +200,9 @@ preference ||= 'light';
 if (!['light', 'dark'].includes(preference)) preference = null;
 let sym = SYMBOLS.includes(Q.get('sym')) ? Q.get('sym') : SYMBOLS[0];
 let hours = [1, 3, 6, 24].includes(+Q.get('h')) ? +Q.get('h') : 3;
-let interval = Q.get('tf') === '5' ? 5 : 1;
+let interval = [1,5,10].includes(+Q.get('tf')) ? +Q.get('tf') : 1;
+let indicatorSeries = [], selectedIndicators = new Set(['EMA','RSI']);
+try { const saved=JSON.parse(localStorage.getItem('chart-indicators'));if(Array.isArray(saved)) selectedIndicators=new Set(saved.filter(v=>['EMA','SMA','BB','VWAP','RSI','MACD'].includes(v))); } catch {}
 let D, C, S, failed = false, refreshing = false, chart, candles, volume, markers, lines = [], firstBar;
 const pos = () => S.positions.find(p => p.symbol === sym);
 const last = s => C[s][C[s].length - 1][4];
@@ -252,7 +256,7 @@ function position() {
   const p = pos(), d = dp(sym);
   if (sym !== 'SOL') {
     const signal = currentShort(sym);
-    el('pos').innerHTML = signal ? `<div><div class="pos-id"><span class="side short">SHORT</span><span class="pair">${sym}/USDT</span><span class="when">모의 20배 신호 · ${esc(signal.status)}</span></div><div class="pnl-sub">${hm(signal.time)} 신호 · 진입 예정 ${hm(signal.entry_time)} · 시간청산 예정 ${hm(signal.exit_time)} · ${signal.notified ? '알림 전송 확인' : '전송 확인 대기'}</div>${signal.return_pct == null ? '' : `<div class="pnl ${cls(signal.return_pct)}">${sgn(signal.return_pct)}<small>%</small></div><div class="pnl-sub">봉 기준 모의 증거금 수익률 · 16bp 비용 가정</div>`}<div class="pnl-sub">신호 관찰 기록 · 실제 주문·체결 없음</div></div>` : `<div><div class="none">새 ${sym} 숏 신호 대기</div><div class="pnl-sub">새 집계 이후 신호부터 표시 · 모의 20배 · 실제 주문 없음</div></div>`;
+    el('pos').innerHTML = signal ? `<div><div class="pos-id"><span class="side short">SHORT</span><span class="pair">${sym}/USDT</span><span class="when">모의 20배 신호 · ${esc(signal.status)}</span></div><div class="pnl-sub">${hm(signal.time)} 신호 · 진입 예정 ${hm(signal.entry_time)} · 시간청산 예정 ${hm(signal.exit_time)} · ${signal.notified ? '알림 전송 확인' : '전송 확인 대기'}</div>${(signal.return_pct??signal.open_return_pct) == null ? '' : `<div class="pnl ${cls(signal.return_pct??signal.open_return_pct)}">${sgn(signal.return_pct??signal.open_return_pct)}<small>%</small></div><div class="pnl-sub">${signal.return_pct==null?'최근 완성봉':'시간청산 봉'} 기준 모의 증거금 수익률 · 16bp 비용 가정</div>`}${signal.reference_entry?`<div class="pnl-sub">모의 기준 진입 ${num(signal.reference_entry,d)} · 참고 가격 ${num(signal.reference_mark,d)}</div>`:''}<div class="pnl-sub">신호 관찰 기록 · 가격 목표·손절 미설정 · 시간청산 · 실제 주문·체결 없음</div></div>` : `<div><div class="none">새 ${sym} 숏 신호 대기</div><div class="pnl-sub">새 집계 이후 신호부터 표시 · 모의 20배 · 실제 주문 없음</div></div>`;
     return;
   }
   if (!p) {
@@ -277,6 +281,34 @@ function position() {
       <div><dt>금액</dt><dd>${num(p.notional)}<span>USDT</span><span class="wide">계좌의 ${num(p.leverage)}배</span></dd></div>
       <div><dt>물타기</dt><dd>${p.ladder_filled} / ${p.ladder_steps}<span>체결</span></dd></div>
     </dl>`;
+}
+
+function renderIndicators(rows) {
+  indicatorSeries.reverse().forEach(series=>chart.removeSeries(series));indicatorSeries=[];
+  const shift=data=>data.map(p=>({...p,time:p.time+KST}));
+  const addLine=(data,color,title,pane=0)=>{
+    const series=chart.addSeries(LightweightCharts.LineSeries,{color,lineWidth:1,priceLineVisible:false,lastValueVisible:false,title},pane);
+    series.setData(shift(data));indicatorSeries.push(series);return series;
+  };
+  if(selectedIndicators.has('EMA')){addLine(ema(rows,20),'#ed9b4e','EMA20');addLine(ema(rows,60),'#7d87cf','EMA60');}
+  if(selectedIndicators.has('SMA'))addLine(sma(rows,20),'#45a6a0','SMA20');
+  if(selectedIndicators.has('BB')){const b=bollinger(rows);addLine(b.upper,'#9faac5','BB상단');addLine(b.middle,'#bac1d3','BB중심');addLine(b.lower,'#9faac5','BB하단');}
+  if(selectedIndicators.has('VWAP'))addLine(vwap(rows),'#d688b2','VWAP');
+  let pane=1;
+  if(selectedIndicators.has('RSI')){
+    const series=addLine(rsi(rows),'#9a82c8','RSI14',pane++);series.getPane().setHeight(100);
+    series.createPriceLine({price:70,color:'#c4bed0',lineWidth:1,lineStyle:2,axisLabelVisible:true,title:'70'});series.createPriceLine({price:30,color:'#c4bed0',lineWidth:1,lineStyle:2,axisLabelVisible:true,title:'30'});
+  }
+  if(selectedIndicators.has('MACD')){
+    const data=macd(rows),series=addLine(data.line,'#729bd2','MACD',pane);addLine(data.signal,'#d9a166','Signal',pane);
+    const histogram=chart.addSeries(LightweightCharts.HistogramSeries,{priceLineVisible:false,lastValueVisible:false,title:'MACD 히스토그램'},pane++);
+    histogram.setData(shift(data.histogram).map(p=>({...p,color:p.value>=0?'#8bd3bb':'#edb3bc'})));indicatorSeries.push(histogram);series.getPane().setHeight(110);
+  }
+  el('indicators').innerHTML='<span>지표</span>'+['EMA','SMA','BB','VWAP','RSI','MACD'].map(name=>`<button data-indicator="${name}" class="${selectedIndicators.has(name)?'on':''}" aria-pressed="${selectedIndicators.has(name)}">${name==='BB'?'볼린저밴드':name}</button>`).join('');
+  el('indicators').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    const name=b.dataset.indicator;if(selectedIndicators.has(name))selectedIndicators.delete(name);else selectedIndicators.add(name);
+    try{localStorage.setItem('chart-indicators',JSON.stringify([...selectedIndicators]));}catch{}chartData(true);
+  });
 }
 
 function buildChart() {
@@ -327,34 +359,39 @@ function chartData(preserve = false) {
   candles.applyOptions({priceFormat: {type: 'price', precision: d, minMove: d === 1 ? .1 : .01}});
   candles.setData(rows.map(r => ({time: r[0] + KST, open: r[1], high: r[2], low: r[3], close: r[4]})));
   volume.setData(rows.map(r => ({time: r[0] + KST, value: r[5], color: r[4] >= r[1] ? css('--up-vol') : css('--down-vol')})));
+  renderIndicators(rows);
   lines.forEach(l => candles.removePriceLine(l)); lines = [];
   const L = LightweightCharts.LineStyle;
-  const line = (price, color, style, axis = true) => { if (price > 0) lines.push(candles.createPriceLine({price, color, lineWidth: 1, lineStyle: style, axisLabelVisible: axis, title: ''})); };
+  const line = (price, color, style, axis = true, title = '') => { if (price > 0) lines.push(candles.createPriceLine({price, color, lineWidth: 1, lineStyle: style, axisLabelVisible: axis, title})); };
   const m = [], bar = t => Math.floor(t / (interval * 60)) * interval * 60 + KST;
   const ordered = t => {
     const up = t.side === 'long';
     if (t.signal_time) m.push({time: bar(t.signal_time), position: 'aboveBar', shape: 'circle', color: css('--faint'), text: hours <= 3 ? '신호' : '', size: .6});
-    m.push({time: bar(t.opened_at), position: up ? 'belowBar' : 'aboveBar', shape: up ? 'arrowUp' : 'arrowDown', color: css(up ? '--up' : '--down'), text: hours <= 3 ? '진입 ' + hm(t.opened_at) : ''});
+    (t.fills.length?t.fills:[{time:t.opened_at,price:t.entry}]).forEach(fill=>m.push({time: bar(fill.time), position: up ? 'belowBar' : 'aboveBar', shape: up ? 'arrowUp' : 'arrowDown', color: css(up ? '--up' : '--down'), text: hours <= 6 ? `${up?'롱':'숏'} 진입 ${hm(fill.time)} · ${num(fill.price,dp(sym))}` : ''}));
   };
   if (p) {
-    line(p.target, css('--up'), L.Dashed); line(p.entry, css('--text'), L.Solid);
+    line(p.target, css('--up'), L.Dashed,true,'목표 / 익절'); line(p.entry, css('--text'), L.Solid,true,'평균 진입');
     p.pending.forEach(v => line(v, css('--faint'), L.Dotted, false));
-    line(p.stop, css('--down'), L.Dashed);
+    line(p.stop, css('--down'), L.Dashed,true,'손절');
     ordered(p);
   }
   (S.orders || []).filter(o => o.symbol === sym).forEach(o => line(o.price, css('--faint'), L.Dotted));
   (D.signals.dots || []).filter(s => s.symbol === sym).forEach(s => m.push({time: bar(s.time), position: 'aboveBar', shape: 'circle', color: css('--faint'), text: '', size: .4}));
   S.closed.filter(t => t.symbol === sym).forEach(t => {
     ordered(t);
-    m.push({time: bar(t.closed_at), position: t.side === 'long' ? 'aboveBar' : 'belowBar', shape: t.side === 'long' ? 'arrowDown' : 'arrowUp', color: css(t.pnl >= 0 ? '--up' : '--down'), text: hours <= 3 ? t.reason + ' ' + hm(t.closed_at) : ''});
+    m.push({time: bar(t.closed_at), position: t.side === 'long' ? 'aboveBar' : 'belowBar', shape: t.side === 'long' ? 'arrowDown' : 'arrowUp', color: css(t.pnl >= 0 ? '--up' : '--down'), text: hours <= 6 ? t.reason + ' ' + hm(t.closed_at) + ' · ' + num(t.exit,dp(sym)) : ''});
   });
+  const ref=currentShort(sym);if(ref?.reference_entry)line(ref.reference_entry,css('--down'),L.Dotted,true,'모의 숏 기준 진입');
+  const recentClosed=S.closed.find(t=>t.symbol===sym);
+  if(!p&&recentClosed){line(recentClosed.target,css('--up'),L.Dashed,true,'목표(종료)');line(recentClosed.stop,css('--down'),L.Dashed,true,'손절(종료)');}
+  D.shorts.filter(t=>t.symbol===sym).forEach(t=>{m.push({time:bar(t.entry_time),position:'aboveBar',shape:'arrowDown',color:css('--down'),text:'모의 숏 진입 '+hm(t.entry_time)});if(t.status==='완료')m.push({time:bar(t.exit_time),position:'belowBar',shape:'arrowUp',color:css('--muted'),text:'시간청산 '+hm(t.exit_time)});});
   markers.setMarkers(m.filter(m => m.time >= rows[0][0] + KST && m.time <= rows[rows.length - 1][0] + KST).sort((a, b) => a.time - b.time));
   if (previous) chart.timeScale().setVisibleLogicalRange({from:previous.from+shift,to:previous.to+shift});
   else applyRange();
   el('ttl').innerHTML = `${sym}/USDT<span>${interval}분봉 · TradingView</span>`;
   const latestBar = rows.at(-1);
   el('ohlc').textContent = `O ${num(latestBar[1],d)}   H ${num(latestBar[2],d)}   L ${num(latestBar[3],d)}   C ${num(latestBar[4],d)} · 거래량 ${num(latestBar[5],0)}`;
-  el('intervals').innerHTML = [1,5].map(n=>`<button class="${n===interval?'on':''}" data-min="${n}" aria-pressed="${n===interval}">${n}분봉</button>`).join('');
+  el('intervals').innerHTML = [1,5,10].map(n=>`<button class="${n===interval?'on':''}" data-min="${n}" aria-pressed="${n===interval}">${n}분봉</button>`).join('');
   el('intervals').querySelectorAll('button').forEach(b=>b.onclick=()=>{interval=+b.dataset.min;firstBar=null;chartData();});
   el('ranges').innerHTML = [1, 3, 6, 24].map(h => `<button class="${h === hours ? 'on' : ''}" data-h="${h}" aria-pressed="${h === hours}">${h}시간</button>`).join('');
   el('ranges').querySelectorAll('button').forEach(b => b.onclick = () => { hours = +b.dataset.h; chartData(); });
