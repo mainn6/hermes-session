@@ -348,6 +348,7 @@ function buildChart() {
 
 function applyRange() {
   if (!C) return;
+  chart.priceScale('right').applyOptions({autoScale: true});
   const rows = bars(), count = hours * 60 / interval, future = Math.round(count * (pos() ? .32 : .04));
   chart.timeScale().setVisibleLogicalRange({from: rows.length - count, to: rows.length - 1 + future});
 }
