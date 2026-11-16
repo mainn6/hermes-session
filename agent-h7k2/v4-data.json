@@ -1,6 +1,6 @@
 {
   "version": "v4",
-  "updated": 1794798670.28,
+  "updated": 1794798725.877,
   "session": {
     "started_at": 1794795618.585,
     "baseline_equity": 10000
@@ -11,14 +11,14 @@
     "down": []
   },
   "marks": {
-    "BTC": 65016.2,
-    "ETH": 1819.66,
-    "SOL": 71.937
+    "BTC": 65074.4,
+    "ETH": 1821.89,
+    "SOL": 72.031
   },
   "accounts": {
     "paper": {
-      "equity": 9994.423262789536,
-      "day_pnl": -5.576737210463762,
+      "equity": 9981.359440093316,
+      "day_pnl": -18.640559906683848,
       "realized": 0.0,
       "trades": 0,
       "wins": 0,
@@ -40,10 +40,10 @@
               "price": 72.012
             }
           ],
-          "mark": 71.937,
-          "pnl": -5.576737210464531,
-          "pnl_pct": -0.055767372104645316,
-          "leverage": 1.0005579848945587,
+          "mark": 72.031,
+          "pnl": -18.64055990668298,
+          "pnl_pct": -0.18640559906682982,
+          "leverage": 1.0018675371845451,
           "pending": [],
           "decision_time": 1794797526.479,
           "ladder_steps": 1,
@@ -73,12 +73,16 @@
       "closed": [],
       "orders": [],
       "baseline_equity": 10000,
-      "pending_plan": null,
+      "pending_plan": {
+        "side": "short",
+        "entry_time": 1794798780.0,
+        "signal_time": 1794798720.0
+      },
       "mode": "own_asset_paper"
     },
     "ETH": {
-      "equity": 10007.84906569959,
-      "day_pnl": 7.849065699589119,
+      "equity": 10015.524627074168,
+      "day_pnl": 15.524627074168166,
       "realized": 0.0,
       "trades": 0,
       "wins": 0,
@@ -100,10 +104,10 @@
               "price": 1825.43
             }
           ],
-          "mark": 1821.08,
-          "pnl": 7.849065699589334,
-          "pnl_pct": 0.07849065699589335,
-          "leverage": 0.99921570902518,
+          "mark": 1819.68,
+          "pnl": 15.524627074168825,
+          "pnl_pct": 0.15524627074168826,
+          "leverage": 0.9984499436971876,
           "pending": [],
           "decision_time": 1794797220.903,
           "ladder_steps": 1,
@@ -122,8 +126,8 @@
       "mode": "own_asset_paper"
     },
     "SOL": {
-      "equity": 9994.423262789536,
-      "day_pnl": -5.576737210463762,
+      "equity": 9981.359440093316,
+      "day_pnl": -18.640559906683848,
       "realized": 0.0,
       "trades": 0,
       "wins": 0,
@@ -145,10 +149,10 @@
               "price": 72.012
             }
           ],
-          "mark": 71.937,
-          "pnl": -5.576737210464531,
-          "pnl_pct": -0.055767372104645316,
-          "leverage": 1.0005579848945587,
+          "mark": 72.031,
+          "pnl": -18.64055990668298,
+          "pnl_pct": -0.18640559906682982,
+          "leverage": 1.0018675371845451,
           "pending": [],
           "decision_time": 1794797526.479,
           "ladder_steps": 1,
@@ -178,21 +182,27 @@
     "notional_equity_multiple": 1
   },
   "native_started_at": 1794795618.585,
-  "native_updated": 1794798670.28,
+  "native_updated": 1794798725.877,
   "signals": {
     "rows": [
       {
         "name": "BTC V4 학습 신호",
         "on": true,
-        "count": 0,
-        "checked_at": 1794798660.0,
-        "last": null
+        "count": 1,
+        "checked_at": 1794798720.0,
+        "last": {
+          "time": 1794798720.0,
+          "symbol": "BTC",
+          "side": "short",
+          "result": "모의 진입 예정",
+          "result_time": 1794798780.0
+        }
       },
       {
         "name": "ETH V4 학습 신호",
         "on": true,
         "count": 1,
-        "checked_at": 1794798660.0,
+        "checked_at": 1794798720.0,
         "last": {
           "time": 1794797220.0,
           "symbol": "ETH",
@@ -205,7 +215,7 @@
         "name": "SOL V4 학습 신호",
         "on": true,
         "count": 1,
-        "checked_at": 1794798660.0,
+        "checked_at": 1794798720.0,
         "last": {
           "time": 1794797520.0,
           "symbol": "SOL",
@@ -216,6 +226,13 @@
       }
     ],
     "history": [
+      {
+        "time": 1794798720.0,
+        "symbol": "BTC",
+        "side": "short",
+        "result": "모의 진입 예정",
+        "result_time": 1794798780.0
+      },
       {
         "time": 1794797520.0,
         "symbol": "SOL",
@@ -234,6 +251,10 @@
     "flow": [],
     "dots": [
       {
+        "time": 1794798720.0,
+        "symbol": "BTC"
+      },
+      {
         "time": 1794797220.0,
         "symbol": "ETH"
       },
@@ -245,5 +266,5 @@
   },
   "shorts": [],
   "short_exit_policy": null,
-  "candles_updated": 1794798600
+  "candles_updated": 1794798660
 }
