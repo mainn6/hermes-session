@@ -1,6 +1,6 @@
 {
   "version": "v4",
-  "updated": 1794801721.561,
+  "updated": 1794801731.803,
   "session": {
     "started_at": 1794795618.585,
     "baseline_equity": 10000
@@ -11,14 +11,14 @@
     "down": []
   },
   "marks": {
-    "BTC": 65131.4,
-    "ETH": 1828.91,
-    "SOL": 72.237
+    "BTC": 65045.2,
+    "ETH": 1825.64,
+    "SOL": 72.01
   },
   "accounts": {
     "paper": {
-      "equity": 9952.730211631395,
-      "day_pnl": -47.26978836860508,
+      "equity": 9984.277953674387,
+      "day_pnl": -15.72204632561261,
       "realized": 0.0,
       "trades": 0,
       "wins": 0,
@@ -40,10 +40,10 @@
               "price": 72.012
             }
           ],
-          "mark": 72.237,
-          "pnl": -47.26978836860445,
-          "pnl_pct": -0.4726978836860445,
-          "leverage": 1.0047494292885948,
+          "mark": 72.01,
+          "pnl": -15.722046325613046,
+          "pnl_pct": -0.15722046325613045,
+          "leverage": 1.001574680352306,
           "pending": [],
           "decision_time": 1794797526.479,
           "ladder_steps": 1,
@@ -154,8 +154,8 @@
       "mode": "own_asset_paper"
     },
     "SOL": {
-      "equity": 9952.730211631395,
-      "day_pnl": -47.26978836860508,
+      "equity": 9984.277953674387,
+      "day_pnl": -15.72204632561261,
       "realized": 0.0,
       "trades": 0,
       "wins": 0,
@@ -177,10 +177,10 @@
               "price": 72.012
             }
           ],
-          "mark": 72.237,
-          "pnl": -47.26978836860445,
-          "pnl_pct": -0.4726978836860445,
-          "leverage": 1.0047494292885948,
+          "mark": 72.01,
+          "pnl": -15.722046325613046,
+          "pnl_pct": -0.15722046325613045,
+          "leverage": 1.001574680352306,
           "pending": [],
           "decision_time": 1794797526.479,
           "ladder_steps": 1,
@@ -210,7 +210,7 @@
     "notional_equity_multiple": 1
   },
   "native_started_at": 1794795618.585,
-  "native_updated": 1794801721.561,
+  "native_updated": 1794801731.803,
   "signals": {
     "rows": [
       {
@@ -243,7 +243,7 @@
         "name": "SOL V4 학습 신호",
         "on": true,
         "count": 1,
-        "checked_at": 1794801660.0,
+        "checked_at": 1794801720.0,
         "last": {
           "time": 1794797520.0,
           "symbol": "SOL",
@@ -305,5 +305,5 @@
   },
   "shorts": [],
   "short_exit_policy": null,
-  "candles_updated": 1794801600
+  "candles_updated": 1794801660
 }
