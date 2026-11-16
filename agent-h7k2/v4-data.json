@@ -1,6 +1,6 @@
 {
   "version": "v4",
-  "updated": 1794803831.076,
+  "updated": 1794803884.951,
   "session": {
     "started_at": 1794795618.585,
     "baseline_equity": 10000
@@ -11,8 +11,8 @@
     "down": []
   },
   "marks": {
-    "BTC": 64960.6,
-    "ETH": 1822.45,
+    "BTC": 64959.7,
+    "ETH": 1822.48,
     "SOL": 71.709
   },
   "accounts": {
@@ -64,8 +64,8 @@
   },
   "native_accounts": {
     "BTC": {
-      "equity": 10007.223950417312,
-      "day_pnl": 7.223950417312153,
+      "equity": 10001.133430970123,
+      "day_pnl": 1.1334309701232996,
       "realized": 0.0,
       "trades": 0,
       "wins": 0,
@@ -87,10 +87,10 @@
               "price": 65071.1
             }
           ],
-          "mark": 64920.1,
-          "pnl": 7.223950417312755,
-          "pnl_pct": 0.07223950417312755,
-          "leverage": 0.9992781264361521,
+          "mark": 64959.7,
+          "pnl": 1.1334309701236747,
+          "pnl_pct": 0.011334309701236746,
+          "leverage": 0.9998866697481894,
           "pending": [],
           "decision_time": 1794798721.697,
           "ladder_steps": 1,
@@ -109,8 +109,8 @@
       "mode": "own_asset_paper"
     },
     "ETH": {
-      "equity": 10006.917033246962,
-      "day_pnl": 6.917033246962092,
+      "equity": 10000.173504325008,
+      "day_pnl": 0.17350432500825264,
       "realized": 0.0,
       "trades": 0,
       "wins": 0,
@@ -132,10 +132,10 @@
               "price": 1825.43
             }
           ],
-          "mark": 1821.25,
-          "pnl": 6.917033246961337,
-          "pnl_pct": 0.06917033246961336,
-          "leverage": 0.9993087747980741,
+          "mark": 1822.48,
+          "pnl": 0.17350432500860435,
+          "pnl_pct": 0.0017350432500860436,
+          "leverage": 0.9999826498685315,
           "pending": [],
           "decision_time": 1794797220.903,
           "ladder_steps": 1,
@@ -210,14 +210,14 @@
     "notional_equity_multiple": 1
   },
   "native_started_at": 1794795618.585,
-  "native_updated": 1794803831.076,
+  "native_updated": 1794803884.951,
   "signals": {
     "rows": [
       {
         "name": "BTC V4 학습 신호",
         "on": true,
         "count": 2,
-        "checked_at": 1794803820.0,
+        "checked_at": 1794803880.0,
         "last": {
           "time": 1794801480.0,
           "symbol": "BTC",
@@ -230,7 +230,7 @@
         "name": "ETH V4 학습 신호",
         "on": true,
         "count": 1,
-        "checked_at": 1794803820.0,
+        "checked_at": 1794803880.0,
         "last": {
           "time": 1794797220.0,
           "symbol": "ETH",
