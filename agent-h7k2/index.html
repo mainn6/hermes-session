@@ -195,12 +195,13 @@ try { preference ||= localStorage.getItem('workspace-theme'); } catch {}
 preference ||= 'light';
 if (!['light', 'dark'].includes(preference)) preference = null;
 let sym = SYMBOLS.includes(Q.get('sym')) ? Q.get('sym') : SYMBOLS[0];
-let hours = [1, 3, 6, 24].includes(+Q.get('h')) ? +Q.get('h') : 3;
+let hours = [1, 3, 6, 24].includes(+Q.get('h')) ? +Q.get('h') : 6;
 let interval = [1,5,10].includes(+Q.get('tf')) ? +Q.get('tf') : 1;
 let indicatorSeries = [], selectedIndicators = new Set();
 try { const saved=JSON.parse(localStorage.getItem('chart-indicators'));if(Array.isArray(saved)) selectedIndicators=new Set(saved.filter(v=>['EMA','SMA','BB','VWAP','RSI','MACD'].includes(v))); } catch {}
-let D, C, S, failed = false, refreshing = false, chart, candles, volume, firstBar;
+let D, C, S, failed = false, refreshing = false, chart, candles, volume, markers, firstBar;
 const liveQuotes={};
+const hm=t=>new Date((t+KST)*1000).toISOString().slice(11,16);
 const last = s => LivePnl.quoteFor(s,liveQuotes,Date.now())?.price??C[s][C[s].length-1][4];
 const bars = () => aggregateCandles(C[sym],interval);
 function totalPnl() {
@@ -283,6 +284,7 @@ function buildChart() {
   });
   volume = chart.addSeries(LightweightCharts.HistogramSeries, {priceScaleId: 'vol', priceFormat: {type: 'volume'}, priceLineVisible: false, lastValueVisible: false});
   chart.priceScale('vol').applyOptions({scaleMargins: {top: 0.84, bottom: 0}});
+  markers=LightweightCharts.createSeriesMarkers(candles,[]);
   chart.subscribeCrosshairMove(event => {
     const value = event.seriesData.get(candles), row = bars().at(-1);
     const b = value || {open:row[1],high:row[2],low:row[3],close:row[4]};
@@ -306,6 +308,8 @@ function chartData(preserve = false) {
   candles.setData(rows.map(r => ({time: r[0] + KST, open: r[1], high: r[2], low: r[3], close: r[4]})));
   volume.setData(rows.map(r => ({time: r[0] + KST, value: r[5], color: r[4] >= r[1] ? css('--up-vol') : css('--down-vol')})));
   renderIndicators(rows);
+  const bucket=t=>Math.floor(t/(interval*60))*interval*60+KST;
+  markers.setMarkers(D.entries.filter(e=>e.symbol===sym&&bucket(e.time)>=rows[0][0]+KST&&bucket(e.time)<=rows.at(-1)[0]+KST).map(e=>({time:bucket(e.time),position:e.side==='long'?'belowBar':'aboveBar',shape:e.side==='long'?'arrowUp':'arrowDown',color:css(e.side==='long'?'--up':'--down'),text:`${e.side==='long'?'롱':'숏'} 진입 ${hm(e.time)} · ${num(e.price,dp(sym))}`})).sort((a,b)=>a.time-b.time));
   if (previous) chart.timeScale().setVisibleLogicalRange({from:previous.from+shift,to:previous.to+shift});
   else applyRange();
   el('ttl').innerHTML = `${sym}/USDT<span>${interval}분봉 · TradingView</span>`;
@@ -322,7 +326,8 @@ function chartData(preserve = false) {
 function render(preserve=false){header();totalPnl();if(!chart)buildChart();chartData(preserve);}
 function validate(data,rows){
   const keys=(value,wanted)=>value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).sort().join(',')===[...wanted].sort().join(',');
-  if(!keys(data,['visibility','version','updated','healthy','accounts'])||data.visibility!=='public-summary'||data.version!==VERSION||!Number.isFinite(data.updated)||typeof data.healthy!=='boolean'||!keys(data.accounts,SYMBOLS)||!keys(rows,SYMBOLS))throw Error('invalid public summary');
+  if(!keys(data,['visibility','version','updated','healthy','accounts','entries'])||data.visibility!=='public-summary'||data.version!==VERSION||!Number.isFinite(data.updated)||typeof data.healthy!=='boolean'||!keys(data.accounts,SYMBOLS)||!keys(rows,SYMBOLS))throw Error('invalid public summary');
+  if(!Array.isArray(data.entries)||!data.entries.every(e=>keys(e,['symbol','side','time','price'])&&SYMBOLS.includes(e.symbol)&&['long','short'].includes(e.side)&&Number.isFinite(e.time)&&e.time>0&&Number.isFinite(e.price)&&e.price>0))throw Error('invalid public entries');
   for(const s of SYMBOLS){
     const a=data.accounts[s],fields=['equity','realized','unrealized','total_pnl','total_pct'];
     if(!keys(a,fields)||!fields.every(k=>Number.isFinite(a[k]))||Math.abs(a.total_pnl-a.realized-a.unrealized)>.021)throw Error('invalid public totals');
