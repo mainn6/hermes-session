@@ -16,6 +16,19 @@
     if(!q||!finite(q.price)||q.price<=0||!finite(q.ts)||q.ts/1000<since||q.ts-now>5000)return null;
     return {...q,live:now-q.ts<=10000&&now-q.received<=10000};
   }
+  function paper(data,quotes,now=Date.now()) {
+    const a=data.accounts.paper;
+    const positions=a.positions.map(p=>{
+      const since=Math.max(p.opened_at,...p.fills.map(f=>f.time));
+      const q=quoteFor(p.symbol,quotes,now,since);
+      const pnl=p.pnl+(q?(q.price-p.mark)*p.size*((p.side==='long'?1:-1)-(p.exit_fee_rate??0)):0);
+      return {...p,mark:q?q.price:p.mark,pnl,pnl_pct:100*pnl/p.notional,quote_live:!!q?.live&&now/1000-data.updated<=900,quote_at:q?.ts};
+    });
+    const unrealized=positions.reduce((sum,p)=>sum+p.pnl,0),total=a.realized+unrealized,base=data.session.baseline_equity;
+    const equity=base+total;positions.forEach(p=>{p.leverage=equity?p.notional/equity:0;});
+    return {...a,positions,unrealized,total_pnl:total,total_pct:100*total/base,equity,day_pnl:total,
+      quote_live:now/1000-data.updated<=900&&positions.every(p=>p.quote_live)};
+  }
   function feed(onQuote,onState) {
     let socket,ping,retry,stopped=false,backoff=1000,lastMessage=Date.now();const seen={};
     function reconnect() {
@@ -43,6 +56,6 @@
     open();
     return ()=>{stopped=true;clearInterval(ping);clearTimeout(retry);if(socket)socket.close();onState(false);};
   }
-  const api={parse,quoteFor,feed};root.LivePnl=api;
+  const api={parse,quoteFor,paper,feed};root.LivePnl=api;
   if(typeof module!=='undefined')module.exports=api;
 })(globalThis);

@@ -147,7 +147,7 @@
   <aside class="sidebar" aria-label="워크스페이스 메뉴">
     <a class="workspace-brand" href="#overview" aria-label="KRAPI 트레이딩 현황"><span class="brand-art"><img class="brand-symbol brand-light" src="krapi-symbol-black.svg" alt=""><img class="brand-symbol brand-dark" src="krapi-symbol-white.svg" alt=""><img class="brand-wordmark brand-light" src="krapi-wordmark-black.svg" alt="KRAPI"><img class="brand-wordmark brand-dark" src="krapi-wordmark-white.svg" alt="KRAPI"></span><span class="brand-caption">TRADING AGENT</span></a>
     <div class="nav-label">WORKSPACE</div>
-    <details class="version-category" data-version="v3"><summary><strong>V3</strong><span>운영 현황</span></summary><nav class="side-nav"><a class="active" href="?version=v3#overview" data-section="#overview"><span aria-hidden="true">▦</span>트레이딩 현황</a><a class="" href="?version=v3#chart-panel" data-section="#chart-panel"><span aria-hidden="true">⌁</span>실시간 차트</a></nav></details><details class="version-category" data-version="v4"><summary><strong>V4</strong><span>운영 현황</span></summary><nav class="side-nav"><a class="active" href="?version=v4#overview" data-section="#overview"><span aria-hidden="true">▦</span>트레이딩 현황</a><a class="" href="?version=v4#chart-panel" data-section="#chart-panel"><span aria-hidden="true">⌁</span>실시간 차트</a></nav></details>
+    <details class="version-category" data-version="v3"><summary><strong>V3</strong><span>운영 현황</span></summary><nav class="side-nav"><a class="active" href="?version=v3#overview" data-section="#overview"><span aria-hidden="true">▦</span>트레이딩 현황</a><a class="" href="?version=v3#chart-panel" data-section="#chart-panel"><span aria-hidden="true">⌁</span>실시간 차트</a><a href="?version=v3#trades-panel" data-section="#trades-panel"><span aria-hidden="true">▤</span>거래 내역</a></nav></details><details class="version-category" data-version="v4"><summary><strong>V4</strong><span>운영 현황</span></summary><nav class="side-nav"><a class="active" href="?version=v4#overview" data-section="#overview"><span aria-hidden="true">▦</span>트레이딩 현황</a><a class="" href="?version=v4#chart-panel" data-section="#chart-panel"><span aria-hidden="true">⌁</span>실시간 차트</a><a href="?version=v4#trades-panel" data-section="#trades-panel"><span aria-hidden="true">▤</span>거래 내역</a></nav></details>
     <div class="side-divider"></div><div class="nav-label">MARKETS</div>
     <div class="asset-nav"><button data-asset="BTC"><img class="asset-icon" src="coin-btc.svg" alt="">Bitcoin<span class="asset-caption">BTC</span></button><button data-asset="ETH"><img class="asset-icon" src="coin-eth.png" alt="">Ethereum<span class="asset-caption">ETH</span></button><button data-asset="SOL"><img class="asset-icon" src="coin-sol.svg" alt="">Solana<span class="asset-caption">SOL</span></button></div>
     <div class="sidebar-bottom"><span class="mode-dot"></span><div><strong>모의 운영</strong><span>모의 계좌 현황</span></div></div>
@@ -163,6 +163,7 @@
   <div id="stale" role="status" hidden></div>
   <nav class="symbols" id="symbols" aria-label="종목"></nav>
   <section class="pos" id="total-pnl" aria-label="계좌 전체 손익"><div class="muted">전체 손익 불러오는 중</div></section>
+  <section class="pos" id="pos" aria-label="지금 포지션"></section>
   <section class="chart-box" id="chart-panel" aria-label="차트">
     <div class="chart-bar">
       <div class="ttl" id="ttl"></div>
@@ -170,8 +171,9 @@
     </div>
     <div id="indicators" class="indicator-tools" aria-label="인디케이터 선택"></div>
     <div class="chart-caption"><div id="ohlc" aria-live="off"></div><button id="reset-view" aria-label="차트 배율 맞춤">차트 맞춤 ↔</button></div>
-    <div class="chart"><div id="lw"></div></div>
+    <div class="chart"><div id="lw"></div><div class="ov" id="ov"></div></div>
   </section>
+<section class="block" id="trades-panel"><h2>최근 거래 <span id="tradesum"></span></h2><div id="trades"></div></section>
 <footer class="workspace-footer">이 페이지는 모의 운영 결과를 표시합니다.</footer>
 </main></div></div>
 <script src="lwc.js"></script>
@@ -199,13 +201,25 @@ let hours = [1, 3, 6, 24].includes(+Q.get('h')) ? +Q.get('h') : 6;
 let interval = [1,5,10].includes(+Q.get('tf')) ? +Q.get('tf') : 1;
 let indicatorSeries = [], selectedIndicators = new Set();
 try { const saved=JSON.parse(localStorage.getItem('chart-indicators'));if(Array.isArray(saved)) selectedIndicators=new Set(saved.filter(v=>['EMA','SMA','BB','VWAP','RSI','MACD'].includes(v))); } catch {}
-let D, C, S, failed = false, refreshing = false, chart, candles, volume, markers, firstBar;
+let D, C, S, failed = false, refreshing = false, chart, candles, volume, markers, lines=[], firstBar;
 const liveQuotes={};
 const hm=t=>new Date((t+KST)*1000).toISOString().slice(11,16);
 const last = s => LivePnl.quoteFor(s,liveQuotes,Date.now())?.price??C[s][C[s].length-1][4];
 const bars = () => aggregateCandles(C[sym],interval);
+const pos=()=>S?.positions.find(p=>p.symbol===sym);
+function prepareLive(){
+  S={...LivePnl.paper({updated:D.updated,accounts:{paper:D.accounts[sym]},session:{baseline_equity:D.accounts[sym].baseline_equity}},liveQuotes),now:Date.now()/1000};
+}
+function position(){
+  const p=pos(),d=dp(sym),c=S.closed[0];
+  if(!p){el('pos').innerHTML=`<div><div class="none">지금 ${sym} 포지션 없음</div>${c?`<div class="last"><span class="side ${c.side}">${c.side.toUpperCase()}</span>직전 거래 ${hm(c.opened_at)} → ${hm(c.closed_at)} · ${c.reason}<b class="${cls(c.pnl)}">${sgn(c.pnl)} USDT</b><span class="${cls(c.pnl_pct)}">${sgn(c.pnl_pct)}%</span></div>`:''}</div>`;return;}
+  el('pos').innerHTML=`<div><div class="pos-id"><span class="side ${p.side}">${p.side.toUpperCase()}</span><span class="pair">${sym}/USDT</span><span class="when">${hm(p.opened_at)} 진입</span></div><div class="pnl-row"><div class="pnl ${cls(p.pnl)}">${sgn(p.pnl)}<small>USDT</small></div><div class="pct ${cls(p.pnl_pct)}">${sgn(p.pnl_pct)}%</div></div></div><dl class="facts"><div><dt>평균 진입가</dt><dd>${num(p.entry,d)}</dd></div><div><dt>현재가</dt><dd>${num(p.mark,d)}</dd></div><div><dt>목표 / 익절</dt><dd>${num(p.target,d)}</dd></div><div><dt>손절</dt><dd>${num(p.stop,d)}</dd></div><div><dt>수량</dt><dd>${num(p.size)} ${sym}</dd></div></dl>`;
+}
+function trades(){
+  el('tradesum').textContent=S.closed.length+'건';
+  el('trades').innerHTML=S.closed.map(t=>`<div class="row trade"><span class="side ${t.side}">${t.side.toUpperCase()}</span><span class="nm">${sym}</span><span class="amt ${cls(t.pnl)}">${sgn(t.pnl)} USDT · ${sgn(t.pnl_pct)}%</span><span class="meta">${hm(t.opened_at)} → ${hm(t.closed_at)} · ${t.reason} · ${num(t.notional)} USDT</span></div>`).join('')||'<div class="none">완료된 거래가 없습니다</div>';
+}
 function totalPnl() {
-  S=D.accounts[sym];
   el('total-pnl').innerHTML=`<div><div class="pos-id"><strong>${sym} 계좌 전체 PnL</strong></div><div class="pnl-row"><div class="pnl ${cls(S.total_pnl)}">${sgn(S.total_pnl)}<small>USDT</small></div><div class="pct ${cls(S.total_pct)}">${sgn(S.total_pct)}%</div></div></div><dl class="facts"><div><dt>실현 손익</dt><dd>${sgn(S.realized)}<span>USDT</span></dd></div><div><dt>미실현 손익</dt><dd>${sgn(S.unrealized)}<span>USDT</span></dd></div><div><dt>현재 평가액</dt><dd>${num(S.equity)}<span>USDT</span></dd></div></dl>`;
 }
 function status() {
@@ -216,7 +230,7 @@ function status() {
 }
 function header() {
   status();el('accounts').textContent=VERSION.toUpperCase()+' · 모의 운영';
-  el('symbols').innerHTML=SYMBOLS.map(s=>`<button class="sym ${s===sym?'on':''}" data-s="${s}" aria-pressed="${s===sym}"><span class="s"><img class="coin-icon" src="coin-${s.toLowerCase()}.${s==='ETH'?'png':'svg'}" alt="">${s}</span><span class="p">${num(last(s),dp(s))}</span></button>`).join('');
+  el('symbols').innerHTML=SYMBOLS.map(s=>`<button class="sym ${s===sym?'on':''}" data-s="${s}" aria-pressed="${s===sym}"><span class="s"><img class="coin-icon" src="coin-${s.toLowerCase()}.${s==='ETH'?'png':'svg'}" alt="">${s}</span><span class="p">${num(last(s),dp(s))}</span>${D.accounts[s].positions[0]?`<span class="st ${D.accounts[s].positions[0].side}">${D.accounts[s].positions[0].side.toUpperCase()} 보유</span>`:'<span class="st none">새 신호 대기</span>'}</button>`).join('');
   el('symbols').querySelectorAll('button').forEach(b=>b.onclick=()=>{sym=b.dataset.s;firstBar=null;render();});
   document.querySelectorAll('[data-asset]').forEach(b=>{b.classList.toggle('active',b.dataset.asset===sym);b.onclick=()=>{sym=b.dataset.asset;firstBar=null;render();};});
 }
@@ -281,10 +295,20 @@ function buildChart() {
   candles = chart.addSeries(LightweightCharts.CandlestickSeries, {
     upColor: css('--up'), downColor: css('--down'), borderVisible: false, wickUpColor: css('--up'), wickDownColor: css('--down'),
     priceLineVisible: true, lastValueVisible: true,
+    autoscaleInfoProvider: original => {
+      const r = original(), p = pos();
+      if (!r?.priceRange || !p) return r;
+      const levels = [p.entry, p.target, p.stop].filter(v => v > 0), pad = (Math.max(...levels) - Math.min(...levels)) * .06;
+      r.priceRange.minValue = Math.min(r.priceRange.minValue, Math.min(...levels) - pad);
+      r.priceRange.maxValue = Math.max(r.priceRange.maxValue, Math.max(...levels) + pad);
+      return r;
+    },
   });
   volume = chart.addSeries(LightweightCharts.HistogramSeries, {priceScaleId: 'vol', priceFormat: {type: 'volume'}, priceLineVisible: false, lastValueVisible: false});
   chart.priceScale('vol').applyOptions({scaleMargins: {top: 0.84, bottom: 0}});
   markers=LightweightCharts.createSeriesMarkers(candles,[]);
+  chart.timeScale().subscribeVisibleLogicalRangeChange(overlay);
+  new ResizeObserver(()=>requestAnimationFrame(overlay)).observe(el('lw'));
   chart.subscribeCrosshairMove(event => {
     const value = event.seriesData.get(candles), row = bars().at(-1);
     const b = value || {open:row[1],high:row[2],low:row[3],close:row[4]};
@@ -296,7 +320,7 @@ function buildChart() {
 function applyRange() {
   if (!C) return;
   chart.priceScale('right').applyOptions({autoScale: true});
-  const rows = bars(), count = hours * 60 / interval, future = Math.round(count * .04);
+  const rows = bars(), count = hours * 60 / interval, future = Math.round(count * (pos() ? .32 : .04));
   chart.timeScale().setVisibleLogicalRange({from: rows.length - count, to: rows.length - 1 + future});
 }
 
@@ -308,6 +332,11 @@ function chartData(preserve = false) {
   candles.setData(rows.map(r => ({time: r[0] + KST, open: r[1], high: r[2], low: r[3], close: r[4]})));
   volume.setData(rows.map(r => ({time: r[0] + KST, value: r[5], color: r[4] >= r[1] ? css('--up-vol') : css('--down-vol')})));
   renderIndicators(rows);
+  lines.forEach(l=>candles.removePriceLine(l));lines=[];
+  const p=pos(),recent=S.closed[0],levels=p||recent;
+  if(levels)for(const [key,label,color,style] of [['entry','평균 진입','--text',0],['target',p?'목표 / 익절':'목표(종료)','--up',2],['stop',p?'손절':'손절(종료)','--down',2]])if(levels[key]>0)lines.push(candles.createPriceLine({price:levels[key],title:label,color:css(color),lineWidth:1,lineStyle:style,axisLabelVisible:true}));
+  if(p)p.pending.forEach(price=>{if(price>0)lines.push(candles.createPriceLine({price,title:'물타기 대기',color:css('--faint'),lineWidth:1,lineStyle:1,axisLabelVisible:false}));});
+
   const bucket=t=>Math.floor(t/(interval*60))*interval*60+KST;
   markers.setMarkers(D.events.filter(e=>e.symbol===sym&&bucket(e.time)>=rows[0][0]+KST&&bucket(e.time)<=rows.at(-1)[0]+KST).map(e=>{
     const entering=e.kind==='entry'||e.kind==='add',long=e.side==='long';
@@ -323,18 +352,70 @@ function chartData(preserve = false) {
   el('intervals').querySelectorAll('button').forEach(b=>b.onclick=()=>{interval=+b.dataset.min;firstBar=null;chartData();});
   el('ranges').innerHTML = [1, 3, 6, 24].map(h => `<button class="${h === hours ? 'on' : ''}" data-h="${h}" aria-pressed="${h === hours}">${h}시간</button>`).join('');
   el('ranges').querySelectorAll('button').forEach(b => b.onclick = () => { hours = +b.dataset.h; chartData(); });
-  el('reset-view').onclick=()=>{applyRange();};
+  el('reset-view').onclick=()=>{applyRange();overlay();};
+  requestAnimationFrame(overlay);
 }
 
 
-function render(preserve=false){header();totalPnl();if(!chart)buildChart();chartData(preserve);}
+function overlay() {
+  if (!S || !C || firstBar == null) return;
+  const ov = el('ov'), ts = chart.timeScale(), p = pos(), W = ts.width(), out = [];
+  const x = t => ts.logicalToCoordinate((Math.floor(t / (interval * 60)) * interval * 60 - firstBar) / (interval * 60)), y = v => v > 0 ? candles.priceToCoordinate(v) : null;
+  const zone = (c, x0, x1, a, b) => {
+    if (x0 == null || x1 == null || a == null || b == null) return;
+    const l = Math.max(0, x0), r = Math.min(W, x1);
+    if (r > l) out.push(`<div class="zone ${c}" style="left:${l}px;width:${r - l}px;top:${Math.min(a, b)}px;height:${Math.abs(a - b)}px"></div>`);
+  };
+  if (p) {
+    const x0 = x(p.opened_at), x1 = x(S.now - 60), up = p.side === 'long', d = dp(sym);
+    const yE = y(p.entry), yT = y(p.target), yS = y(p.stop), pct = v => sgn((v / p.entry - 1) * 100 * (up ? 1 : -1));
+    zone('tp', x0, W, yE, yT); zone('sl', x0, W, yE, yS);
+    if (W < 520) out.push(`<div class="tag ${p.pnl >= 0 ? 'gain' : 'loss'}" style="left:10px;top:10px">${esc(p.side.toUpperCase())} · ${sgn(p.pnl)} USDT · ${sgn(p.pnl_pct)}%</div>`);
+    else if (x0 != null && yE != null) {
+      if (yT != null) out.push(`<div class="ztext up" style="left:${W - 10}px;top:${up ? Math.min(yE, yT) + 8 : Math.max(yE, yT) - 24}px;transform:translateX(-100%)">익절 ${pct(p.target)}%</div>`);
+      if (yS != null) out.push(`<div class="ztext down" style="left:${W - 10}px;top:${up ? Math.max(yE, yS) - 24 : Math.min(yE, yS) + 8}px;transform:translateX(-100%)">손절 ${pct(p.stop)}%</div>`);
+      out.push(`<div class="tag" style="left:${W - 8}px;top:${yE - 12}px;transform:translateX(-100%)">${esc(p.side.toUpperCase())} ${num(p.size)} ${sym} · ${num(p.notional)} USDT</div>`);
+      if (p.pending.length > 1) {
+        const ys = p.pending.map(y), top = up ? Math.max(...ys) + 4 : Math.min(...ys) - 28;
+        out.push(`<div class="tag ghost" style="right:${ov.clientWidth - W + 8}px;top:${top}px">물타기 대기 ${p.pending.map(v => num(v, d)).join(' · ')}</div>`);
+      } else p.pending.forEach(v => out.push(`<div class="tag ghost" style="left:${Math.max(8, x0 + 8) + 150}px;top:${y(v) + (up ? 4 : -28)}px">물타기 대기 ${num(v, d)}</div>`));
+    }
+    if (x1 != null && W >= 520) out.push(`<div class="tag ${p.pnl >= 0 ? 'gain' : 'loss'}" style="left:${x1 + 18}px;top:${y(p.mark) + (p.pnl >= 0 ? -30 : 6)}px">${sgn(p.pnl)} USDT · ${sgn(p.pnl_pct)}%</div>`);
+  }
+  let mobileRow = p ? 1 : 0;
+  S.closed.filter(t => t.symbol === sym).forEach(t => {
+    const x0 = x(t.opened_at), x1 = x(t.closed_at);
+    if (x0 == null || x1 == null || x0 > W || x1 < 0) return;
+    zone('tp', x0, x1, y(t.entry), y(t.target)); zone('sl', x0, x1, y(t.entry), y(t.stop));
+    const res = `${esc(t.reason)} ${hm(t.closed_at)} · ${sgn(t.pnl)} USDT · ${sgn(t.pnl_pct)}%`, c = t.pnl >= 0 ? 'gain' : 'loss';
+    if (W < 520) out.push(`<div class="tag ${c}" data-closed style="left:10px;top:${10 + mobileRow++ * 28}px">${res}</div>`);
+    else {
+      const top = Math.max(4, Math.min(...[y(t.entry), y(t.target), y(t.stop), y(t.exit)].filter(v => v != null)) - 30);
+      const text = x1 - x0 < 40 ? `${sgn(t.pnl)}` : res;                         // narrow zone (long ranges): the amount only
+      if (x0 > W - 260) out.push(`<div class="tag ${c}" data-closed style="left:${Math.min(W - 8, Math.max(x1, x0 + 4))}px;top:${top}px;transform:translateX(-100%)">${text}</div>`);
+      else out.push(`<div class="tag ${c}" data-closed style="left:${Math.max(4, x0)}px;top:${top}px">${text}</div>`);
+    }
+  });
+  ov.innerHTML = out.join('');
+}
+
+function render(preserve=false){prepareLive();header();totalPnl();position();trades();if(!chart)buildChart();chartData(preserve);}
 function validate(data,rows){
   const keys=(value,wanted)=>value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).sort().join(',')===[...wanted].sort().join(',');
   if(!keys(data,['visibility','version','updated','healthy','accounts','events'])||data.visibility!=='public-summary'||data.version!==VERSION||!Number.isFinite(data.updated)||typeof data.healthy!=='boolean'||!keys(data.accounts,SYMBOLS)||!keys(rows,SYMBOLS))throw Error('invalid public summary');
   if(!Array.isArray(data.events)||!data.events.every(e=>keys(e,['symbol','side','time','price','kind'])&&SYMBOLS.includes(e.symbol)&&['long','short'].includes(e.side)&&['entry','add','take_profit','stop_loss','close'].includes(e.kind)&&Number.isFinite(e.time)&&e.time>0&&Number.isFinite(e.price)&&e.price>0))throw Error('invalid public events');
   for(const s of SYMBOLS){
-    const a=data.accounts[s],fields=['equity','realized','unrealized','total_pnl','total_pct'];
-    if(!keys(a,fields)||!fields.every(k=>Number.isFinite(a[k]))||Math.abs(a.total_pnl-a.realized-a.unrealized)>.021)throw Error('invalid public totals');
+    const a=data.accounts[s],money=['equity','realized','unrealized','total_pnl','total_pct'],fields=[...money,'baseline_equity','positions','closed'];
+    if(!keys(a,fields)||!money.every(k=>Number.isFinite(a[k]))||!Number.isFinite(a.baseline_equity)||a.baseline_equity<=0||Math.abs(a.total_pnl-a.realized-a.unrealized)>.021)throw Error('invalid public totals');
+    const common=['symbol','side','size','entry','notional','target','stop','opened_at','pnl','pnl_pct','fills'];
+    for(const [field,extra] of [['positions',['mark','pending','ladder_filled','ladder_steps','exit_fee_rate']],['closed',['closed_at','exit','reason']]]){
+      if(!Array.isArray(a[field]))throw Error('invalid public trades');
+      for(const p of a[field]){
+        if(!keys(p,[...common,...extra])||p.symbol!==s||!['long','short'].includes(p.side)||!['size','entry','notional','opened_at'].every(k=>Number.isFinite(p[k])&&p[k]>0)||!['target','stop','pnl','pnl_pct'].every(k=>Number.isFinite(p[k]))||!Array.isArray(p.fills)||!p.fills.every(f=>keys(f,['time','price'])&&Number.isFinite(f.time)&&f.time>0&&Number.isFinite(f.price)&&f.price>0))throw Error('invalid public trade');
+        if(field==='positions'&&(!['mark','ladder_filled','ladder_steps','exit_fee_rate'].every(k=>Number.isFinite(p[k]))||p.mark<=0||!Array.isArray(p.pending)||!p.pending.every(v=>Number.isFinite(v)&&v>0)))throw Error('invalid open trade');
+        if(field==='closed'&&(!Number.isFinite(p.closed_at)||p.closed_at<p.opened_at||!Number.isFinite(p.exit)||p.exit<=0||!['익절','손절','청산'].includes(p.reason)))throw Error('invalid closed trade');
+      }
+    }
     if(!Array.isArray(rows[s])||!rows[s].length||!rows[s].every((r,i)=>Array.isArray(r)&&r.length===6&&r.every(Number.isFinite)&&r[0]>0&&Math.min(...r.slice(1,5))>0&&r[5]>=0&&r[3]<=Math.min(r[1],r[4])&&r[2]>=Math.max(r[1],r[4])&&(!i||r[0]-rows[s][i-1][0]===60)))throw Error('invalid market candles');
   }
 }
@@ -358,7 +439,7 @@ for(const a of document.querySelectorAll('.version-switch a')){a.href=versionUrl
 document.querySelector('.breadcrumbs strong').textContent=VERSION.toUpperCase()+' 운영 현황';
 document.querySelectorAll('.side-nav a').forEach(a=>a.addEventListener('click',()=>{document.querySelectorAll('.side-nav a').forEach(n=>n.classList.remove('active'));a.classList.add('active');}));
 refresh();LivePnl.feed(q=>{liveQuotes[q.symbol]=q;},()=>{});
-setInterval(()=>{if(D&&C)header();},1000);setInterval(refresh,10000);setInterval(status,10000);
+setInterval(()=>{if(D&&C){prepareLive();header();totalPnl();position();overlay();}},1000);setInterval(refresh,10000);setInterval(status,10000);
 </script>
 </body>
 </html>
