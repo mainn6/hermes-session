@@ -1,6 +1,6 @@
 {
   "version": "v4",
-  "updated": 1794798084.343,
+  "updated": 1794798121.503,
   "session": {
     "started_at": 1794795618.585,
     "baseline_equity": 10000
@@ -11,8 +11,8 @@
     "down": []
   },
   "marks": {
-    "BTC": 65196.4,
-    "ETH": 1826.68,
+    "BTC": 65188.2,
+    "ETH": 1825.97,
     "SOL": 72.296
   },
   "accounts": {
@@ -77,8 +77,8 @@
       "mode": "own_asset_paper"
     },
     "ETH": {
-      "equity": 9989.043940331867,
-      "day_pnl": -10.956059668133094,
+      "equity": 9981.039426326948,
+      "day_pnl": -18.96057367305184,
       "realized": 0.0,
       "trades": 0,
       "wins": 0,
@@ -100,10 +100,10 @@
               "price": 1825.43
             }
           ],
-          "mark": 1824.51,
-          "pnl": -10.95605966813259,
-          "pnl_pct": -0.10956059668132591,
-          "leverage": 1.0010968076358036,
+          "mark": 1825.97,
+          "pnl": -18.960573673052178,
+          "pnl_pct": -0.18960573673052178,
+          "leverage": 1.0018996592301839,
           "pending": [],
           "decision_time": 1794797220.903,
           "ladder_steps": 1,
@@ -178,21 +178,21 @@
     "notional_equity_multiple": 1
   },
   "native_started_at": 1794795618.585,
-  "native_updated": 1794798084.343,
+  "native_updated": 1794798121.503,
   "signals": {
     "rows": [
       {
         "name": "BTC V4 학습 신호",
         "on": true,
         "count": 0,
-        "checked_at": 1794798060.0,
+        "checked_at": 1794798120.0,
         "last": null
       },
       {
         "name": "ETH V4 학습 신호",
         "on": true,
         "count": 1,
-        "checked_at": 1794798060.0,
+        "checked_at": 1794798120.0,
         "last": {
           "time": 1794797220.0,
           "symbol": "ETH",
