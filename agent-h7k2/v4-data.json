@@ -1,6 +1,6 @@
 {
   "version": "v4",
-  "updated": 1794798725.877,
+  "updated": 1794798734.129,
   "session": {
     "started_at": 1794795618.585,
     "baseline_equity": 10000
@@ -182,7 +182,7 @@
     "notional_equity_multiple": 1
   },
   "native_started_at": 1794795618.585,
-  "native_updated": 1794798725.877,
+  "native_updated": 1794798734.129,
   "signals": {
     "rows": [
       {
