@@ -309,7 +309,11 @@ function chartData(preserve = false) {
   volume.setData(rows.map(r => ({time: r[0] + KST, value: r[5], color: r[4] >= r[1] ? css('--up-vol') : css('--down-vol')})));
   renderIndicators(rows);
   const bucket=t=>Math.floor(t/(interval*60))*interval*60+KST;
-  markers.setMarkers(D.entries.filter(e=>e.symbol===sym&&bucket(e.time)>=rows[0][0]+KST&&bucket(e.time)<=rows.at(-1)[0]+KST).map(e=>({time:bucket(e.time),position:e.side==='long'?'belowBar':'aboveBar',shape:e.side==='long'?'arrowUp':'arrowDown',color:css(e.side==='long'?'--up':'--down'),text:`${e.side==='long'?'롱':'숏'} 진입 ${hm(e.time)} · ${num(e.price,dp(sym))}`})).sort((a,b)=>a.time-b.time));
+  markers.setMarkers(D.events.filter(e=>e.symbol===sym&&bucket(e.time)>=rows[0][0]+KST&&bucket(e.time)<=rows.at(-1)[0]+KST).map(e=>{
+    const entering=e.kind==='entry'||e.kind==='add',long=e.side==='long';
+    const label={entry:`${long?'롱':'숏'} 진입`,add:'물타기',take_profit:'익절',stop_loss:'손절',close:'청산'}[e.kind];
+    return {time:bucket(e.time),position:entering===long?'belowBar':'aboveBar',shape:e.kind==='entry'?(long?'arrowUp':'arrowDown'):e.kind==='add'||e.kind==='stop_loss'?'square':'circle',color:e.kind==='add'?'#d69316':css(e.kind==='take_profit'?'--up':e.kind==='stop_loss'?'--down':entering?(long?'--up':'--down'):'--muted'),text:`${label} ${hm(e.time)} · ${num(e.price,dp(sym))}`};
+  }).sort((a,b)=>a.time-b.time));
   if (previous) chart.timeScale().setVisibleLogicalRange({from:previous.from+shift,to:previous.to+shift});
   else applyRange();
   el('ttl').innerHTML = `${sym}/USDT<span>${interval}분봉 · TradingView</span>`;
@@ -326,8 +330,8 @@ function chartData(preserve = false) {
 function render(preserve=false){header();totalPnl();if(!chart)buildChart();chartData(preserve);}
 function validate(data,rows){
   const keys=(value,wanted)=>value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).sort().join(',')===[...wanted].sort().join(',');
-  if(!keys(data,['visibility','version','updated','healthy','accounts','entries'])||data.visibility!=='public-summary'||data.version!==VERSION||!Number.isFinite(data.updated)||typeof data.healthy!=='boolean'||!keys(data.accounts,SYMBOLS)||!keys(rows,SYMBOLS))throw Error('invalid public summary');
-  if(!Array.isArray(data.entries)||!data.entries.every(e=>keys(e,['symbol','side','time','price'])&&SYMBOLS.includes(e.symbol)&&['long','short'].includes(e.side)&&Number.isFinite(e.time)&&e.time>0&&Number.isFinite(e.price)&&e.price>0))throw Error('invalid public entries');
+  if(!keys(data,['visibility','version','updated','healthy','accounts','events'])||data.visibility!=='public-summary'||data.version!==VERSION||!Number.isFinite(data.updated)||typeof data.healthy!=='boolean'||!keys(data.accounts,SYMBOLS)||!keys(rows,SYMBOLS))throw Error('invalid public summary');
+  if(!Array.isArray(data.events)||!data.events.every(e=>keys(e,['symbol','side','time','price','kind'])&&SYMBOLS.includes(e.symbol)&&['long','short'].includes(e.side)&&['entry','add','take_profit','stop_loss','close'].includes(e.kind)&&Number.isFinite(e.time)&&e.time>0&&Number.isFinite(e.price)&&e.price>0))throw Error('invalid public events');
   for(const s of SYMBOLS){
     const a=data.accounts[s],fields=['equity','realized','unrealized','total_pnl','total_pct'];
     if(!keys(a,fields)||!fields.every(k=>Number.isFinite(a[k]))||Math.abs(a.total_pnl-a.realized-a.unrealized)>.021)throw Error('invalid public totals');
