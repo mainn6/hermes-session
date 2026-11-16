@@ -1,6 +1,6 @@
 {
   "version": "v4",
-  "updated": 1794805222.321,
+  "updated": 1794805265.96,
   "session": {
     "started_at": 1794795618.585,
     "baseline_equity": 10000
@@ -11,18 +11,19 @@
     "down": []
   },
   "marks": {
-    "BTC": 64787.3,
-    "ETH": 1817.76,
-    "SOL": 71.543
+    "BTC": 64639.3,
+    "ETH": 1812.27,
+    "SOL": 71.275
   },
   "accounts": {
     "paper": {
-      "equity": 10049.180136643892,
-      "day_pnl": 49.18013664389218,
-      "realized": 0.0,
-      "trades": 0,
-      "wins": 0,
-      "positions": [
+      "equity": 10084.08,
+      "day_pnl": 84.07999999999993,
+      "realized": 84.07999999999993,
+      "trades": 1,
+      "wins": 1,
+      "positions": [],
+      "closed": [
         {
           "symbol": "SOL",
           "side": "short",
@@ -40,10 +41,10 @@
               "price": 72.012
             }
           ],
-          "mark": 71.543,
-          "pnl": 49.18013664389187,
-          "pnl_pct": 0.49180136643891875,
-          "leverage": 0.9951060548248549,
+          "mark": 71.29188,
+          "pnl": 84.07999999999922,
+          "pnl_pct": 0.8407999999999922,
+          "leverage": 0.9916621050209836,
           "pending": [],
           "decision_time": 1794797526.479,
           "ladder_steps": 1,
@@ -52,10 +53,12 @@
           "is_reference": true,
           "exit_fee_rate": 0.0008,
           "margin_leverage": 20,
-          "margin": 500.0
+          "margin": 500.0,
+          "closed_at": 1794805260.0,
+          "exit": 71.29188,
+          "reason": "익절"
         }
       ],
-      "closed": [],
       "orders": [],
       "baseline_equity": 10000,
       "pending_plan": null,
@@ -64,8 +67,8 @@
   },
   "native_accounts": {
     "BTC": {
-      "equity": 10029.540474957392,
-      "day_pnl": 29.54047495739178,
+      "equity": 10030.078778443887,
+      "day_pnl": 30.07877844388713,
       "realized": 0.0,
       "trades": 0,
       "wins": 0,
@@ -87,10 +90,10 @@
               "price": 65071.1
             }
           ],
-          "mark": 64775.0,
-          "pnl": 29.54047495739253,
-          "pnl_pct": 0.2954047495739253,
-          "leverage": 0.9970546531986035,
+          "mark": 64771.5,
+          "pnl": 30.07877844388654,
+          "pnl_pct": 0.3007877844388654,
+          "leverage": 0.9970011423530859,
           "pending": [],
           "decision_time": 1794798721.697,
           "ladder_steps": 1,
@@ -109,8 +112,8 @@
       "mode": "own_asset_paper"
     },
     "ETH": {
-      "equity": 10026.270412998581,
-      "day_pnl": 26.270412998581378,
+      "equity": 10026.051111245022,
+      "day_pnl": 26.051111245022184,
       "realized": 0.0,
       "trades": 0,
       "wins": 0,
@@ -132,10 +135,10 @@
               "price": 1825.43
             }
           ],
-          "mark": 1817.72,
-          "pnl": 26.270412998581357,
-          "pnl_pct": 0.26270412998581355,
-          "leverage": 0.9973798419635158,
+          "mark": 1817.76,
+          "pnl": 26.051111245022117,
+          "pnl_pct": 0.2605111124502212,
+          "leverage": 0.9974016578455496,
           "pending": [],
           "decision_time": 1794797220.903,
           "ladder_steps": 1,
@@ -154,12 +157,13 @@
       "mode": "own_asset_paper"
     },
     "SOL": {
-      "equity": 10049.180136643892,
-      "day_pnl": 49.18013664389218,
-      "realized": 0.0,
-      "trades": 0,
-      "wins": 0,
-      "positions": [
+      "equity": 10084.08,
+      "day_pnl": 84.07999999999993,
+      "realized": 84.07999999999993,
+      "trades": 1,
+      "wins": 1,
+      "positions": [],
+      "closed": [
         {
           "symbol": "SOL",
           "side": "short",
@@ -177,10 +181,10 @@
               "price": 72.012
             }
           ],
-          "mark": 71.543,
-          "pnl": 49.18013664389187,
-          "pnl_pct": 0.49180136643891875,
-          "leverage": 0.9951060548248549,
+          "mark": 71.29188,
+          "pnl": 84.07999999999922,
+          "pnl_pct": 0.8407999999999922,
+          "leverage": 0.9916621050209836,
           "pending": [],
           "decision_time": 1794797526.479,
           "ladder_steps": 1,
@@ -189,10 +193,12 @@
           "is_reference": true,
           "exit_fee_rate": 0.0008,
           "margin_leverage": 20,
-          "margin": 500.0
+          "margin": 500.0,
+          "closed_at": 1794805260.0,
+          "exit": 71.29188,
+          "reason": "익절"
         }
       ],
-      "closed": [],
       "orders": [],
       "baseline_equity": 10000,
       "pending_plan": null,
@@ -210,14 +216,14 @@
     "notional_equity_multiple": 1
   },
   "native_started_at": 1794795618.585,
-  "native_updated": 1794805222.321,
+  "native_updated": 1794805265.96,
   "signals": {
     "rows": [
       {
         "name": "BTC V4 학습 신호",
         "on": true,
         "count": 2,
-        "checked_at": 1794805200.0,
+        "checked_at": 1794805260.0,
         "last": {
           "time": 1794801480.0,
           "symbol": "BTC",
@@ -230,7 +236,7 @@
         "name": "ETH V4 학습 신호",
         "on": true,
         "count": 1,
-        "checked_at": 1794805200.0,
+        "checked_at": 1794805260.0,
         "last": {
           "time": 1794797220.0,
           "symbol": "ETH",
@@ -243,13 +249,15 @@
         "name": "SOL V4 학습 신호",
         "on": true,
         "count": 1,
-        "checked_at": 1794805200.0,
+        "checked_at": 1794805260.0,
         "last": {
           "time": 1794797520.0,
           "symbol": "SOL",
           "side": "short",
           "result": "모의 진입",
-          "result_time": 1794797580.0
+          "result_time": 1794797580.0,
+          "outcome": "익절",
+          "pnl": 84.07999999999922
         }
       }
     ],
@@ -273,7 +281,9 @@
         "symbol": "SOL",
         "side": "short",
         "result": "모의 진입",
-        "result_time": 1794797580.0
+        "result_time": 1794797580.0,
+        "outcome": "익절",
+        "pnl": 84.07999999999922
       },
       {
         "time": 1794797220.0,
@@ -305,5 +315,5 @@
   },
   "shorts": [],
   "short_exit_policy": null,
-  "candles_updated": 1794805140
+  "candles_updated": 1794805200
 }
