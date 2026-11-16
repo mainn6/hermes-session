@@ -1,1 +1,117 @@
-{"version":"v4","mode":"snapshot","analyzed":["BTC"],"updated":1794792240,"window":{"start":1794705840,"end":1794792180},"session":{"started_at":1794705840},"marks":{"BTC":64671.5,"ETH":1806.84,"SOL":71.21},"signals":{"dots":[{"time":1794714660,"symbol":"BTC","side":"short","price":64743.2},{"time":1794726180,"symbol":"BTC","side":"short","price":64281.7},{"time":1794743460,"symbol":"BTC","side":"short","price":65387.6},{"time":1794767940,"symbol":"BTC","side":"long","price":64639.5},{"time":1794783120,"symbol":"BTC","side":"short","price":65101.4},{"time":1794784200,"symbol":"BTC","side":"short","price":65164.6},{"time":1794786780,"symbol":"BTC","side":"short","price":65143.1}],"history":[{"time":1794786780,"symbol":"BTC","side":"short","result":"학습 신호 판정"},{"time":1794784200,"symbol":"BTC","side":"short","result":"학습 신호 판정"},{"time":1794783120,"symbol":"BTC","side":"short","result":"학습 신호 판정"},{"time":1794767940,"symbol":"BTC","side":"long","result":"학습 신호 판정"},{"time":1794743460,"symbol":"BTC","side":"short","result":"학습 신호 판정"},{"time":1794726180,"symbol":"BTC","side":"short","result":"학습 신호 판정"},{"time":1794714660,"symbol":"BTC","side":"short","result":"학습 신호 판정"}],"rows":[{"name":"BTC 학습 신호","on":false,"count":7,"state":"분석 스냅샷","last":{"time":1794786780,"result_time":1794786840,"side":"short","result":"완성봉 판정"}},{"name":"ETH 학습 신호","on":false,"count":0,"state":"미분석","last":null},{"name":"SOL 학습 신호","on":false,"count":0,"state":"미분석","last":null}],"flow":[]}}
+{
+  "version": "v4",
+  "updated": 1794795976.339,
+  "session": {
+    "started_at": 1794795618.585,
+    "baseline_equity": 10000
+  },
+  "health": {
+    "ok": 3,
+    "total": 3,
+    "down": []
+  },
+  "marks": {
+    "BTC": 65233.9,
+    "ETH": 1831.18,
+    "SOL": 72.539
+  },
+  "accounts": {
+    "paper": {
+      "equity": 10000.0,
+      "day_pnl": 0.0,
+      "realized": 0.0,
+      "trades": 0,
+      "wins": 0,
+      "positions": [],
+      "closed": [],
+      "orders": [],
+      "baseline_equity": 10000,
+      "pending_plan": null,
+      "mode": "own_asset_paper"
+    }
+  },
+  "native_accounts": {
+    "BTC": {
+      "equity": 10000.0,
+      "day_pnl": 0.0,
+      "realized": 0.0,
+      "trades": 0,
+      "wins": 0,
+      "positions": [],
+      "closed": [],
+      "orders": [],
+      "baseline_equity": 10000,
+      "pending_plan": null,
+      "mode": "own_asset_paper"
+    },
+    "ETH": {
+      "equity": 10000.0,
+      "day_pnl": 0.0,
+      "realized": 0.0,
+      "trades": 0,
+      "wins": 0,
+      "positions": [],
+      "closed": [],
+      "orders": [],
+      "baseline_equity": 10000,
+      "pending_plan": null,
+      "mode": "own_asset_paper"
+    },
+    "SOL": {
+      "equity": 10000.0,
+      "day_pnl": 0.0,
+      "realized": 0.0,
+      "trades": 0,
+      "wins": 0,
+      "positions": [],
+      "closed": [],
+      "orders": [],
+      "baseline_equity": 10000,
+      "pending_plan": null,
+      "mode": "own_asset_paper"
+    }
+  },
+  "native_policy": {
+    "mode": "paper",
+    "source": "own_asset_chart",
+    "target_pct": 0.01,
+    "stop_pct": 0.02,
+    "max_hold_minutes": null,
+    "margin_leverage": 20,
+    "roundtrip_bps": 16,
+    "notional_equity_multiple": 1
+  },
+  "native_started_at": 1794795618.585,
+  "native_updated": 1794795976.339,
+  "signals": {
+    "rows": [
+      {
+        "name": "BTC V4 학습 신호",
+        "on": true,
+        "count": 0,
+        "checked_at": 1794795960.0,
+        "last": null
+      },
+      {
+        "name": "ETH V4 학습 신호",
+        "on": true,
+        "count": 0,
+        "checked_at": 1794795960.0,
+        "last": null
+      },
+      {
+        "name": "SOL V4 학습 신호",
+        "on": true,
+        "count": 0,
+        "checked_at": 1794795960.0,
+        "last": null
+      }
+    ],
+    "history": [],
+    "flow": [],
+    "dots": []
+  },
+  "shorts": [],
+  "short_exit_policy": null,
+  "candles_updated": 1794795900
+}

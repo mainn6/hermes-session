@@ -184,7 +184,6 @@
 <script src="chart-data.js"></script>
 <script src="indicators.js"></script>
 <script src="live-pnl.js"></script>
-<script src="v4-view.js"></script>
 <script>
 const Q = new URLSearchParams(location.search), KST = 9 * 3600;
 const SYMBOLS = ['BTC', 'ETH', 'SOL'];
@@ -212,12 +211,11 @@ try { const saved=JSON.parse(localStorage.getItem('chart-indicators'));if(Array.
 let D, C, S, failed = false, refreshing = false, chart, candles, volume, markers, lines = [], firstBar;
 const liveQuotes={};let liveConnected=false,liveShorts=[],liveAccounts={};
 const pos = () => S.positions.find(p => p.symbol === sym);
-const last = s => (!IS_V4 && LivePnl.quoteFor(s,liveQuotes,Date.now())?.price) || C[s][C[s].length - 1][4];
+const last = s => LivePnl.quoteFor(s,liveQuotes,Date.now())?.price??C[s][C[s].length - 1][4];
 const bars = () => aggregateCandles(C[sym], interval);
 const currentShort = s => liveShorts.find(r => r.symbol === s);
 
 function prepareLive() {
-  if (IS_V4) { S={positions:[],closed:[],orders:[],now:D.updated};liveAccounts={};liveShorts=[];return; }
   const now=Date.now(),paper=LivePnl.paper(D,liveQuotes,now);liveAccounts={SOL:paper};
   for(const [symbol,a] of Object.entries(D.native_accounts??{}))liveAccounts[symbol]=LivePnl.paper({...D,updated:D.native_updated,accounts:{paper:a},session:{...D.session,baseline_equity:a.baseline_equity}},liveQuotes,now);
   S={...(liveAccounts[sym]??paper),now:now/1000};
@@ -225,7 +223,6 @@ function prepareLive() {
 }
 
 function totalPnl() {
-  if (IS_V4) return V4View.totalPnl();
   const q=LivePnl.quoteFor(sym,liveQuotes,Date.now());
   const live=liveConnected&&q?.live&&Date.now()/1000-D.updated<=900;
   const stamp=`Bitget 표시가격 · ${live?'실시간 시세':'시세 연결 확인 중 / 마지막 가격'} ${q?hms(q.ts/1000):'—'} · 포지션 기록 ${hms(D.native_accounts?.[sym]?D.native_updated:D.updated)} 기준`;
@@ -261,7 +258,6 @@ systemTheme.addEventListener('change', () => { if (!preference) theme(); });
 theme();
 
 function status() {
-  if (IS_V4) return V4View.status();
   if (D) {
     const h = D.health;
     el('live').textContent = h.down.length ? `${h.ok} / ${h.total} · 멈춤: ${h.down.join(', ')}` : `${h.ok} / ${h.total} 정상 · ${hm(D.updated)} 갱신 · UTC+9`;
@@ -274,11 +270,11 @@ function status() {
 
 function header() {
   status();
-  el('accounts').textContent = IS_V4 ? 'V4 · 학습 신호 스냅샷 · 거래 미연결' : `모의 · ${D.native_accounts?.[sym]?'자체 차트 · ':''}새 집계 ${dhm(D.native_accounts?.[sym]?D.native_started_at:D.session.started_at)}부터`;
+  el('accounts').textContent = IS_V4 ? `V4 · 모의 · 새 집계 ${dhm(D.session.started_at)}부터` : `모의 · ${D.native_accounts?.[sym]?'자체 차트 · ':''}새 집계 ${dhm(D.native_accounts?.[sym]?D.native_started_at:D.session.started_at)}부터`;
   el('symbols').innerHTML = SYMBOLS.map(s => {
     const p = (liveAccounts[s]??S).positions.find(p => p.symbol === s);
     const activeShort = currentShort(s);
-    const st = IS_V4 ? `<span class="st none">${s==='BTC'?'학습 신호 7건':'신호 미분석'}</span>` : p ? `<span class="st ${esc(p.side)}">${esc(p.side.toUpperCase())} 보유</span>` : activeShort && activeShort.status !== '완료' ? '<span class="st short">숏 신호 관찰</span>' : '<span class="st none">새 신호 대기</span>';
+    const st = p ? `<span class="st ${esc(p.side)}">${esc(p.side.toUpperCase())} 보유</span>` : activeShort && activeShort.status !== '완료' ? '<span class="st short">숏 신호 관찰</span>' : '<span class="st none">새 신호 대기</span>';
     return `<button class="sym ${s === sym ? 'on' : ''}" data-s="${s}" aria-pressed="${s === sym}"><span class="s"><img class="coin-icon" src="coin-${s.toLowerCase()}.${s === 'ETH' ? 'png' : 'svg'}" alt="">${s}</span><span class="p">${num(last(s), dp(s))}</span>${st}</button>`;
   }).join('');
   el('symbols').querySelectorAll('button').forEach(b => b.onclick = () => { sym = b.dataset.s; firstBar=null; render(); });
@@ -286,7 +282,6 @@ function header() {
 }
 
 function position() {
-  if (IS_V4) return V4View.position();
   const p = pos(), d = dp(sym);
   if (D.native_accounts?.[sym]) {
     const pending=S.pending_plan,c=S.closed.find(t=>t.symbol===sym);
@@ -421,7 +416,7 @@ function chartData(preserve = false) {
     ordered(p);
   }
   (S.orders || []).filter(o => o.symbol === sym).forEach(o => line(o.price, css('--faint'), L.Dotted));
-  (D.signals.dots || []).filter(s => s.symbol === sym).forEach(s => m.push(IS_V4 ? {time:bar(s.time),position:s.side==='long'?'belowBar':'aboveBar',shape:s.side==='long'?'arrowUp':'arrowDown',color:css(s.side==='long'?'--up':'--down'),text:`학습 ${s.side==='long'?'롱':'숏'} ${hm(s.time)}`,size:1} : {time: bar(s.time), position: 'aboveBar', shape: 'circle', color: css('--faint'), text: '', size: .4}));
+  (D.signals.dots || []).filter(s => s.symbol === sym).forEach(s => m.push({time: bar(s.time), position: 'aboveBar', shape: 'circle', color: css('--faint'), text: '', size: .4}));
   S.closed.filter(t => t.symbol === sym).forEach(t => {
     ordered(t);
     m.push({time: bar(t.closed_at), position: t.side === 'long' ? 'aboveBar' : 'belowBar', shape: t.side === 'long' ? 'arrowDown' : 'arrowUp', color: css(t.pnl >= 0 ? '--up' : '--down'), text: hours <= 6 ? t.reason + ' ' + hm(t.closed_at) + ' · ' + num(t.exit,dp(sym)) : ''});
@@ -430,7 +425,7 @@ function chartData(preserve = false) {
   if(ref?.reference_levels){line(ref.reference_levels.target,css('--up'),L.Dashed,true,'부분익절 판단선');line(ref.reference_levels.stop,css('--down'),L.Dashed,true,'손절 판단선');line(ref.reference_levels.protection,css('--text'),L.Dashed,true,'수익보호 판단선');}
   const recentClosed=S.closed.find(t=>t.symbol===sym);
   if(!p&&recentClosed){line(recentClosed.target,css('--up'),L.Dashed,true,'목표(종료)');line(recentClosed.stop,css('--down'),L.Dashed,true,'손절(종료)');}
-  (IS_V4 ? [] : D.shorts).filter(t=>t.symbol===sym).forEach(t=>{
+  D.shorts.filter(t=>t.symbol===sym).forEach(t=>{
     if(t.reference_entry&&t.entry_time<=S.now)m.push({time:bar(t.entry_time),position:'aboveBar',shape:'arrowDown',color:css('--down'),text:'모의 숏 기준 진입 '+hm(t.entry_time)});
     if(t.reference_exits?.length)t.reference_exits.forEach(x=>m.push({time:bar(x.time),position:'belowBar',shape:'arrowUp',color:css(x.reason==='손절'?'--down':'--up'),text:`${x.reason} ${num(x.fraction*100,0)}% ${hm(x.time)} · ${num(x.price,dp(sym))}`}));
     else if(t.status==='완료')m.push({time:bar(t.exit_time),position:'belowBar',shape:'arrowUp',color:css('--muted'),text:(t.exit_reason??'시간청산')+' '+hm(t.exit_time)});
@@ -509,7 +504,7 @@ function lower() {
     const last = r.last ? `<b>${hm(r.last.time)} ${esc(r.last.side.toUpperCase())}</b> → ${esc(r.last.result)}${r.last.result_time ? ' ' + hm(r.last.result_time) : ''}` : '아직 신호 없음';
     return `<div class="row sig"><span class="nm">${esc(r.name)}</span><span class="stt ${r.on ? '' : 'off'}"><i></i>${r.state ? '' : r.on ? '수신 중 · ' : '멈춤 · '}${esc(chk)}</span><span class="cnt">${r.count == null ? '' : '수신 ' + r.count + '건'}</span>${r.count == null ? '' : `<span class="lastsig">마지막 ${last}</span>`}</div>`;
   }).join('') + (D.signals.flow.length ? '<div class="flow-ttl">마지막 신호가 지나간 길</div><div class="flow">' + D.signals.flow.map(r => `<div class="st"><b>${esc(r.step)}</b>${hm(r.time)}</div>`).join('') + '</div>' : '') + history();
-  if (IS_V4) { V4View.lower(); return; }
+  if (IS_V4) el('account-title').textContent = sym+' 모의 계좌';
   el('account').innerHTML = [['평가액', num(S.equity) + ' USDT', ''], ['새 집계 손익', sgn(S.day_pnl) + ' USDT', cls(S.day_pnl)], ['누적 실현 손익', sgn(S.realized) + ' USDT', cls(S.realized)], ['거래', `${S.trades}건 · ${S.wins}승`, '']]
     .map(([k, v, c]) => `<div class="row acct"><span class="muted">${k}</span><span class="v ${c}">${v}</span></div>`).join('');
   el('tradesum').textContent = `${S.trades}건 · 모의 신호 ${D.shorts.length}건`;
@@ -526,7 +521,7 @@ function render(preserve = false) {
 }
 
 function validate(data, rows) {
-  if (IS_V4) return V4View.validate(data, rows);
+  if (IS_V4 && (data.version!=='v4' || !data.native_accounts?.SOL)) throw Error('invalid V4 live book');
   if (!Number.isFinite(data.updated) || !data.health || !Array.isArray(data.health.down) || !data.marks || !data.accounts || !Array.isArray(data.signals?.rows) || !Array.isArray(data.signals.flow)) throw Error('invalid data');
   const numbers = (item, keys) => keys.every(k => Number.isFinite(item[k]));
   if (!numbers(data.health, ['ok','total']) || !data.health.down.every(s => typeof s === 'string')) throw Error('invalid health');
@@ -534,13 +529,13 @@ function validate(data, rows) {
     const a = data.accounts[name];
     if (!a || !Array.isArray(a.positions) || !Array.isArray(a.closed) || !numbers(a, ['equity','day_pnl','realized','trades','wins'])) throw Error('invalid account');
     if (![...a.positions, ...a.closed].every(p => ['long', 'short'].includes(p.side) && SYMBOLS.includes(p.symbol) && Array.isArray(p.fills) && numbers(p, ['size','entry','notional','pnl','pnl_pct','opened_at','target','stop','signal_time']))) throw Error('invalid position');
-    if (!a.positions.every(p => numbers(p, ['mark','leverage','decision_time','max_hold_at','ladder_filled','ladder_steps']) && Array.isArray(p.pending) && p.pending.every(Number.isFinite))) throw Error('invalid open position');
+    if (!a.positions.every(p => numbers(p, ['mark','leverage','decision_time','ladder_filled','ladder_steps',...(IS_V4?[]:['max_hold_at'])]) && (!IS_V4 || p.max_hold_at===null) && Array.isArray(p.pending) && p.pending.every(Number.isFinite))) throw Error('invalid open position');
     if (!a.closed.every(t => numbers(t, ['exit','closed_at']) && typeof t.reason === 'string')) throw Error('invalid trade');
     if (a.orders && (!Array.isArray(a.orders) || !a.orders.every(o => numbers(o, ['time','price','size']) && SYMBOLS.includes(o.symbol)))) throw Error('invalid orders');
   }
   if(data.native_accounts){
     if(!data.native_policy||data.native_policy.source!=='own_asset_chart'||data.native_policy.max_hold_minutes!==null||!Number.isFinite(data.native_started_at)||!Number.isFinite(data.native_updated))throw Error('invalid native policy');
-    for(const symbol of ['BTC','ETH']){const a=data.native_accounts[symbol];if(!a||!numbers(a,['equity','day_pnl','realized','trades','wins','baseline_equity'])||!Array.isArray(a.positions)||!Array.isArray(a.closed))throw Error('invalid native account');for(const p of [...a.positions,...a.closed])if(p.symbol!==symbol||!['long','short'].includes(p.side)||p.max_hold_at!==null||!p.is_reference||!Array.isArray(p.fills)||!numbers(p,['entry','target','stop','size','notional','pnl','pnl_pct','opened_at','signal_time','margin']))throw Error('invalid native bracket');}
+    for(const symbol of (IS_V4?SYMBOLS:['BTC','ETH'])){const a=data.native_accounts[symbol];if(!a||!numbers(a,['equity','day_pnl','realized','trades','wins','baseline_equity'])||!Array.isArray(a.positions)||!Array.isArray(a.closed))throw Error('invalid native account');for(const p of [...a.positions,...a.closed])if(p.symbol!==symbol||!['long','short'].includes(p.side)||p.max_hold_at!==null||!p.is_reference||!Array.isArray(p.fills)||!numbers(p,['entry','target','stop','size','notional','pnl','pnl_pct','opened_at','signal_time','margin']))throw Error('invalid native bracket');}
   }
   if (!data.session || !Number.isFinite(data.session.started_at) || !Array.isArray(data.shorts) || !data.shorts.every(r=>SYMBOLS.includes(r.symbol)&&r.side==='short'&&[r.time,r.entry_time,r.exit_time,r.leverage].every(Number.isFinite)&&(r.return_pct===null||Number.isFinite(r.return_pct)))) throw Error('invalid session or short signal');
   if (!data.signals.rows.every(r => typeof r.name === 'string' && typeof r.on === 'boolean' && (!r.last || (numbers(r.last, ['time','result_time']) && ['long','short'].includes(r.last.side) && typeof r.last.result === 'string')))) throw Error('invalid signals');
@@ -578,11 +573,11 @@ for(const group of document.querySelectorAll('.version-category')) {
 for(const a of document.querySelectorAll('.version-switch a')) {a.href=versionUrl(a.dataset.version);if(a.dataset.version===VERSION)a.setAttribute('aria-current','page');}
 document.querySelector('.breadcrumbs strong').textContent=VERSION.toUpperCase()+(IS_V4?' 새 학습 신호':' 기존 운영');
 if(IS_V4) {
-  document.querySelector('.intro-copy').textContent='SOL에서 학습한 신호를 BTC 차트에 적용한 V4입니다. ETH·SOL은 시장 차트만 표시합니다.';
-  document.querySelector('.sidebar-bottom strong').textContent='학습 신호 관찰';
-  document.querySelector('.sidebar-bottom div>span').textContent='과거 스냅샷 · 주문·체결 없음';
-  document.querySelector('.workspace-footer').textContent='V4 · 학습 신호 스냅샷 · 수익성 미검증 · V3 운영은 별도로 유지됩니다.';
-  document.querySelector('#signals-panel .card-heading').textContent='학습 신호';
+  document.querySelector('.intro-copy').textContent='BTC, ETH, SOL의 새 학습 신호와 모의 거래를 한곳에서 확인하세요.';
+  document.querySelector('.sidebar-bottom strong').textContent='모의 운영';
+  document.querySelector('.sidebar-bottom div>span').textContent='새 학습 신호로 모의 매매';
+  document.querySelector('.workspace-footer').textContent='V4 모의 신호와 거래를 표시합니다. V3 운영은 그대로 유지됩니다.';
+  document.querySelector('#signals-panel .card-heading').textContent='신호 수신';
 }
 document.querySelectorAll('.side-nav a').forEach(a=>a.addEventListener('click',()=>{function versionUrl(version) { const u=new URL(location.href);u.searchParams.set('version',version);u.hash='';return u; }
 for(const group of document.querySelectorAll('.version-category')) {
@@ -593,17 +588,17 @@ for(const group of document.querySelectorAll('.version-category')) {
 for(const a of document.querySelectorAll('.version-switch a')) {a.href=versionUrl(a.dataset.version);if(a.dataset.version===VERSION)a.setAttribute('aria-current','page');}
 document.querySelector('.breadcrumbs strong').textContent=VERSION.toUpperCase()+(IS_V4?' 새 학습 신호':' 기존 운영');
 if(IS_V4) {
-  document.querySelector('.intro-copy').textContent='SOL에서 학습한 신호를 BTC 차트에 적용한 V4입니다. ETH·SOL은 시장 차트만 표시합니다.';
-  document.querySelector('.sidebar-bottom strong').textContent='학습 신호 관찰';
-  document.querySelector('.sidebar-bottom div>span').textContent='과거 스냅샷 · 주문·체결 없음';
-  document.querySelector('.workspace-footer').textContent='V4 · 학습 신호 스냅샷 · 수익성 미검증 · V3 운영은 별도로 유지됩니다.';
-  document.querySelector('#signals-panel .card-heading').textContent='학습 신호';
+  document.querySelector('.intro-copy').textContent='BTC, ETH, SOL의 새 학습 신호와 모의 거래를 한곳에서 확인하세요.';
+  document.querySelector('.sidebar-bottom strong').textContent='모의 운영';
+  document.querySelector('.sidebar-bottom div>span').textContent='새 학습 신호로 모의 매매';
+  document.querySelector('.workspace-footer').textContent='V4 모의 신호와 거래를 표시합니다. V3 운영은 그대로 유지됩니다.';
+  document.querySelector('#signals-panel .card-heading').textContent='신호 수신';
 }
 document.querySelectorAll('.side-nav a').forEach(n=>n.classList.remove('active'));a.classList.add('active');}));
 refresh();
-if (!IS_V4) LivePnl.feed(q=>{liveQuotes[q.symbol]=q;},connected=>{liveConnected=connected;});
-if (!IS_V4) setInterval(()=>{if(D){prepareLive();header();totalPnl();position();lower();if(chart)overlay();}},1000);
-if (!IS_V4) setInterval(refresh, 10000);
+LivePnl.feed(q=>{liveQuotes[q.symbol]=q;},connected=>{liveConnected=connected;});
+setInterval(()=>{if(D){prepareLive();header();totalPnl();position();lower();if(chart)overlay();}},1000);
+setInterval(refresh, 10000);
 setInterval(status, 10000);
 </script>
 </body>
