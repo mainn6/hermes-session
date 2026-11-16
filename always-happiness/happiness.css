@@ -28,6 +28,11 @@ button:focus-visible,a:focus-visible { outline:2px solid var(--accent);outline-o
 #tv-load-status button { text-decoration:underline;margin-left:10px; }
 .tv-links { padding:11px 18px 14px;border-top:1px solid var(--line); }
 #signals-panel { margin-top:20px; }
+.pnl-placeholder { border:1px solid var(--line);border-radius:17px;margin-top:20px;padding:21px 23px; }
+.pnl-placeholder h2 { font-size:14px;font-weight:650; }
+.pnl-placeholder p { display:flex;align-items:baseline;gap:8px;margin-top:12px; }
+.pnl-placeholder strong { font-size:35px;line-height:1.1;letter-spacing:-1px; }
+.pnl-placeholder span { font-size:15px;font-weight:600; }
 #chart-panel { margin-top:20px; }
 #theme-toggle { font-size:11px;color:var(--muted); }
 @media(max-width:860px) {
