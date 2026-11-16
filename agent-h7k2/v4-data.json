@@ -1,6 +1,6 @@
 {
   "version": "v4",
-  "updated": 1794796030.033,
+  "updated": 1794796083.693,
   "session": {
     "started_at": 1794795618.585,
     "baseline_equity": 10000
@@ -11,8 +11,8 @@
     "down": []
   },
   "marks": {
-    "BTC": 65233.3,
-    "ETH": 1830.87,
+    "BTC": 65227.8,
+    "ETH": 1830.67,
     "SOL": 72.58
   },
   "accounts": {
@@ -82,21 +82,21 @@
     "notional_equity_multiple": 1
   },
   "native_started_at": 1794795618.585,
-  "native_updated": 1794796030.033,
+  "native_updated": 1794796083.693,
   "signals": {
     "rows": [
       {
         "name": "BTC V4 학습 신호",
         "on": true,
         "count": 0,
-        "checked_at": 1794796020.0,
+        "checked_at": 1794796080.0,
         "last": null
       },
       {
         "name": "ETH V4 학습 신호",
         "on": true,
         "count": 0,
-        "checked_at": 1794796020.0,
+        "checked_at": 1794796080.0,
         "last": null
       },
       {
