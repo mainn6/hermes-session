@@ -1,6 +1,6 @@
 {
   "version": "v4",
-  "updated": 1794797592.431,
+  "updated": 1794797646.052,
   "session": {
     "started_at": 1794795618.585,
     "baseline_equity": 10000
@@ -11,26 +11,54 @@
     "down": []
   },
   "marks": {
-    "BTC": 65010.4,
-    "ETH": 1820.88,
-    "SOL": 72.012
+    "BTC": 64972.2,
+    "ETH": 1819.27,
+    "SOL": 71.985
   },
   "accounts": {
     "paper": {
-      "equity": 10000.0,
-      "day_pnl": 0.0,
+      "equity": 9987.752374604233,
+      "day_pnl": -12.24762539576659,
       "realized": 0.0,
       "trades": 0,
       "wins": 0,
-      "positions": [],
+      "positions": [
+        {
+          "symbol": "SOL",
+          "side": "short",
+          "size": 138.86574459812255,
+          "entry": 72.012,
+          "notional": 10000.0,
+          "target": 71.29188,
+          "stop": 73.45224,
+          "signal_time": 1794797520.0,
+          "opened_at": 1794797580.0,
+          "fills": [
+            {
+              "time": 1794797580.0,
+              "size": 138.86574459812255,
+              "price": 72.012
+            }
+          ],
+          "mark": 71.985,
+          "pnl": -12.247625395767233,
+          "pnl_pct": -0.12247625395767234,
+          "leverage": 1.0012262644223047,
+          "pending": [],
+          "decision_time": 1794797526.479,
+          "ladder_steps": 1,
+          "ladder_filled": 1,
+          "max_hold_at": null,
+          "is_reference": true,
+          "exit_fee_rate": 0.0008,
+          "margin_leverage": 20,
+          "margin": 500.0
+        }
+      ],
       "closed": [],
       "orders": [],
       "baseline_equity": 10000,
-      "pending_plan": {
-        "side": "short",
-        "entry_time": 1794797580.0,
-        "signal_time": 1794797520.0
-      },
+      "pending_plan": null,
       "mode": "own_asset_paper"
     }
   },
@@ -49,8 +77,8 @@
       "mode": "own_asset_paper"
     },
     "ETH": {
-      "equity": 10013.605736730524,
-      "day_pnl": 13.605736730523859,
+      "equity": 10009.164876220946,
+      "day_pnl": 9.164876220946098,
       "realized": 0.0,
       "trades": 0,
       "wins": 0,
@@ -72,10 +100,10 @@
               "price": 1825.43
             }
           ],
-          "mark": 1820.03,
-          "pnl": 13.605736730524264,
-          "pnl_pct": 0.13605736730524262,
-          "leverage": 0.998641274972449,
+          "mark": 1820.84,
+          "pnl": 9.164876220945997,
+          "pnl_pct": 0.09164876220945997,
+          "leverage": 0.9990843515583684,
           "pending": [],
           "decision_time": 1794797220.903,
           "ladder_steps": 1,
@@ -94,20 +122,48 @@
       "mode": "own_asset_paper"
     },
     "SOL": {
-      "equity": 10000.0,
-      "day_pnl": 0.0,
+      "equity": 9987.752374604233,
+      "day_pnl": -12.24762539576659,
       "realized": 0.0,
       "trades": 0,
       "wins": 0,
-      "positions": [],
+      "positions": [
+        {
+          "symbol": "SOL",
+          "side": "short",
+          "size": 138.86574459812255,
+          "entry": 72.012,
+          "notional": 10000.0,
+          "target": 71.29188,
+          "stop": 73.45224,
+          "signal_time": 1794797520.0,
+          "opened_at": 1794797580.0,
+          "fills": [
+            {
+              "time": 1794797580.0,
+              "size": 138.86574459812255,
+              "price": 72.012
+            }
+          ],
+          "mark": 71.985,
+          "pnl": -12.247625395767233,
+          "pnl_pct": -0.12247625395767234,
+          "leverage": 1.0012262644223047,
+          "pending": [],
+          "decision_time": 1794797526.479,
+          "ladder_steps": 1,
+          "ladder_filled": 1,
+          "max_hold_at": null,
+          "is_reference": true,
+          "exit_fee_rate": 0.0008,
+          "margin_leverage": 20,
+          "margin": 500.0
+        }
+      ],
       "closed": [],
       "orders": [],
       "baseline_equity": 10000,
-      "pending_plan": {
-        "side": "short",
-        "entry_time": 1794797580.0,
-        "signal_time": 1794797520.0
-      },
+      "pending_plan": null,
       "mode": "own_asset_paper"
     }
   },
@@ -122,21 +178,21 @@
     "notional_equity_multiple": 1
   },
   "native_started_at": 1794795618.585,
-  "native_updated": 1794797592.431,
+  "native_updated": 1794797646.052,
   "signals": {
     "rows": [
       {
         "name": "BTC V4 학습 신호",
         "on": true,
         "count": 0,
-        "checked_at": 1794797580.0,
+        "checked_at": 1794797640.0,
         "last": null
       },
       {
         "name": "ETH V4 학습 신호",
         "on": true,
         "count": 1,
-        "checked_at": 1794797580.0,
+        "checked_at": 1794797640.0,
         "last": {
           "time": 1794797220.0,
           "symbol": "ETH",
@@ -149,12 +205,12 @@
         "name": "SOL V4 학습 신호",
         "on": true,
         "count": 1,
-        "checked_at": 1794797580.0,
+        "checked_at": 1794797640.0,
         "last": {
           "time": 1794797520.0,
           "symbol": "SOL",
           "side": "short",
-          "result": "모의 진입 예정",
+          "result": "모의 진입",
           "result_time": 1794797580.0
         }
       }
@@ -164,7 +220,7 @@
         "time": 1794797520.0,
         "symbol": "SOL",
         "side": "short",
-        "result": "모의 진입 예정",
+        "result": "모의 진입",
         "result_time": 1794797580.0
       },
       {
@@ -189,5 +245,5 @@
   },
   "shorts": [],
   "short_exit_policy": null,
-  "candles_updated": 1794797520
+  "candles_updated": 1794797580
 }
