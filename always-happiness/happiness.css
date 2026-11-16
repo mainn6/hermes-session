@@ -1,0 +1,29 @@
+[hidden] { display:none!important; }
+.happiness-wordmark { font-size:29px;font-weight:750;line-height:1.06;letter-spacing:-1.2px;color:var(--text); }
+.happiness-dot { color:var(--accent); }
+.happiness-mobile { font-size:17px;font-weight:750;letter-spacing:-.6px;white-space:nowrap; }
+.workspace-brand .brand-caption { margin-top:9px; }
+.brand #theme-toggle { display:inline-block; }
+.chart-mode-bar,.tv-panel-bar,.tv-links { display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap; }
+.chart-mode-bar { padding:16px 18px;border-bottom:1px solid var(--line); }
+.chart-exchange,.tv-help,.tv-links,#tv-load-status { font-size:11px;color:var(--muted); }
+.tv-panel-bar { padding:17px 18px 4px; }
+.tv-panel-bar strong { font-size:13px;margin-right:auto; }
+.tv-panel-bar a,.tv-links a { font-size:11px;color:var(--muted);text-decoration:underline;text-underline-offset:3px; }
+.tv-help { padding:5px 18px 13px;line-height:1.6; }
+/* The embed sets an inline 100% height; retain an explicit chart height in the auto-sized card. */
+#tv-host { height:660px!important;width:100%; }
+.tradingview-widget-container__widget { height:100%;width:100%; }
+#tv-load-status { padding:10px 18px; }
+#tv-load-status button { text-decoration:underline;margin-left:10px; }
+.tv-links { padding:11px 18px 14px;border-top:1px solid var(--line); }
+#trades-panel { margin-top:20px; }
+@media(max-width:860px) {
+  .chart-mode-bar { padding:11px 12px;gap:9px; }
+  .chart-exchange { font-size:9px; }
+  .tv-panel-bar { padding:13px 12px 4px;gap:9px; }
+  .tv-panel-bar a { font-size:10px; }
+  .tv-help { padding:5px 12px 10px;font-size:10px; }
+  #tv-host { height:540px!important; }
+  .tv-links { padding:10px 12px; }
+}
