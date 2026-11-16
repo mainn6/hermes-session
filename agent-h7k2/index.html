@@ -140,19 +140,20 @@
   #stale { margin-top: 12px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--down-text); }
 </style>
 <link rel="stylesheet" href="workspace.css">
+<link rel="stylesheet" href="versions.css">
 </head>
 <body>
 <div class="app-shell">
   <aside class="sidebar" aria-label="워크스페이스 메뉴">
     <a class="workspace-brand" href="#overview" aria-label="KRAPI 트레이딩 현황"><span class="brand-art"><img class="brand-symbol brand-light" src="krapi-symbol-black.svg" alt=""><img class="brand-symbol brand-dark" src="krapi-symbol-white.svg" alt=""><img class="brand-wordmark brand-light" src="krapi-wordmark-black.svg" alt="KRAPI"><img class="brand-wordmark brand-dark" src="krapi-wordmark-white.svg" alt="KRAPI"></span><span class="brand-caption">TRADING AGENT</span></a>
     <div class="nav-label">WORKSPACE</div>
-    <nav class="side-nav"><a class="active" href="#overview"><span aria-hidden="true">▦</span>트레이딩 현황</a><a href="#chart-panel"><span aria-hidden="true">⌁</span>실시간 차트</a><a href="#signals-panel"><span aria-hidden="true">◉</span>신호 기록</a><a href="#trades-panel"><span aria-hidden="true">▤</span>거래 내역</a><a href="signal-comparison.html"><span aria-hidden="true">⇄</span>신호 비교</a></nav>
+    <details class="version-category" data-version="v3"><summary><strong>V3</strong><span>기존 운영</span></summary><nav class="side-nav"><a class="active" href="?version=v3#overview" data-section="#overview"><span aria-hidden="true">▦</span>트레이딩 현황</a><a class="" href="?version=v3#chart-panel" data-section="#chart-panel"><span aria-hidden="true">⌁</span>실시간 차트</a><a class="" href="?version=v3#signals-panel" data-section="#signals-panel"><span aria-hidden="true">◉</span>신호 기록</a><a class="" href="?version=v3#trades-panel" data-section="#trades-panel"><span aria-hidden="true">▤</span>거래 내역</a></nav></details><details class="version-category" data-version="v4"><summary><strong>V4</strong><span>새 학습 신호</span></summary><nav class="side-nav"><a class="active" href="?version=v4#overview" data-section="#overview"><span aria-hidden="true">▦</span>트레이딩 현황</a><a class="" href="?version=v4#chart-panel" data-section="#chart-panel"><span aria-hidden="true">⌁</span>실시간 차트</a><a class="" href="?version=v4#signals-panel" data-section="#signals-panel"><span aria-hidden="true">◉</span>신호 기록</a><a class="" href="?version=v4#trades-panel" data-section="#trades-panel"><span aria-hidden="true">▤</span>거래 내역</a></nav></details>
     <div class="side-divider"></div><div class="nav-label">MARKETS</div>
     <div class="asset-nav"><button data-asset="BTC"><img class="asset-icon" src="coin-btc.svg" alt="">Bitcoin<span class="asset-caption">BTC</span></button><button data-asset="ETH"><img class="asset-icon" src="coin-eth.png" alt="">Ethereum<span class="asset-caption">ETH</span></button><button data-asset="SOL"><img class="asset-icon" src="coin-sol.svg" alt="">Solana<span class="asset-caption">SOL</span></button></div>
     <div class="sidebar-bottom"><span class="mode-dot"></span><div><strong>모의 운영</strong><span>실제 주문 없이 신호 관찰</span></div></div>
   </aside>
   <div class="workspace">
-    <div class="workspace-top"><a class="mobile-brand brand-art" href="#overview" aria-label="KRAPI 트레이딩 현황"><img class="brand-symbol brand-light" src="krapi-symbol-black.svg" alt=""><img class="brand-symbol brand-dark" src="krapi-symbol-white.svg" alt=""><img class="brand-wordmark brand-light" src="krapi-wordmark-black.svg" alt="KRAPI"><img class="brand-wordmark brand-dark" src="krapi-wordmark-white.svg" alt="KRAPI"></a><div class="breadcrumbs">워크스페이스 <span>›</span> 트레이딩 <span>›</span> <strong>운영 현황</strong></div><a class="top-link" href="signal-comparison.html">신호 비교 <span aria-hidden="true">↗</span></a></div>
+    <div class="workspace-top"><a class="mobile-brand brand-art" href="#overview" aria-label="KRAPI 트레이딩 현황"><img class="brand-symbol brand-light" src="krapi-symbol-black.svg" alt=""><img class="brand-symbol brand-dark" src="krapi-symbol-white.svg" alt=""><img class="brand-wordmark brand-light" src="krapi-wordmark-black.svg" alt="KRAPI"><img class="brand-wordmark brand-dark" src="krapi-wordmark-white.svg" alt="KRAPI"></a><div class="breadcrumbs">워크스페이스 <span>›</span> 트레이딩 <span>›</span> <strong>운영 현황</strong></div><nav class="version-switch" aria-label="버전 선택"><a href="?version=v3" data-version="v3">V3</a><a href="?version=v4" data-version="v4">V4</a></nav></div>
     <main class="page" id="overview">
   <header class="top">
     <div class="brand"><strong>트레이딩 현황</strong><span class="live"><i></i><span id="live" role="status">자료 불러오는 중</span></span><button id="theme-toggle" aria-label="화면 테마 변경"></button></div>
@@ -174,7 +175,7 @@
   </section>
   <section class="grid3">
     <div class="block" id="signals-panel"><h2><span class="card-heading">신호 수신</span> <span id="sigsum"></span></h2><div id="signals"></div></div>
-    <div class="block"><h2>SOL 모의 계좌</h2><div id="account"></div></div>
+    <div class="block"><h2 id="account-title">SOL 모의 계좌</h2><div id="account"></div></div>
     <div class="block" id="trades-panel"><h2><span class="card-heading">최근 거래</span> <span id="tradesum"></span></h2><div id="trades"></div></div>
   </section>
 <footer class="workspace-footer">모의 신호와 거래만 표시합니다. 원본 기록은 보존됩니다.</footer>
@@ -183,9 +184,11 @@
 <script src="chart-data.js"></script>
 <script src="indicators.js"></script>
 <script src="live-pnl.js"></script>
+<script src="v4-view.js"></script>
 <script>
 const Q = new URLSearchParams(location.search), KST = 9 * 3600;
 const SYMBOLS = ['BTC', 'ETH', 'SOL'];
+const VERSION = Q.get('version') === 'v4' || (!Q.has('version') && Q.get('release') === 'v4') ? 'v4' : 'v3', IS_V4 = VERSION === 'v4';
 const el = id => document.getElementById(id);
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const dp = s => s === 'BTC' ? 1 : 2;
@@ -209,11 +212,12 @@ try { const saved=JSON.parse(localStorage.getItem('chart-indicators'));if(Array.
 let D, C, S, failed = false, refreshing = false, chart, candles, volume, markers, lines = [], firstBar;
 const liveQuotes={};let liveConnected=false,liveShorts=[],liveAccounts={};
 const pos = () => S.positions.find(p => p.symbol === sym);
-const last = s => LivePnl.quoteFor(s,liveQuotes,Date.now())?.price??C[s][C[s].length - 1][4];
+const last = s => (!IS_V4 && LivePnl.quoteFor(s,liveQuotes,Date.now())?.price) || C[s][C[s].length - 1][4];
 const bars = () => aggregateCandles(C[sym], interval);
 const currentShort = s => liveShorts.find(r => r.symbol === s);
 
 function prepareLive() {
+  if (IS_V4) { S={positions:[],closed:[],orders:[],now:D.updated};liveAccounts={};liveShorts=[];return; }
   const now=Date.now(),paper=LivePnl.paper(D,liveQuotes,now);liveAccounts={SOL:paper};
   for(const [symbol,a] of Object.entries(D.native_accounts??{}))liveAccounts[symbol]=LivePnl.paper({...D,updated:D.native_updated,accounts:{paper:a},session:{...D.session,baseline_equity:a.baseline_equity}},liveQuotes,now);
   S={...(liveAccounts[sym]??paper),now:now/1000};
@@ -221,6 +225,7 @@ function prepareLive() {
 }
 
 function totalPnl() {
+  if (IS_V4) return V4View.totalPnl();
   const q=LivePnl.quoteFor(sym,liveQuotes,Date.now());
   const live=liveConnected&&q?.live&&Date.now()/1000-D.updated<=900;
   const stamp=`Bitget 표시가격 · ${live?'실시간 시세':'시세 연결 확인 중 / 마지막 가격'} ${q?hms(q.ts/1000):'—'} · 포지션 기록 ${hms(D.native_accounts?.[sym]?D.native_updated:D.updated)} 기준`;
@@ -256,6 +261,7 @@ systemTheme.addEventListener('change', () => { if (!preference) theme(); });
 theme();
 
 function status() {
+  if (IS_V4) return V4View.status();
   if (D) {
     const h = D.health;
     el('live').textContent = h.down.length ? `${h.ok} / ${h.total} · 멈춤: ${h.down.join(', ')}` : `${h.ok} / ${h.total} 정상 · ${hm(D.updated)} 갱신 · UTC+9`;
@@ -268,11 +274,11 @@ function status() {
 
 function header() {
   status();
-  el('accounts').textContent = `모의 · ${D.native_accounts?.[sym]?'자체 차트 · ':''}새 집계 ${dhm(D.native_accounts?.[sym]?D.native_started_at:D.session.started_at)}부터`;
+  el('accounts').textContent = IS_V4 ? 'V4 · 학습 신호 스냅샷 · 거래 미연결' : `모의 · ${D.native_accounts?.[sym]?'자체 차트 · ':''}새 집계 ${dhm(D.native_accounts?.[sym]?D.native_started_at:D.session.started_at)}부터`;
   el('symbols').innerHTML = SYMBOLS.map(s => {
     const p = (liveAccounts[s]??S).positions.find(p => p.symbol === s);
     const activeShort = currentShort(s);
-    const st = p ? `<span class="st ${esc(p.side)}">${esc(p.side.toUpperCase())} 보유</span>` : activeShort && activeShort.status !== '완료' ? '<span class="st short">숏 신호 관찰</span>' : '<span class="st none">새 신호 대기</span>';
+    const st = IS_V4 ? `<span class="st none">${s==='BTC'?'학습 신호 7건':'신호 미분석'}</span>` : p ? `<span class="st ${esc(p.side)}">${esc(p.side.toUpperCase())} 보유</span>` : activeShort && activeShort.status !== '완료' ? '<span class="st short">숏 신호 관찰</span>' : '<span class="st none">새 신호 대기</span>';
     return `<button class="sym ${s === sym ? 'on' : ''}" data-s="${s}" aria-pressed="${s === sym}"><span class="s"><img class="coin-icon" src="coin-${s.toLowerCase()}.${s === 'ETH' ? 'png' : 'svg'}" alt="">${s}</span><span class="p">${num(last(s), dp(s))}</span>${st}</button>`;
   }).join('');
   el('symbols').querySelectorAll('button').forEach(b => b.onclick = () => { sym = b.dataset.s; firstBar=null; render(); });
@@ -280,6 +286,7 @@ function header() {
 }
 
 function position() {
+  if (IS_V4) return V4View.position();
   const p = pos(), d = dp(sym);
   if (D.native_accounts?.[sym]) {
     const pending=S.pending_plan,c=S.closed.find(t=>t.symbol===sym);
@@ -414,7 +421,7 @@ function chartData(preserve = false) {
     ordered(p);
   }
   (S.orders || []).filter(o => o.symbol === sym).forEach(o => line(o.price, css('--faint'), L.Dotted));
-  (D.signals.dots || []).filter(s => s.symbol === sym).forEach(s => m.push({time: bar(s.time), position: 'aboveBar', shape: 'circle', color: css('--faint'), text: '', size: .4}));
+  (D.signals.dots || []).filter(s => s.symbol === sym).forEach(s => m.push(IS_V4 ? {time:bar(s.time),position:s.side==='long'?'belowBar':'aboveBar',shape:s.side==='long'?'arrowUp':'arrowDown',color:css(s.side==='long'?'--up':'--down'),text:`학습 ${s.side==='long'?'롱':'숏'} ${hm(s.time)}`,size:1} : {time: bar(s.time), position: 'aboveBar', shape: 'circle', color: css('--faint'), text: '', size: .4}));
   S.closed.filter(t => t.symbol === sym).forEach(t => {
     ordered(t);
     m.push({time: bar(t.closed_at), position: t.side === 'long' ? 'aboveBar' : 'belowBar', shape: t.side === 'long' ? 'arrowDown' : 'arrowUp', color: css(t.pnl >= 0 ? '--up' : '--down'), text: hours <= 6 ? t.reason + ' ' + hm(t.closed_at) + ' · ' + num(t.exit,dp(sym)) : ''});
@@ -423,7 +430,7 @@ function chartData(preserve = false) {
   if(ref?.reference_levels){line(ref.reference_levels.target,css('--up'),L.Dashed,true,'부분익절 판단선');line(ref.reference_levels.stop,css('--down'),L.Dashed,true,'손절 판단선');line(ref.reference_levels.protection,css('--text'),L.Dashed,true,'수익보호 판단선');}
   const recentClosed=S.closed.find(t=>t.symbol===sym);
   if(!p&&recentClosed){line(recentClosed.target,css('--up'),L.Dashed,true,'목표(종료)');line(recentClosed.stop,css('--down'),L.Dashed,true,'손절(종료)');}
-  D.shorts.filter(t=>t.symbol===sym).forEach(t=>{
+  (IS_V4 ? [] : D.shorts).filter(t=>t.symbol===sym).forEach(t=>{
     if(t.reference_entry&&t.entry_time<=S.now)m.push({time:bar(t.entry_time),position:'aboveBar',shape:'arrowDown',color:css('--down'),text:'모의 숏 기준 진입 '+hm(t.entry_time)});
     if(t.reference_exits?.length)t.reference_exits.forEach(x=>m.push({time:bar(x.time),position:'belowBar',shape:'arrowUp',color:css(x.reason==='손절'?'--down':'--up'),text:`${x.reason} ${num(x.fraction*100,0)}% ${hm(x.time)} · ${num(x.price,dp(sym))}`}));
     else if(t.status==='완료')m.push({time:bar(t.exit_time),position:'belowBar',shape:'arrowUp',color:css('--muted'),text:(t.exit_reason??'시간청산')+' '+hm(t.exit_time)});
@@ -502,6 +509,7 @@ function lower() {
     const last = r.last ? `<b>${hm(r.last.time)} ${esc(r.last.side.toUpperCase())}</b> → ${esc(r.last.result)}${r.last.result_time ? ' ' + hm(r.last.result_time) : ''}` : '아직 신호 없음';
     return `<div class="row sig"><span class="nm">${esc(r.name)}</span><span class="stt ${r.on ? '' : 'off'}"><i></i>${r.state ? '' : r.on ? '수신 중 · ' : '멈춤 · '}${esc(chk)}</span><span class="cnt">${r.count == null ? '' : '수신 ' + r.count + '건'}</span>${r.count == null ? '' : `<span class="lastsig">마지막 ${last}</span>`}</div>`;
   }).join('') + (D.signals.flow.length ? '<div class="flow-ttl">마지막 신호가 지나간 길</div><div class="flow">' + D.signals.flow.map(r => `<div class="st"><b>${esc(r.step)}</b>${hm(r.time)}</div>`).join('') + '</div>' : '') + history();
+  if (IS_V4) { V4View.lower(); return; }
   el('account').innerHTML = [['평가액', num(S.equity) + ' USDT', ''], ['새 집계 손익', sgn(S.day_pnl) + ' USDT', cls(S.day_pnl)], ['누적 실현 손익', sgn(S.realized) + ' USDT', cls(S.realized)], ['거래', `${S.trades}건 · ${S.wins}승`, '']]
     .map(([k, v, c]) => `<div class="row acct"><span class="muted">${k}</span><span class="v ${c}">${v}</span></div>`).join('');
   el('tradesum').textContent = `${S.trades}건 · 모의 신호 ${D.shorts.length}건`;
@@ -518,6 +526,7 @@ function render(preserve = false) {
 }
 
 function validate(data, rows) {
+  if (IS_V4) return V4View.validate(data, rows);
   if (!Number.isFinite(data.updated) || !data.health || !Array.isArray(data.health.down) || !data.marks || !data.accounts || !Array.isArray(data.signals?.rows) || !Array.isArray(data.signals.flow)) throw Error('invalid data');
   const numbers = (item, keys) => keys.every(k => Number.isFinite(item[k]));
   if (!numbers(data.health, ['ok','total']) || !data.health.down.every(s => typeof s === 'string')) throw Error('invalid health');
@@ -547,7 +556,7 @@ async function refresh() {
   refreshing = true;
   try {
     const stamp = Date.now();
-    const [data, rows] = await Promise.all(['data.json', 'candles.json'].map(async name => {
+    const [data, rows] = await Promise.all((IS_V4 ? ['v4-data.json','v4-candles.json'] : ['data.json', 'candles.json']).map(async name => {
       const response = await fetch(`${name}?v=${stamp}`, {cache: 'no-store', signal: AbortSignal.timeout(15000)});
       if (!response.ok) throw Error('fetch failed');
       return response.json();
@@ -560,11 +569,41 @@ async function refresh() {
     if (!D) el('pos').innerHTML = '<div class="muted">자료를 기다리는 중</div>';
   } finally { refreshing = false; status(); }
 }
-document.querySelectorAll('.side-nav a').forEach(a=>a.addEventListener('click',()=>{document.querySelectorAll('.side-nav a').forEach(n=>n.classList.remove('active'));a.classList.add('active');}));
+function versionUrl(version) { const u=new URL(location.href);u.searchParams.set('version',version);u.hash='';return u; }
+for(const group of document.querySelectorAll('.version-category')) {
+  const active=group.dataset.version===VERSION;group.open=active;
+  group.querySelectorAll('[data-section]').forEach(a=>{const u=versionUrl(group.dataset.version);u.hash=a.dataset.section;a.href=u;a.classList.toggle('active',active&&a.dataset.section==='#overview');});
+  group.addEventListener('toggle',()=>{if(group.open&&group.dataset.version!==VERSION)location.href=versionUrl(group.dataset.version);});
+}
+for(const a of document.querySelectorAll('.version-switch a')) {a.href=versionUrl(a.dataset.version);if(a.dataset.version===VERSION)a.setAttribute('aria-current','page');}
+document.querySelector('.breadcrumbs strong').textContent=VERSION.toUpperCase()+(IS_V4?' 새 학습 신호':' 기존 운영');
+if(IS_V4) {
+  document.querySelector('.intro-copy').textContent='SOL에서 학습한 신호를 BTC 차트에 적용한 V4입니다. ETH·SOL은 시장 차트만 표시합니다.';
+  document.querySelector('.sidebar-bottom strong').textContent='학습 신호 관찰';
+  document.querySelector('.sidebar-bottom div>span').textContent='과거 스냅샷 · 주문·체결 없음';
+  document.querySelector('.workspace-footer').textContent='V4 · 학습 신호 스냅샷 · 수익성 미검증 · V3 운영은 별도로 유지됩니다.';
+  document.querySelector('#signals-panel .card-heading').textContent='학습 신호';
+}
+document.querySelectorAll('.side-nav a').forEach(a=>a.addEventListener('click',()=>{function versionUrl(version) { const u=new URL(location.href);u.searchParams.set('version',version);u.hash='';return u; }
+for(const group of document.querySelectorAll('.version-category')) {
+  const active=group.dataset.version===VERSION;group.open=active;
+  group.querySelectorAll('[data-section]').forEach(a=>{const u=versionUrl(group.dataset.version);u.hash=a.dataset.section;a.href=u;a.classList.toggle('active',active&&a.dataset.section==='#overview');});
+  group.addEventListener('toggle',()=>{if(group.open&&group.dataset.version!==VERSION)location.href=versionUrl(group.dataset.version);});
+}
+for(const a of document.querySelectorAll('.version-switch a')) {a.href=versionUrl(a.dataset.version);if(a.dataset.version===VERSION)a.setAttribute('aria-current','page');}
+document.querySelector('.breadcrumbs strong').textContent=VERSION.toUpperCase()+(IS_V4?' 새 학습 신호':' 기존 운영');
+if(IS_V4) {
+  document.querySelector('.intro-copy').textContent='SOL에서 학습한 신호를 BTC 차트에 적용한 V4입니다. ETH·SOL은 시장 차트만 표시합니다.';
+  document.querySelector('.sidebar-bottom strong').textContent='학습 신호 관찰';
+  document.querySelector('.sidebar-bottom div>span').textContent='과거 스냅샷 · 주문·체결 없음';
+  document.querySelector('.workspace-footer').textContent='V4 · 학습 신호 스냅샷 · 수익성 미검증 · V3 운영은 별도로 유지됩니다.';
+  document.querySelector('#signals-panel .card-heading').textContent='학습 신호';
+}
+document.querySelectorAll('.side-nav a').forEach(n=>n.classList.remove('active'));a.classList.add('active');}));
 refresh();
-LivePnl.feed(q=>{liveQuotes[q.symbol]=q;},connected=>{liveConnected=connected;});
-setInterval(()=>{if(D){prepareLive();header();totalPnl();position();lower();if(chart)overlay();}},1000);
-setInterval(refresh, 10000);
+if (!IS_V4) LivePnl.feed(q=>{liveQuotes[q.symbol]=q;},connected=>{liveConnected=connected;});
+if (!IS_V4) setInterval(()=>{if(D){prepareLive();header();totalPnl();position();lower();if(chart)overlay();}},1000);
+if (!IS_V4) setInterval(refresh, 10000);
 setInterval(status, 10000);
 </script>
 </body>
