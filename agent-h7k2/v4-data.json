@@ -1,6 +1,6 @@
 {
   "version": "v4",
-  "updated": 1794797344.69,
+  "updated": 1794797354.945,
   "session": {
     "started_at": 1794795618.585,
     "baseline_equity": 10000
@@ -11,9 +11,9 @@
     "down": []
   },
   "marks": {
-    "BTC": 65166.8,
-    "ETH": 1824.83,
-    "SOL": 72.282
+    "BTC": 65128.0,
+    "ETH": 1822.6,
+    "SOL": 72.131
   },
   "accounts": {
     "paper": {
@@ -114,7 +114,7 @@
     "notional_equity_multiple": 1
   },
   "native_started_at": 1794795618.585,
-  "native_updated": 1794797344.69,
+  "native_updated": 1794797354.945,
   "signals": {
     "rows": [
       {
@@ -141,7 +141,7 @@
         "name": "SOL V4 학습 신호",
         "on": true,
         "count": 0,
-        "checked_at": 1794797280.0,
+        "checked_at": 1794797340.0,
         "last": null
       }
     ],
@@ -164,5 +164,5 @@
   },
   "shorts": [],
   "short_exit_policy": null,
-  "candles_updated": 1794797220
+  "candles_updated": 1794797280
 }
