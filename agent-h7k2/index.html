@@ -147,23 +147,22 @@
   <aside class="sidebar" aria-label="워크스페이스 메뉴">
     <a class="workspace-brand" href="#overview" aria-label="KRAPI 트레이딩 현황"><span class="brand-art"><img class="brand-symbol brand-light" src="krapi-symbol-black.svg" alt=""><img class="brand-symbol brand-dark" src="krapi-symbol-white.svg" alt=""><img class="brand-wordmark brand-light" src="krapi-wordmark-black.svg" alt="KRAPI"><img class="brand-wordmark brand-dark" src="krapi-wordmark-white.svg" alt="KRAPI"></span><span class="brand-caption">TRADING AGENT</span></a>
     <div class="nav-label">WORKSPACE</div>
-    <details class="version-category" data-version="v3"><summary><strong>V3</strong><span>기존 운영</span></summary><nav class="side-nav"><a class="active" href="?version=v3#overview" data-section="#overview"><span aria-hidden="true">▦</span>트레이딩 현황</a><a class="" href="?version=v3#chart-panel" data-section="#chart-panel"><span aria-hidden="true">⌁</span>실시간 차트</a><a class="" href="?version=v3#signals-panel" data-section="#signals-panel"><span aria-hidden="true">◉</span>신호 기록</a><a class="" href="?version=v3#trades-panel" data-section="#trades-panel"><span aria-hidden="true">▤</span>거래 내역</a></nav></details><details class="version-category" data-version="v4"><summary><strong>V4</strong><span>새 학습 신호</span></summary><nav class="side-nav"><a class="active" href="?version=v4#overview" data-section="#overview"><span aria-hidden="true">▦</span>트레이딩 현황</a><a class="" href="?version=v4#chart-panel" data-section="#chart-panel"><span aria-hidden="true">⌁</span>실시간 차트</a><a class="" href="?version=v4#signals-panel" data-section="#signals-panel"><span aria-hidden="true">◉</span>신호 기록</a><a class="" href="?version=v4#trades-panel" data-section="#trades-panel"><span aria-hidden="true">▤</span>거래 내역</a></nav></details>
+    <details class="version-category" data-version="v3"><summary><strong>V3</strong><span>운영 현황</span></summary><nav class="side-nav"><a class="active" href="?version=v3#overview" data-section="#overview"><span aria-hidden="true">▦</span>트레이딩 현황</a><a class="" href="?version=v3#chart-panel" data-section="#chart-panel"><span aria-hidden="true">⌁</span>실시간 차트</a></nav></details><details class="version-category" data-version="v4"><summary><strong>V4</strong><span>운영 현황</span></summary><nav class="side-nav"><a class="active" href="?version=v4#overview" data-section="#overview"><span aria-hidden="true">▦</span>트레이딩 현황</a><a class="" href="?version=v4#chart-panel" data-section="#chart-panel"><span aria-hidden="true">⌁</span>실시간 차트</a></nav></details>
     <div class="side-divider"></div><div class="nav-label">MARKETS</div>
     <div class="asset-nav"><button data-asset="BTC"><img class="asset-icon" src="coin-btc.svg" alt="">Bitcoin<span class="asset-caption">BTC</span></button><button data-asset="ETH"><img class="asset-icon" src="coin-eth.png" alt="">Ethereum<span class="asset-caption">ETH</span></button><button data-asset="SOL"><img class="asset-icon" src="coin-sol.svg" alt="">Solana<span class="asset-caption">SOL</span></button></div>
-    <div class="sidebar-bottom"><span class="mode-dot"></span><div><strong>모의 운영</strong><span>실제 주문 없이 신호 관찰</span></div></div>
+    <div class="sidebar-bottom"><span class="mode-dot"></span><div><strong>모의 운영</strong><span>모의 계좌 현황</span></div></div>
   </aside>
   <div class="workspace">
     <div class="workspace-top"><a class="mobile-brand brand-art" href="#overview" aria-label="KRAPI 트레이딩 현황"><img class="brand-symbol brand-light" src="krapi-symbol-black.svg" alt=""><img class="brand-symbol brand-dark" src="krapi-symbol-white.svg" alt=""><img class="brand-wordmark brand-light" src="krapi-wordmark-black.svg" alt="KRAPI"><img class="brand-wordmark brand-dark" src="krapi-wordmark-white.svg" alt="KRAPI"></a><div class="breadcrumbs">워크스페이스 <span>›</span> 트레이딩 <span>›</span> <strong>운영 현황</strong></div><nav class="version-switch" aria-label="버전 선택"><a href="?version=v3" data-version="v3">V3</a><a href="?version=v4" data-version="v4">V4</a></nav></div>
     <main class="page" id="overview">
   <header class="top">
     <div class="brand"><strong>트레이딩 현황</strong><span class="live"><i></i><span id="live" role="status">자료 불러오는 중</span></span><button id="theme-toggle" aria-label="화면 테마 변경"></button></div>
-    <div id="accounts" aria-label="모의 집계 시작"></div>
+    <div id="accounts" aria-label="운영 버전"></div>
   </header>
-  <p class="intro-copy">BTC, ETH, SOL의 신호와 모의 거래를 한곳에서 확인하세요.</p>
+  <p class="intro-copy">BTC, ETH, SOL의 시세와 계좌 현황을 확인하세요.</p>
   <div id="stale" role="status" hidden></div>
   <nav class="symbols" id="symbols" aria-label="종목"></nav>
-  <section class="pos" id="total-pnl" aria-label="전체 실시간 손익"><div class="muted">전체 손익 불러오는 중</div></section>
-  <section class="pos" id="pos" aria-label="지금 포지션"><div class="muted">자료 불러오는 중</div></section>
+  <section class="pos" id="total-pnl" aria-label="계좌 전체 손익"><div class="muted">전체 손익 불러오는 중</div></section>
   <section class="chart-box" id="chart-panel" aria-label="차트">
     <div class="chart-bar">
       <div class="ttl" id="ttl"></div>
@@ -171,14 +170,9 @@
     </div>
     <div id="indicators" class="indicator-tools" aria-label="인디케이터 선택"></div>
     <div class="chart-caption"><div id="ohlc" aria-live="off"></div><button id="reset-view" aria-label="차트 배율 맞춤">차트 맞춤 ↔</button></div>
-    <div class="chart"><div id="lw"></div><div class="ov" id="ov"></div></div>
+    <div class="chart"><div id="lw"></div></div>
   </section>
-  <section class="grid3">
-    <div class="block" id="signals-panel"><h2><span class="card-heading">신호 수신</span> <span id="sigsum"></span></h2><div id="signals"></div></div>
-    <div class="block"><h2 id="account-title">SOL 모의 계좌</h2><div id="account"></div></div>
-    <div class="block" id="trades-panel"><h2><span class="card-heading">최근 거래</span> <span id="tradesum"></span></h2><div id="trades"></div></div>
-  </section>
-<footer class="workspace-footer">모의 신호와 거래만 표시합니다. 원본 기록은 보존됩니다.</footer>
+<footer class="workspace-footer">이 페이지는 모의 운영 결과를 표시합니다.</footer>
 </main></div></div>
 <script src="lwc.js"></script>
 <script src="chart-data.js"></script>
@@ -193,9 +187,6 @@ const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).
 const dp = s => s === 'BTC' ? 1 : 2;
 const num = (v, d = 2) => v.toLocaleString('en-US', {minimumFractionDigits: d, maximumFractionDigits: d});
 const sgn = (v, d = 2) => (v >= 0 ? '+' : '−') + num(Math.abs(v), d);
-const hm = t => t ? new Date((t + KST) * 1000).toISOString().slice(11, 16) : '—';
-const hms = t => t ? new Date((t + KST) * 1000).toISOString().slice(11, 19) : '—';
-const ago = s => s < 3600 ? Math.max(1, Math.round(Math.max(0, s) / 60)) + '분' : Math.floor(s / 3600) + '시간 ' + Math.round(s % 3600 / 60) + '분';
 const cls = v => v >= 0 ? 'up' : 'down';
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const systemTheme = matchMedia('(prefers-color-scheme: dark)');
@@ -206,38 +197,28 @@ if (!['light', 'dark'].includes(preference)) preference = null;
 let sym = SYMBOLS.includes(Q.get('sym')) ? Q.get('sym') : SYMBOLS[0];
 let hours = [1, 3, 6, 24].includes(+Q.get('h')) ? +Q.get('h') : 3;
 let interval = [1,5,10].includes(+Q.get('tf')) ? +Q.get('tf') : 1;
-let indicatorSeries = [], selectedIndicators = new Set(['EMA','RSI']);
+let indicatorSeries = [], selectedIndicators = new Set();
 try { const saved=JSON.parse(localStorage.getItem('chart-indicators'));if(Array.isArray(saved)) selectedIndicators=new Set(saved.filter(v=>['EMA','SMA','BB','VWAP','RSI','MACD'].includes(v))); } catch {}
-let D, C, S, failed = false, refreshing = false, chart, candles, volume, markers, lines = [], firstBar;
-const liveQuotes={};let liveConnected=false,liveShorts=[],liveAccounts={};
-const pos = () => S.positions.find(p => p.symbol === sym);
-const last = s => LivePnl.quoteFor(s,liveQuotes,Date.now())?.price??C[s][C[s].length - 1][4];
-const bars = () => aggregateCandles(C[sym], interval);
-const currentShort = s => liveShorts.find(r => r.symbol === s);
-
-function prepareLive() {
-  const now=Date.now(),paper=LivePnl.paper(D,liveQuotes,now);liveAccounts={SOL:paper};
-  for(const [symbol,a] of Object.entries(D.native_accounts??{}))liveAccounts[symbol]=LivePnl.paper({...D,updated:D.native_updated,accounts:{paper:a},session:{...D.session,baseline_equity:a.baseline_equity}},liveQuotes,now);
-  S={...(liveAccounts[sym]??paper),now:now/1000};
-  liveShorts=LivePnl.shorts(D,liveQuotes,now);
-}
-
+let D, C, S, failed = false, refreshing = false, chart, candles, volume, firstBar;
+const liveQuotes={};
+const last = s => LivePnl.quoteFor(s,liveQuotes,Date.now())?.price??C[s][C[s].length-1][4];
+const bars = () => aggregateCandles(C[sym],interval);
 function totalPnl() {
-  const q=LivePnl.quoteFor(sym,liveQuotes,Date.now());
-  const live=liveConnected&&q?.live&&Date.now()/1000-D.updated<=900;
-  const stamp=`Bitget 표시가격 · ${live?'실시간 시세':'시세 연결 확인 중 / 마지막 가격'} ${q?hms(q.ts/1000):'—'} · 포지션 기록 ${hms(D.native_accounts?.[sym]?D.native_updated:D.updated)} 기준`;
-  let title,value,pct,realized,unrealized,detail,unit;
-  if(sym==='SOL'||D.native_accounts?.[sym]) {
-    title=sym==='SOL'?'SOL 계좌 전체 PnL':`${sym} 모의 계좌 전체 PnL`;value=S.total_pnl;pct=S.total_pct;realized=S.realized;unrealized=S.unrealized;unit='USDT';
-    detail=sym==='SOL'?`실현 + 보유분 미실현 · 새 집계 기준 · 기록된 수수료 반영`:`자체 차트 LONG·SHORT · 목표 +1% / 손절 −2% · 시간 청산 없음 · 비용 가정 반영`;
-  } else {
-    const t=LivePnl.shortTotal(sym,liveShorts,Date.now());
-    title=`${sym} 모의 신호 전체 평균 PnL`;value=t.total;pct=null;realized=t.realized;unrealized=t.unrealized;unit='%';
-    detail=`동일 증거금 가정 · 시작된 ${t.count}개 신호 평균 · 보유 ${t.active}개 · 20배 / 16bp 비용 가정${t.waiting_exit?' · 청산 기록 갱신 대기':''}`;
-  }
-  el('total-pnl').innerHTML=`<div><div class="pos-id"><strong>${title}</strong></div><div class="pnl-row"><div class="pnl ${value==null?'muted':cls(value)}">${value==null?'—':sgn(value)}<small>${unit}</small></div>${pct==null?'':`<div class="pct ${cls(pct)}">${sgn(pct)}%</div>`}</div><div class="pnl-sub">${detail}</div><div class="pnl-sub" id="pnl-price-status">${stamp}</div></div><dl class="facts"><div><dt>${sym==='SOL'||D.native_accounts?.[sym]?'실현 손익':'실현 기여'}</dt><dd>${sgn(realized)}<span>${unit}</span></dd></div><div><dt>${sym==='SOL'||D.native_accounts?.[sym]?'미실현 손익':'미실현 기여'}</dt><dd>${sgn(unrealized)}<span>${unit}</span></dd></div>${sym==='SOL'||D.native_accounts?.[sym]?`<div><dt>현재 평가액</dt><dd>${num(S.equity)}<span>USDT</span></dd></div>`:''}</dl>`;
+  S=D.accounts[sym];
+  el('total-pnl').innerHTML=`<div><div class="pos-id"><strong>${sym} 계좌 전체 PnL</strong></div><div class="pnl-row"><div class="pnl ${cls(S.total_pnl)}">${sgn(S.total_pnl)}<small>USDT</small></div><div class="pct ${cls(S.total_pct)}">${sgn(S.total_pct)}%</div></div></div><dl class="facts"><div><dt>실현 손익</dt><dd>${sgn(S.realized)}<span>USDT</span></dd></div><div><dt>미실현 손익</dt><dd>${sgn(S.unrealized)}<span>USDT</span></dd></div><div><dt>현재 평가액</dt><dd>${num(S.equity)}<span>USDT</span></dd></div></dl>`;
 }
-
+function status() {
+  if(D){el('live').textContent=D.healthy?'정상 운영':'상태 확인 중';el('live').parentElement.classList.toggle('failed',!D.healthy);}
+  const age=D?Math.max(0,Date.now()/1000-D.updated):0;
+  el('stale').hidden=!failed&&age<=900;
+  el('stale').textContent='자료 갱신을 확인하고 있습니다';
+}
+function header() {
+  status();el('accounts').textContent=VERSION.toUpperCase()+' · 모의 운영';
+  el('symbols').innerHTML=SYMBOLS.map(s=>`<button class="sym ${s===sym?'on':''}" data-s="${s}" aria-pressed="${s===sym}"><span class="s"><img class="coin-icon" src="coin-${s.toLowerCase()}.${s==='ETH'?'png':'svg'}" alt="">${s}</span><span class="p">${num(last(s),dp(s))}</span></button>`).join('');
+  el('symbols').querySelectorAll('button').forEach(b=>b.onclick=()=>{sym=b.dataset.s;firstBar=null;render();});
+  document.querySelectorAll('[data-asset]').forEach(b=>{b.classList.toggle('active',b.dataset.asset===sym);b.onclick=()=>{sym=b.dataset.asset;firstBar=null;render();};});
+}
 function theme() {
   const dark = (preference || (systemTheme.matches ? 'dark' : 'light')) === 'dark';
   document.documentElement.dataset.theme = dark ? 'dark' : 'light';
@@ -256,71 +237,6 @@ el('theme-toggle').onclick = () => {
 };
 systemTheme.addEventListener('change', () => { if (!preference) theme(); });
 theme();
-
-function status() {
-  if (D) {
-    const h = D.health;
-    el('live').textContent = h.down.length ? `${h.ok} / ${h.total} · 멈춤: ${h.down.join(', ')}` : `${h.ok} / ${h.total} 정상 · ${hm(D.updated)} 갱신 · UTC+9`;
-    el('live').parentElement.classList.toggle('failed', h.down.length > 0);
-  }
-  const age = D ? Math.max(0, Date.now() / 1000 - D.updated) : 0;
-  el('stale').hidden = !failed && age <= 900;          // the page is published every 5 minutes; 15 minutes without an update means something stopped
-  el('stale').textContent = D ? `자료가 ${Math.max(failed ? 1 : 0, Math.floor(age / 60))}분째 갱신되지 않았습니다` : '자료를 불러오지 못했습니다 · 다음 갱신 때 다시 확인합니다';
-}
-
-function header() {
-  status();
-  el('accounts').textContent = IS_V4 ? `V4 · 모의 · 새 집계 ${dhm(D.session.started_at)}부터` : `모의 · ${D.native_accounts?.[sym]?'자체 차트 · ':''}새 집계 ${dhm(D.native_accounts?.[sym]?D.native_started_at:D.session.started_at)}부터`;
-  el('symbols').innerHTML = SYMBOLS.map(s => {
-    const p = (liveAccounts[s]??S).positions.find(p => p.symbol === s);
-    const activeShort = currentShort(s);
-    const st = p ? `<span class="st ${esc(p.side)}">${esc(p.side.toUpperCase())} 보유</span>` : activeShort && activeShort.status !== '완료' ? '<span class="st short">숏 신호 관찰</span>' : '<span class="st none">새 신호 대기</span>';
-    return `<button class="sym ${s === sym ? 'on' : ''}" data-s="${s}" aria-pressed="${s === sym}"><span class="s"><img class="coin-icon" src="coin-${s.toLowerCase()}.${s === 'ETH' ? 'png' : 'svg'}" alt="">${s}</span><span class="p">${num(last(s), dp(s))}</span>${st}</button>`;
-  }).join('');
-  el('symbols').querySelectorAll('button').forEach(b => b.onclick = () => { sym = b.dataset.s; firstBar=null; render(); });
-  document.querySelectorAll('[data-asset]').forEach(b=>{b.classList.toggle('active',b.dataset.asset===sym);b.onclick=()=>{sym=b.dataset.asset;firstBar=null;render();};});
-}
-
-function position() {
-  const p = pos(), d = dp(sym);
-  if (D.native_accounts?.[sym]) {
-    const pending=S.pending_plan,c=S.closed.find(t=>t.symbol===sym);
-    const rules='자체 차트에서 LONG·SHORT 판단 · 가격 +1% 목표 / −2% 손절 · 시간 청산 없음';
-    if(!p){el('pos').innerHTML=`<div><div class="none">${pending?`${pending.side.toUpperCase()} 모의 진입 예정 ${hm(pending.entry_time)}`:`새 ${sym} 자체 차트 신호 대기`}</div><div class="pnl-sub">${rules}</div><div class="pnl-sub">별도 10,000 USDT 모의 계좌 · 실제 주문·체결 없음</div>${c?`<div class="last"><span class="side ${esc(c.side)}">${c.side.toUpperCase()}</span> ${hm(c.opened_at)} → ${hm(c.closed_at)} · ${esc(c.reason)} <b class="${cls(c.pnl)}">${sgn(c.pnl)} USDT</b></div>`:''}</div>`;return;}
-    el('pos').innerHTML=`<div><div class="pos-id"><span class="side ${esc(p.side)}">${p.side.toUpperCase()}</span><span class="pair">${sym}/USDT</span><span class="when">${hm(p.opened_at)} 모의 시가 진입 · ${ago(S.now-p.opened_at)} 전</span></div><div class="pnl-row"><div class="pnl ${cls(p.pnl)}">${sgn(p.pnl)}<small>USDT</small></div><div class="pct ${cls(p.pnl)}">${sgn(p.pnl_pct)}%</div></div><div class="pnl-sub">${rules}</div><div class="pnl-sub">20배 증거금 기준 ${sgn(100*p.pnl/p.margin)}% · 계좌 노출 ${num(p.leverage)}배 · 실제 주문·체결 없음</div></div><dl class="facts"><div><dt>모의 진입가</dt><dd>${num(p.entry,d)}</dd></div><div><dt>현재가</dt><dd>${num(p.mark,d)}</dd></div><div><dt>목표 / 익절</dt><dd>${num(p.target,d)}</dd></div><div><dt>손절</dt><dd>${num(p.stop,d)}</dd></div><div><dt>수량</dt><dd>${num(p.size)} ${sym}</dd></div></dl>`;return;
-  }
-  if (sym !== 'SOL') {
-    const signal = currentShort(sym);
-    const policy=signal?.exit_rules;
-    const active=D.short_exit_policy;
-    const rules=p=>`순수익 +${num(p.take_profit_pct)}%에서 ${num(p.partial_fraction*100,0)}% 부분익절 · 잔량 최고 대비 ${num(p.trail_pp)}%p 되돌림/본전 · 전체 ${num(p.stop_pct)}% 손절 판단`;
-    const labels={profit_protection:'수익보호 청산'};
-    el('pos').innerHTML = signal ? `<div><div class="pos-id"><span class="side short">SHORT</span><span class="pair">${sym}/USDT</span><span class="when">모의 20배 신호 · ${esc(signal.status)}</span></div><div class="pnl-sub">${hm(signal.time)} 신호 · 기준 진입 ${hm(signal.entry_time)} · 최대 종료 ${hm(signal.planned_exit_time??signal.exit_time)} · ${signal.notified ? '알림 전송 확인' : '전송 확인 대기'}</div>${(signal.return_pct??signal.open_return_pct) == null ? '' : `<div class="pnl ${cls(signal.return_pct??signal.open_return_pct)}">${sgn(signal.return_pct??signal.open_return_pct)}<small>%</small></div><div class="pnl-sub">${signal.return_pct==null?'최근 완성봉':'종료 기록'} 기준 모의 증거금 수익률 · 분할 청산 포함 · 16bp 비용 가정</div>`}${signal.reference_entry?`<div class="pnl-sub">모의 기준 진입 ${num(signal.reference_entry,d)} · ${signal.status==='완료'?'가중 평균 종료':'참고'} 가격 ${num(signal.reference_mark,d)}</div>`:''}${signal.exit_reason?`<div class="pnl-sub">${esc(signal.exit_reason)} · ${hm(signal.exit_time)}</div>`:''}${signal.reference_exits?.map(x=>`<div class="pnl-sub">${hm(x.time)} ${esc(x.reason)} ${num(x.fraction*100,0)}% · ${num(x.price,d)}</div>`).join('')??''}${signal.baseline_return_pct==null?'':`<div class="pnl-sub">원래 시간청산 비교 ${sgn(signal.baseline_return_pct)}% · 별도 가상 비교</div>`}<div class="pnl-sub">${policy?rules(policy):'이전 설정: 시간청산'} · 실제 주문·체결 없음</div>${active?`<div class="pnl-sub">새 신호 적용: ${rules(active)} · ${labels.profit_protection} · 완성 1분봉 확인 후 다음 분 시가 기준</div>`:''}</div>` : `<div><div class="none">새 ${sym} 숏 신호 대기</div><div class="pnl-sub">${active?rules(active):'새 집계 이후 신호부터 표시'} · 모의 20배 · 실제 주문 없음</div></div>`;
-    return;
-  }
-  if (!p) {
-    const c = S.closed.find(t => t.symbol === sym);
-    const empty = (S.orders || []).filter(o => o.symbol === sym).length ? `분할 주문 ${(S.orders || []).filter(o => o.symbol === sym).length}건 대기` : '새 집계 이후 신호 대기 중';
-    el('pos').innerHTML = `<div><div class="none">지금 ${sym} 포지션 없음</div><div class="pnl-sub">${empty}</div>` + (c ?
-      `<div class="last"><span class="side ${esc(c.side)}">${esc(c.side.toUpperCase())}</span><span>직전 거래 ${hm(c.opened_at)} → ${hm(c.closed_at)} · ${esc(c.reason)}</span><b class="${cls(c.pnl)}">${sgn(c.pnl)} USDT</b><span class="${cls(c.pnl)}">${sgn(c.pnl_pct)}%</span></div>` : '') + '</div>';
-    return;
-  }
-  const left = p.max_hold_at - S.now, limit = p.max_hold_at - p.opened_at;
-  el('pos').innerHTML = `
-    <div>
-      <div class="pos-id"><span class="side ${esc(p.side)}">${esc(p.side.toUpperCase())}</span><span class="pair">${sym}/USDT</span>
-        <span class="when">${hm(p.opened_at)} 진입 · ${ago(S.now - p.opened_at)} 전</span><span class="limit">${limit % 3600 ? num(limit / 60, 0) + '분' : num(limit / 3600, 0) + '시간'} 한도 · ${left > 0 ? ago(left) + ' 남음' : '청산 대기'}</span></div>
-      <div class="pnl-row"><div class="pnl ${cls(p.pnl)}">${sgn(p.pnl)}<small>USDT</small></div><div class="pct ${cls(p.pnl)}">${sgn(p.pnl_pct)}%</div></div>
-      <div class="pnl-sub">현재 포지션 미실현 손익 · 계좌 대비 ${S.equity ? sgn(p.pnl / S.equity * 100) + '%' : '—'} · ${p.quote_live&&liveConnected?'실시간 표시가격':'마지막 기준가격'}</div>
-    </div>
-    <dl class="facts">
-      <div><dt>평균 진입가</dt><dd>${num(p.entry, d)}</dd></div>
-      <div><dt>현재가</dt><dd>${num(p.mark, d)}</dd></div>
-      <div><dt>수량</dt><dd>${num(p.size)}<span>${sym}</span></dd></div>
-      <div><dt>금액</dt><dd>${num(p.notional)}<span>USDT</span><span class="wide">계좌의 ${num(p.leverage)}배</span></dd></div>
-      <div><dt>물타기</dt><dd>${p.ladder_filled} / ${p.ladder_steps}<span>체결</span></dd></div>
-    </dl>`;
-}
 
 function renderIndicators(rows) {
   indicatorSeries.reverse().forEach(series=>chart.removeSeries(series));indicatorSeries=[];
@@ -364,20 +280,9 @@ function buildChart() {
   candles = chart.addSeries(LightweightCharts.CandlestickSeries, {
     upColor: css('--up'), downColor: css('--down'), borderVisible: false, wickUpColor: css('--up'), wickDownColor: css('--down'),
     priceLineVisible: true, lastValueVisible: true,
-    autoscaleInfoProvider: original => {
-      const r = original(), p = pos();
-      if (!r || !p) return r;
-      const levels = [p.entry, p.target, p.stop].filter(v => v > 0), pad = (Math.max(...levels) - Math.min(...levels)) * .06;
-      r.priceRange.minValue = Math.min(r.priceRange.minValue, Math.min(...levels) - pad);
-      r.priceRange.maxValue = Math.max(r.priceRange.maxValue, Math.max(...levels) + pad);
-      return r;
-    },
   });
   volume = chart.addSeries(LightweightCharts.HistogramSeries, {priceScaleId: 'vol', priceFormat: {type: 'volume'}, priceLineVisible: false, lastValueVisible: false});
   chart.priceScale('vol').applyOptions({scaleMargins: {top: 0.84, bottom: 0}});
-  markers = LightweightCharts.createSeriesMarkers(candles, []);
-  chart.timeScale().subscribeVisibleLogicalRangeChange(overlay);
-  new ResizeObserver(() => requestAnimationFrame(overlay)).observe(el('lw'));
   chart.subscribeCrosshairMove(event => {
     const value = event.seriesData.get(candles), row = bars().at(-1);
     const b = value || {open:row[1],high:row[2],low:row[3],close:row[4]};
@@ -385,52 +290,22 @@ function buildChart() {
   });
 }
 
+
 function applyRange() {
   if (!C) return;
   chart.priceScale('right').applyOptions({autoScale: true});
-  const rows = bars(), count = hours * 60 / interval, future = Math.round(count * (pos() ? .32 : .04));
+  const rows = bars(), count = hours * 60 / interval, future = Math.round(count * .04);
   chart.timeScale().setVisibleLogicalRange({from: rows.length - count, to: rows.length - 1 + future});
 }
 
 function chartData(preserve = false) {
-  const d = dp(sym), rows = bars(), p = pos(), previous = preserve && chart.timeScale().getVisibleLogicalRange();
+  const d = dp(sym), rows = bars(), previous = preserve && chart.timeScale().getVisibleLogicalRange();
   const shift = firstBar == null ? 0 : (firstBar - rows[0][0]) / (interval * 60);
   firstBar = rows[0][0];
   candles.applyOptions({priceFormat: {type: 'price', precision: d, minMove: d === 1 ? .1 : .01}});
   candles.setData(rows.map(r => ({time: r[0] + KST, open: r[1], high: r[2], low: r[3], close: r[4]})));
   volume.setData(rows.map(r => ({time: r[0] + KST, value: r[5], color: r[4] >= r[1] ? css('--up-vol') : css('--down-vol')})));
   renderIndicators(rows);
-  lines.forEach(l => candles.removePriceLine(l)); lines = [];
-  const L = LightweightCharts.LineStyle;
-  const line = (price, color, style, axis = true, title = '') => { if (price > 0) lines.push(candles.createPriceLine({price, color, lineWidth: 1, lineStyle: style, axisLabelVisible: axis, title})); };
-  const m = [], bar = t => Math.floor(t / (interval * 60)) * interval * 60 + KST;
-  const ordered = t => {
-    const up = t.side === 'long';
-    if (t.signal_time) m.push({time: bar(t.signal_time), position: 'aboveBar', shape: 'circle', color: css('--faint'), text: hours <= 3 ? '신호' : '', size: .6});
-    (t.fills.length?t.fills:[{time:t.opened_at,price:t.entry}]).forEach(fill=>m.push({time: bar(fill.time), position: up ? 'belowBar' : 'aboveBar', shape: up ? 'arrowUp' : 'arrowDown', color: css(up ? '--up' : '--down'), text: hours <= 6 ? `${t.is_reference?'모의 ':''}${up?'롱':'숏'} 진입 ${hm(fill.time)} · ${num(fill.price,dp(sym))}` : ''}));
-  };
-  if (p) {
-    line(p.target, css('--up'), L.Dashed,true,'목표 / 익절'); line(p.entry, css('--text'), L.Solid,true,'평균 진입');
-    p.pending.forEach(v => line(v, css('--faint'), L.Dotted, false));
-    line(p.stop, css('--down'), L.Dashed,true,'손절');
-    ordered(p);
-  }
-  (S.orders || []).filter(o => o.symbol === sym).forEach(o => line(o.price, css('--faint'), L.Dotted));
-  (D.signals.dots || []).filter(s => s.symbol === sym).forEach(s => m.push({time: bar(s.time), position: 'aboveBar', shape: 'circle', color: css('--faint'), text: '', size: .4}));
-  S.closed.filter(t => t.symbol === sym).forEach(t => {
-    ordered(t);
-    m.push({time: bar(t.closed_at), position: t.side === 'long' ? 'aboveBar' : 'belowBar', shape: t.side === 'long' ? 'arrowDown' : 'arrowUp', color: css(t.pnl >= 0 ? '--up' : '--down'), text: hours <= 6 ? t.reason + ' ' + hm(t.closed_at) + ' · ' + num(t.exit,dp(sym)) : ''});
-  });
-  const ref=currentShort(sym);if(ref?.reference_entry)line(ref.reference_entry,css('--down'),L.Dotted,true,'모의 숏 기준 진입');
-  if(ref?.reference_levels){line(ref.reference_levels.target,css('--up'),L.Dashed,true,'부분익절 판단선');line(ref.reference_levels.stop,css('--down'),L.Dashed,true,'손절 판단선');line(ref.reference_levels.protection,css('--text'),L.Dashed,true,'수익보호 판단선');}
-  const recentClosed=S.closed.find(t=>t.symbol===sym);
-  if(!p&&recentClosed){line(recentClosed.target,css('--up'),L.Dashed,true,'목표(종료)');line(recentClosed.stop,css('--down'),L.Dashed,true,'손절(종료)');}
-  D.shorts.filter(t=>t.symbol===sym).forEach(t=>{
-    if(t.reference_entry&&t.entry_time<=S.now)m.push({time:bar(t.entry_time),position:'aboveBar',shape:'arrowDown',color:css('--down'),text:'모의 숏 기준 진입 '+hm(t.entry_time)});
-    if(t.reference_exits?.length)t.reference_exits.forEach(x=>m.push({time:bar(x.time),position:'belowBar',shape:'arrowUp',color:css(x.reason==='손절'?'--down':'--up'),text:`${x.reason} ${num(x.fraction*100,0)}% ${hm(x.time)} · ${num(x.price,dp(sym))}`}));
-    else if(t.status==='완료')m.push({time:bar(t.exit_time),position:'belowBar',shape:'arrowUp',color:css('--muted'),text:(t.exit_reason??'시간청산')+' '+hm(t.exit_time)});
-  });
-  markers.setMarkers(m.filter(m => m.time >= rows[0][0] + KST && m.time <= rows[rows.length - 1][0] + KST).sort((a, b) => a.time - b.time));
   if (previous) chart.timeScale().setVisibleLogicalRange({from:previous.from+shift,to:previous.to+shift});
   else applyRange();
   el('ttl').innerHTML = `${sym}/USDT<span>${interval}분봉 · TradingView</span>`;
@@ -440,166 +315,41 @@ function chartData(preserve = false) {
   el('intervals').querySelectorAll('button').forEach(b=>b.onclick=()=>{interval=+b.dataset.min;firstBar=null;chartData();});
   el('ranges').innerHTML = [1, 3, 6, 24].map(h => `<button class="${h === hours ? 'on' : ''}" data-h="${h}" aria-pressed="${h === hours}">${h}시간</button>`).join('');
   el('ranges').querySelectorAll('button').forEach(b => b.onclick = () => { hours = +b.dataset.h; chartData(); });
-  el('reset-view').onclick=()=>{applyRange();overlay();};
-  requestAnimationFrame(overlay);
+  el('reset-view').onclick=()=>{applyRange();};
 }
 
-function overlay() {
-  if (!S || !C || firstBar == null) return;
-  const ov = el('ov'), ts = chart.timeScale(), p = pos(), W = ts.width(), out = [];
-  const x = t => ts.logicalToCoordinate((Math.floor(t / (interval * 60)) * interval * 60 - firstBar) / (interval * 60)), y = v => v > 0 ? candles.priceToCoordinate(v) : null;
-  const zone = (c, x0, x1, a, b) => {
-    if (x0 == null || x1 == null || a == null || b == null) return;
-    const l = Math.max(0, x0), r = Math.min(W, x1);
-    if (r > l) out.push(`<div class="zone ${c}" style="left:${l}px;width:${r - l}px;top:${Math.min(a, b)}px;height:${Math.abs(a - b)}px"></div>`);
-  };
-  if (p) {
-    const x0 = x(p.opened_at), x1 = x(S.now - 60), up = p.side === 'long', d = dp(sym);
-    const yE = y(p.entry), yT = y(p.target), yS = y(p.stop), pct = v => sgn((v / p.entry - 1) * 100 * (up ? 1 : -1));
-    zone('tp', x0, W, yE, yT); zone('sl', x0, W, yE, yS);
-    if (W < 520) out.push(`<div class="tag ${p.pnl >= 0 ? 'gain' : 'loss'}" style="left:10px;top:10px">${esc(p.side.toUpperCase())} · ${sgn(p.pnl)} USDT · ${sgn(p.pnl_pct)}%</div>`);
-    else if (x0 != null && yE != null) {
-      if (yT != null) out.push(`<div class="ztext up" style="left:${W - 10}px;top:${up ? Math.min(yE, yT) + 8 : Math.max(yE, yT) - 24}px;transform:translateX(-100%)">익절 ${pct(p.target)}%</div>`);
-      if (yS != null) out.push(`<div class="ztext down" style="left:${W - 10}px;top:${up ? Math.max(yE, yS) - 24 : Math.min(yE, yS) + 8}px;transform:translateX(-100%)">손절 ${pct(p.stop)}%</div>`);
-      out.push(`<div class="tag" style="left:${W - 8}px;top:${yE - 12}px;transform:translateX(-100%)">${esc(p.side.toUpperCase())} ${num(p.size)} ${sym} · ${num(p.notional)} USDT</div>`);
-      if (p.pending.length > 1) {
-        const ys = p.pending.map(y), top = up ? Math.max(...ys) + 4 : Math.min(...ys) - 28;
-        out.push(`<div class="tag ghost" style="right:${ov.clientWidth - W + 8}px;top:${top}px">물타기 대기 ${p.pending.map(v => num(v, d)).join(' · ')}</div>`);
-      } else p.pending.forEach(v => out.push(`<div class="tag ghost" style="left:${Math.max(8, x0 + 8) + 150}px;top:${y(v) + (up ? 4 : -28)}px">물타기 대기 ${num(v, d)}</div>`));
-    }
-    if (x1 != null && W >= 520) out.push(`<div class="tag ${p.pnl >= 0 ? 'gain' : 'loss'}" style="left:${x1 + 18}px;top:${y(p.mark) + (p.pnl >= 0 ? -30 : 6)}px">${sgn(p.pnl)} USDT · ${sgn(p.pnl_pct)}%</div>`);
-  }
-  let mobileRow = p ? 1 : 0;
-  S.closed.filter(t => t.symbol === sym).forEach(t => {
-    const x0 = x(t.opened_at), x1 = x(t.closed_at);
-    if (x0 == null || x1 == null || x0 > W || x1 < 0) return;
-    zone('tp', x0, x1, y(t.entry), y(t.target)); zone('sl', x0, x1, y(t.entry), y(t.stop));
-    const res = `${esc(t.reason)} ${hm(t.closed_at)} · ${sgn(t.pnl)} USDT · ${sgn(t.pnl_pct)}%`, c = t.pnl >= 0 ? 'gain' : 'loss';
-    if (W < 520) out.push(`<div class="tag ${c}" data-closed style="left:10px;top:${10 + mobileRow++ * 28}px">${res}</div>`);
-    else {
-      const top = Math.max(4, Math.min(...[y(t.entry), y(t.target), y(t.stop), y(t.exit)].filter(v => v != null)) - 30);
-      const text = x1 - x0 < 40 ? `${sgn(t.pnl)}` : res;                         // narrow zone (long ranges): the amount only
-      if (x0 > W - 260) out.push(`<div class="tag ${c}" data-closed style="left:${Math.min(W - 8, Math.max(x1, x0 + 4))}px;top:${top}px;transform:translateX(-100%)">${text}</div>`);
-      else out.push(`<div class="tag ${c}" data-closed style="left:${Math.max(4, x0)}px;top:${top}px">${text}</div>`);
-    }
-  });
-  ov.innerHTML = out.join('');
-}
 
-const dhm = t => { const d = new Date((t + KST) * 1000).toISOString(); return `${+d.slice(5, 7)}/${+d.slice(8, 10)} ${d.slice(11, 16)}`; };
-function history() {                                  // every signal that reached the bot, newest first
-  const h = D.signals.history || [];
-  if (!h.length) return '';
-  return `<div class="hist-ttl">신호 기록 <span>${h.length}건</span></div>` + h.map(r => {
-    const end = r.pnl != null ? ` · ${esc(r.outcome)} <b class="${cls(r.pnl)}">${sgn(r.pnl)} USDT</b>` : r.outcome ? ` · ${esc(r.outcome)}` : '';
-    return `<div class="row hist"><span class="t">${dhm(r.time)}</span><span><span class="side ${esc(r.side)}">${esc(r.side.toUpperCase())}</span> <b>${esc(r.symbol)}</b></span><span class="res">${esc(r.result)}${end}</span></div>`;
-  }).join('');
-}
-
-function lower() {
-  const rows = D.signals.rows;
-  el('sigsum').textContent = `${rows.filter(r => r.on).length} / ${rows.length} 수신 중`;
-  el('signals').innerHTML = rows.map(r => {
-    const chk = r.state || (r.checked_at ? (S.now - r.checked_at < 60 ? '방금 확인' : `${ago(S.now - r.checked_at)} 전 확인`) : '확인 전');
-    const last = r.last ? `<b>${hm(r.last.time)} ${esc(r.last.side.toUpperCase())}</b> → ${esc(r.last.result)}${r.last.result_time ? ' ' + hm(r.last.result_time) : ''}` : '아직 신호 없음';
-    return `<div class="row sig"><span class="nm">${esc(r.name)}</span><span class="stt ${r.on ? '' : 'off'}"><i></i>${r.state ? '' : r.on ? '수신 중 · ' : '멈춤 · '}${esc(chk)}</span><span class="cnt">${r.count == null ? '' : '수신 ' + r.count + '건'}</span>${r.count == null ? '' : `<span class="lastsig">마지막 ${last}</span>`}</div>`;
-  }).join('') + (D.signals.flow.length ? '<div class="flow-ttl">마지막 신호가 지나간 길</div><div class="flow">' + D.signals.flow.map(r => `<div class="st"><b>${esc(r.step)}</b>${hm(r.time)}</div>`).join('') + '</div>' : '') + history();
-  if (IS_V4) el('account-title').textContent = sym+' 모의 계좌';
-  el('account').innerHTML = [['평가액', num(S.equity) + ' USDT', ''], ['새 집계 손익', sgn(S.day_pnl) + ' USDT', cls(S.day_pnl)], ['누적 실현 손익', sgn(S.realized) + ' USDT', cls(S.realized)], ['거래', `${S.trades}건 · ${S.wins}승`, '']]
-    .map(([k, v, c]) => `<div class="row acct"><span class="muted">${k}</span><span class="v ${c}">${v}</span></div>`).join('');
-  el('tradesum').textContent = `${S.trades}건 · 모의 신호 ${D.shorts.length}건`;
-  el('trades').innerHTML = S.closed.map(t => `<div class="row trade"><span class="side ${esc(t.side)}">${esc(t.side.toUpperCase())}</span><span class="nm">${esc(t.symbol)}</span><span class="amt ${cls(t.pnl)}">${sgn(t.pnl)} USDT · ${sgn(t.pnl_pct)}%</span>
-    <span class="meta">${hm(t.opened_at)} → ${hm(t.closed_at)} · ${esc(t.reason)} · ${num(t.notional)} USDT</span></div>`).join('') + D.shorts.map(r=>`<div class="row trade"><span class="side short">SHORT</span><span class="nm">${esc(r.symbol)}</span><span class="amt">${esc(r.status)}${r.return_pct==null?'':' · '+sgn(r.return_pct)+'% (모의 20배)'}</span><span class="meta">기준 ${hm(r.entry_time)} → ${hm(r.exit_time)} · ${esc(r.exit_reason??r.status)} · 신호 관찰 기록</span></div>`).join('');
-  if (!S.closed.length && !D.shorts.length) el('trades').innerHTML='<div class="empty-state"><span aria-hidden="true">▤</span><strong>새 거래를 기다리고 있어요</strong><p>새 집계 이후 거래가 생기면<br>이곳에 표시됩니다.</p></div>';
-}
-
-function render(preserve = false) {
-  prepareLive();
-  header(); totalPnl(); position();
-  if (!chart) buildChart();
-  chartData(preserve); lower();
-}
-
-function validate(data, rows) {
-  if (IS_V4 && (data.version!=='v4' || !data.native_accounts?.SOL)) throw Error('invalid V4 live book');
-  if (!Number.isFinite(data.updated) || !data.health || !Array.isArray(data.health.down) || !data.marks || !data.accounts || !Array.isArray(data.signals?.rows) || !Array.isArray(data.signals.flow)) throw Error('invalid data');
-  const numbers = (item, keys) => keys.every(k => Number.isFinite(item[k]));
-  if (!numbers(data.health, ['ok','total']) || !data.health.down.every(s => typeof s === 'string')) throw Error('invalid health');
-  for (const name of ['paper']) {
-    const a = data.accounts[name];
-    if (!a || !Array.isArray(a.positions) || !Array.isArray(a.closed) || !numbers(a, ['equity','day_pnl','realized','trades','wins'])) throw Error('invalid account');
-    if (![...a.positions, ...a.closed].every(p => ['long', 'short'].includes(p.side) && SYMBOLS.includes(p.symbol) && Array.isArray(p.fills) && numbers(p, ['size','entry','notional','pnl','pnl_pct','opened_at','target','stop','signal_time']))) throw Error('invalid position');
-    if (!a.positions.every(p => numbers(p, ['mark','leverage','decision_time','ladder_filled','ladder_steps',...(IS_V4?[]:['max_hold_at'])]) && (!IS_V4 || p.max_hold_at===null) && Array.isArray(p.pending) && p.pending.every(Number.isFinite))) throw Error('invalid open position');
-    if (!a.closed.every(t => numbers(t, ['exit','closed_at']) && typeof t.reason === 'string')) throw Error('invalid trade');
-    if (a.orders && (!Array.isArray(a.orders) || !a.orders.every(o => numbers(o, ['time','price','size']) && SYMBOLS.includes(o.symbol)))) throw Error('invalid orders');
-  }
-  if(data.native_accounts){
-    if(!data.native_policy||data.native_policy.source!=='own_asset_chart'||data.native_policy.max_hold_minutes!==null||!Number.isFinite(data.native_started_at)||!Number.isFinite(data.native_updated))throw Error('invalid native policy');
-    for(const symbol of (IS_V4?SYMBOLS:['BTC','ETH'])){const a=data.native_accounts[symbol];if(!a||!numbers(a,['equity','day_pnl','realized','trades','wins','baseline_equity'])||!Array.isArray(a.positions)||!Array.isArray(a.closed))throw Error('invalid native account');for(const p of [...a.positions,...a.closed])if(p.symbol!==symbol||!['long','short'].includes(p.side)||p.max_hold_at!==null||!p.is_reference||!Array.isArray(p.fills)||!numbers(p,['entry','target','stop','size','notional','pnl','pnl_pct','opened_at','signal_time','margin']))throw Error('invalid native bracket');}
-  }
-  if (!data.session || !Number.isFinite(data.session.started_at) || !Array.isArray(data.shorts) || !data.shorts.every(r=>SYMBOLS.includes(r.symbol)&&r.side==='short'&&[r.time,r.entry_time,r.exit_time,r.leverage].every(Number.isFinite)&&(r.return_pct===null||Number.isFinite(r.return_pct)))) throw Error('invalid session or short signal');
-  if (!data.signals.rows.every(r => typeof r.name === 'string' && typeof r.on === 'boolean' && (!r.last || (numbers(r.last, ['time','result_time']) && ['long','short'].includes(r.last.side) && typeof r.last.result === 'string')))) throw Error('invalid signals');
-  if (!data.signals.flow.every(r => typeof r.step === 'string' && Number.isFinite(r.time))) throw Error('invalid flow');
-  if (data.signals.dots && (!Array.isArray(data.signals.dots) || !data.signals.dots.every(r => SYMBOLS.includes(r.symbol) && Number.isFinite(r.time)))) throw Error('invalid dots');
-  for (const s of SYMBOLS) {
-    if (!Array.isArray(rows[s]) || !rows[s].length || !rows[s].every((r, i) => r.length === 6 && r.every(Number.isFinite) && (!i || r[0] - rows[s][i - 1][0] === 60))) throw Error('invalid candles');
+function render(preserve=false){header();totalPnl();if(!chart)buildChart();chartData(preserve);}
+function validate(data,rows){
+  const keys=(value,wanted)=>value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).sort().join(',')===[...wanted].sort().join(',');
+  if(!keys(data,['visibility','version','updated','healthy','accounts'])||data.visibility!=='public-summary'||data.version!==VERSION||!Number.isFinite(data.updated)||typeof data.healthy!=='boolean'||!keys(data.accounts,SYMBOLS)||!keys(rows,SYMBOLS))throw Error('invalid public summary');
+  for(const s of SYMBOLS){
+    const a=data.accounts[s],fields=['equity','realized','unrealized','total_pnl','total_pct'];
+    if(!keys(a,fields)||!fields.every(k=>Number.isFinite(a[k]))||Math.abs(a.total_pnl-a.realized-a.unrealized)>.021)throw Error('invalid public totals');
+    if(!Array.isArray(rows[s])||!rows[s].length||!rows[s].every((r,i)=>Array.isArray(r)&&r.length===6&&r.every(Number.isFinite)&&r[0]>0&&Math.min(...r.slice(1,5))>0&&r[5]>=0&&r[3]<=Math.min(r[1],r[4])&&r[2]>=Math.max(r[1],r[4])&&(!i||r[0]-rows[s][i-1][0]===60)))throw Error('invalid market candles');
   }
 }
-
-async function refresh() {
-  if (refreshing) return;
-  refreshing = true;
-  try {
-    const stamp = Date.now();
-    const [data, rows] = await Promise.all((IS_V4 ? ['v4-data.json','v4-candles.json'] : ['data.json', 'candles.json']).map(async name => {
-      const response = await fetch(`${name}?v=${stamp}`, {cache: 'no-store', signal: AbortSignal.timeout(15000)});
-      if (!response.ok) throw Error('fetch failed');
-      return response.json();
+async function refresh(){
+  if(refreshing)return;refreshing=true;
+  try{
+    const stamp=Date.now();
+    const [data,rows]=await Promise.all((IS_V4?['v4-data.json','v4-candles.json']:['data.json','candles.json']).map(async name=>{
+      const response=await fetch(`${name}?v=${stamp}`,{cache:'no-store',signal:AbortSignal.timeout(15000)});if(!response.ok)throw Error('fetch failed');return response.json();
     }));
-    validate(data, rows);
-    D = data; C = rows; failed = false;
-    render(true);
-  } catch {
-    failed = true;
-    if (!D) el('pos').innerHTML = '<div class="muted">자료를 기다리는 중</div>';
-  } finally { refreshing = false; status(); }
+    validate(data,rows);D=data;C=rows;failed=false;render(true);
+  }catch{failed=true;}finally{refreshing=false;status();}
 }
-function versionUrl(version) { const u=new URL(location.href);u.searchParams.set('version',version);u.hash='';return u; }
-for(const group of document.querySelectorAll('.version-category')) {
+function versionUrl(version){const u=new URL(location.href);u.searchParams.set('version',version);u.hash='';return u;}
+for(const group of document.querySelectorAll('.version-category')){
   const active=group.dataset.version===VERSION;group.open=active;
   group.querySelectorAll('[data-section]').forEach(a=>{const u=versionUrl(group.dataset.version);u.hash=a.dataset.section;a.href=u;a.classList.toggle('active',active&&a.dataset.section==='#overview');});
   group.addEventListener('toggle',()=>{if(group.open&&group.dataset.version!==VERSION)location.href=versionUrl(group.dataset.version);});
 }
-for(const a of document.querySelectorAll('.version-switch a')) {a.href=versionUrl(a.dataset.version);if(a.dataset.version===VERSION)a.setAttribute('aria-current','page');}
-document.querySelector('.breadcrumbs strong').textContent=VERSION.toUpperCase()+(IS_V4?' 새 학습 신호':' 기존 운영');
-if(IS_V4) {
-  document.querySelector('.intro-copy').textContent='BTC, ETH, SOL의 새 학습 신호와 모의 거래를 한곳에서 확인하세요.';
-  document.querySelector('.sidebar-bottom strong').textContent='모의 운영';
-  document.querySelector('.sidebar-bottom div>span').textContent='새 학습 신호로 모의 매매';
-  document.querySelector('.workspace-footer').textContent='V4 모의 신호와 거래를 표시합니다. V3 운영은 그대로 유지됩니다.';
-  document.querySelector('#signals-panel .card-heading').textContent='신호 수신';
-}
-document.querySelectorAll('.side-nav a').forEach(a=>a.addEventListener('click',()=>{function versionUrl(version) { const u=new URL(location.href);u.searchParams.set('version',version);u.hash='';return u; }
-for(const group of document.querySelectorAll('.version-category')) {
-  const active=group.dataset.version===VERSION;group.open=active;
-  group.querySelectorAll('[data-section]').forEach(a=>{const u=versionUrl(group.dataset.version);u.hash=a.dataset.section;a.href=u;a.classList.toggle('active',active&&a.dataset.section==='#overview');});
-  group.addEventListener('toggle',()=>{if(group.open&&group.dataset.version!==VERSION)location.href=versionUrl(group.dataset.version);});
-}
-for(const a of document.querySelectorAll('.version-switch a')) {a.href=versionUrl(a.dataset.version);if(a.dataset.version===VERSION)a.setAttribute('aria-current','page');}
-document.querySelector('.breadcrumbs strong').textContent=VERSION.toUpperCase()+(IS_V4?' 새 학습 신호':' 기존 운영');
-if(IS_V4) {
-  document.querySelector('.intro-copy').textContent='BTC, ETH, SOL의 새 학습 신호와 모의 거래를 한곳에서 확인하세요.';
-  document.querySelector('.sidebar-bottom strong').textContent='모의 운영';
-  document.querySelector('.sidebar-bottom div>span').textContent='새 학습 신호로 모의 매매';
-  document.querySelector('.workspace-footer').textContent='V4 모의 신호와 거래를 표시합니다. V3 운영은 그대로 유지됩니다.';
-  document.querySelector('#signals-panel .card-heading').textContent='신호 수신';
-}
-document.querySelectorAll('.side-nav a').forEach(n=>n.classList.remove('active'));a.classList.add('active');}));
-refresh();
-LivePnl.feed(q=>{liveQuotes[q.symbol]=q;},connected=>{liveConnected=connected;});
-setInterval(()=>{if(D){prepareLive();header();totalPnl();position();lower();if(chart)overlay();}},1000);
-setInterval(refresh, 10000);
-setInterval(status, 10000);
+for(const a of document.querySelectorAll('.version-switch a')){a.href=versionUrl(a.dataset.version);if(a.dataset.version===VERSION)a.setAttribute('aria-current','page');}
+document.querySelector('.breadcrumbs strong').textContent=VERSION.toUpperCase()+' 운영 현황';
+document.querySelectorAll('.side-nav a').forEach(a=>a.addEventListener('click',()=>{document.querySelectorAll('.side-nav a').forEach(n=>n.classList.remove('active'));a.classList.add('active');}));
+refresh();LivePnl.feed(q=>{liveQuotes[q.symbol]=q;},()=>{});
+setInterval(()=>{if(D&&C)header();},1000);setInterval(refresh,10000);setInterval(status,10000);
 </script>
 </body>
 </html>
