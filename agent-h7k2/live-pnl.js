@@ -22,7 +22,7 @@
     const positions=a.positions.map(p=>{
       const since=Math.max(p.opened_at,...p.fills.map(f=>f.time));
       const q=quoteFor(p.symbol,quotes,now,since);
-      const pnl=p.pnl+(q?(q.price-p.mark)*p.size*(p.side==='long'?1:-1):0);
+      const pnl=p.pnl+(q?(q.price-p.mark)*p.size*((p.side==='long'?1:-1)-(p.exit_fee_rate??0)):0);
       return {...p,mark:q?q.price:p.mark,pnl,pnl_pct:100*pnl/p.notional,quote_live:!!q?.live&&now/1000-data.updated<=900,quote_at:q?.ts};
     });
     const unrealized=positions.reduce((sum,p)=>sum+p.pnl,0),total=a.realized+unrealized,base=data.session.baseline_equity;
