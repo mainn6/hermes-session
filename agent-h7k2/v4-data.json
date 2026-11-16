@@ -1,6 +1,6 @@
 {
   "version": "v4",
-  "updated": 1794797524.444,
+  "updated": 1794797538.796,
   "session": {
     "started_at": 1794795618.585,
     "baseline_equity": 10000
@@ -11,9 +11,9 @@
     "down": []
   },
   "marks": {
-    "BTC": 65030.3,
-    "ETH": 1819.75,
-    "SOL": 72.006
+    "BTC": 64977.3,
+    "ETH": 1819.56,
+    "SOL": 71.96
   },
   "accounts": {
     "paper": {
@@ -26,7 +26,11 @@
       "closed": [],
       "orders": [],
       "baseline_equity": 10000,
-      "pending_plan": null,
+      "pending_plan": {
+        "side": "short",
+        "entry_time": 1794797580.0,
+        "signal_time": 1794797520.0
+      },
       "mode": "own_asset_paper"
     }
   },
@@ -99,7 +103,11 @@
       "closed": [],
       "orders": [],
       "baseline_equity": 10000,
-      "pending_plan": null,
+      "pending_plan": {
+        "side": "short",
+        "entry_time": 1794797580.0,
+        "signal_time": 1794797520.0
+      },
       "mode": "own_asset_paper"
     }
   },
@@ -114,7 +122,7 @@
     "notional_equity_multiple": 1
   },
   "native_started_at": 1794795618.585,
-  "native_updated": 1794797524.444,
+  "native_updated": 1794797538.796,
   "signals": {
     "rows": [
       {
@@ -140,12 +148,25 @@
       {
         "name": "SOL V4 학습 신호",
         "on": true,
-        "count": 0,
-        "checked_at": 1794797460.0,
-        "last": null
+        "count": 1,
+        "checked_at": 1794797520.0,
+        "last": {
+          "time": 1794797520.0,
+          "symbol": "SOL",
+          "side": "short",
+          "result": "모의 진입 예정",
+          "result_time": 1794797580.0
+        }
       }
     ],
     "history": [
+      {
+        "time": 1794797520.0,
+        "symbol": "SOL",
+        "side": "short",
+        "result": "모의 진입 예정",
+        "result_time": 1794797580.0
+      },
       {
         "time": 1794797220.0,
         "symbol": "ETH",
@@ -159,10 +180,14 @@
       {
         "time": 1794797220.0,
         "symbol": "ETH"
+      },
+      {
+        "time": 1794797520.0,
+        "symbol": "SOL"
       }
     ]
   },
   "shorts": [],
   "short_exit_policy": null,
-  "candles_updated": 1794797400
+  "candles_updated": 1794797460
 }
