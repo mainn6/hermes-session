@@ -1,14 +1,16 @@
 {
   "version": "v4",
-  "updated": 1794797825.261,
+  "updated": 1794797837.486,
   "session": {
     "started_at": 1794795618.585,
     "baseline_equity": 10000
   },
   "health": {
-    "ok": 3,
+    "ok": 0,
     "total": 3,
-    "down": []
+    "down": [
+      "V4 신호 수신"
+    ]
   },
   "marks": {
     "BTC": 65096.5,
@@ -178,19 +180,19 @@
     "notional_equity_multiple": 1
   },
   "native_started_at": 1794795618.585,
-  "native_updated": 1794797825.261,
+  "native_updated": 1794797835.463,
   "signals": {
     "rows": [
       {
         "name": "BTC V4 학습 신호",
-        "on": true,
+        "on": false,
         "count": 0,
         "checked_at": 1794797820.0,
         "last": null
       },
       {
         "name": "ETH V4 학습 신호",
-        "on": true,
+        "on": false,
         "count": 1,
         "checked_at": 1794797820.0,
         "last": {
@@ -203,7 +205,7 @@
       },
       {
         "name": "SOL V4 학습 신호",
-        "on": true,
+        "on": false,
         "count": 1,
         "checked_at": 1794797820.0,
         "last": {
